@@ -1,60 +1,40 @@
 <!DOCTYPE html>
-<html>
-    <head>
-        <link rel="icon" type="image/jpg" href="Bilder/Cover.png" >
-        <title>Meine Song Lyrics</title>
-    </head>
-    <body>
-        <h1>Match_3</h1>
-        <h4>von Ufo361 & ​​lucidbeatz</h4>
-        <a href="https://www.youtube.com/watch?v=H6bAT9Tt9dw">
-         original video   
-        </a>
-        <br><br>
-        <a href="https://www.youtube.com/watch?v=H6bAT9Tt9dw">
-        <img src="Bilder/Cover.png"
-        width="200">
-        </a>
-        <hr>
-        <br>
-        <pre>
-    [Intro: Clara La San & Ufo361]
-    I don't understand, you said you'd never leave
-    You told me that you'd be there, but you lied again to me
-    You're always on my mind, and when it's late at night
-    I think of what you're doin', do you think of me sometimes?
-    And when I'm feelin' down, I lose all control
-    Emotions keep comin' and I'm tryna let you go
-    So if you wanna talk to me again
-    Don't try to act like we were always friends (Ihr wisst Bescheid)
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Seite</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-    [Hook: Ufo361]
-    Wir war'n ein Match seit dem Tag, als ich dich das erste Mal sah
-    Jetzt bist du weg und ich frag' mich: „Wo bist du wohl grad?“
-    Ich rauch' ein Pack und ich warte darauf, dass ich einschlafe
-    Wir hatten Pech und dein Name ist alles, was ich noch habe
+    <main>
+        <section id="github">
+            <h2>GitHub Repository</h2>
+            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
+            <a href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank">
+                <img src="Github.png" alt="GitHub Repository Link">
+            </a>
+        </section>
 
-    [Part: Ufo361]
-    Die Bags, die ich dir gekauft hab', ich weiß, du trägst sie noch
-    (Ich weiß)
-    Ich denk' an den Sex, ich weiß, du denkst auch dran,
-     immer wenn Regen tropft (Immer wenn Regen tropft)
-    Wir hab'n von Zukunft geredet, 
-    Baby, und ich glaubte dir jedes Wort (Ja, ja)
-    Du bist paar Stunden erst weg (Ey),
-    trotzdem kommt es mir irgendwie ewig vor (Woah)
-    Es kommt mir wie Jahre vor (Ihr wisst Bescheid)
-    Kann dich nicht vergessen, auch wenn ich durchgehend high bin (Durchgehend high bin)
-    Ich will, dass du hier bist, ja, 
-    mir ist egal, ob wir streiten (Ist egal, ob wir streiten)
-    Ich wart' auf 'ne Nachricht die ganze Nacht, aber du schreibst nicht (Aber du schreibst nicht)
-    Doch ich weiß, dass du allein bist (Mh-mh-mh), ja
-   
-    [Hook: Ufo361]
-    Wir war'n ein Match seit dem Tag, als ich dich das erste Mal sah
-    Jetzt bist du weg und ich frag' mich: „Wo bist du wohl grad?“
-    Ich rauch' ein Pack und ich warte darauf, dass ich einschlafe
-    Wir hatten Pech und dein Name ist alles, was ich noch habe (Ja, ja, ey)            
-        </pre>
-    </body>
+        <section id="library-vorlagen">
+            <h2>LCD Vorlagen</h2>
+            <p>Das in platformio.ini:</p>
+            <code>lib_deps = mathertel/LiquidCrystal_PCF8574@^2.2.0</code>
+
+            <p>Und das in die normale C++ Datei:</p>
+            <pre><code>#include &lt;Wire.h&gt;
+#include "LiquidCrystal_PCF8574.h"
+LiquidCrystal_PCF8574 lcd(0x27);</code></pre>
+
+            <p>build_flags = -D PIO_FRAMEWORK_ARDUINO_NANOLIB_FLOAT_PRINTF</p>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Meine Website</p>
+    </footer>
+
+    <script src="index.js"></script>
+</body>
 </html>
