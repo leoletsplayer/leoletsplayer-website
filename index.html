@@ -11,7 +11,8 @@
     <main>
         <section id="github">
             <h2>GitHub Repository</h2>
-            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
+            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. 
+                Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
             <a href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank">
                 <img src="github.png" alt="GitHub Repository Link">
             </a>
@@ -23,11 +24,17 @@
             <code>lib_deps = mathertel/LiquidCrystal_PCF8574@^2.2.0</code>
 
             <p>Und das in die normale C++ Datei:</p>
-            <pre><code>#include &lt;Wire.h&gt;
+                            <pre><code>#include &lt;Wire.h&gt;
 #include "LiquidCrystal_PCF8574.h"
 LiquidCrystal_PCF8574 lcd(0x27);</code></pre>
+            <p>Das hier ins Setup:</p>
+            <pre><code>display.begin(16,2);
+display.setBacklight(255);
+display.clear();
+display.setCursor(0,0);
+display.printf("it.schule");</code></pre>
 
-            <p>build_flags = -D PIO_FRAMEWORK_ARDUINO_NANOLIB_FLOAT_PRINTF</p>
+            
         </section>
     </main>
 
