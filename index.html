@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,39 +7,46 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <main>
         <section id="github">
             <h2>GitHub Repository</h2>
-            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. 
-                Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
-            <a href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank">
+            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
+            <a href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank" rel="noreferrer noopener">
                 <img src="github.png" alt="GitHub Repository Link">
             </a>
         </section>
 
         <section id="library-vorlagen">
-            <h2>LCD Vorlagen</h2>
-            <p>Das in platformio.ini:</p>
+            <h2>LCD-Vorlagen</h2>
+            <p>In der <code>platformio.ini</code>:</p>
             <pre><code>lib_deps = mathertel/LiquidCrystal_PCF8574@^2.2.0</code></pre>
 
-            <p>Und das in die normale C++ Datei:</p>
-                            <pre><code>#include &lt;Wire.h&gt;
+            <p>In der C++-Datei:</p>
+            <pre><code>#include &lt;Wire.h&gt;
 #include "LiquidCrystal_PCF8574.h"
 LiquidCrystal_PCF8574 lcd(0x27);</code></pre>
-            <p>Das hier ins Setup:</p>
-            <pre><code>display.begin(16,2);
+
+            <p>Im <code>setup()</code>:</p>
+            <pre><code>display.begin(16, 2);
 display.setBacklight(255);
 display.clear();
-display.setCursor(0,0);
+display.setCursor(0, 0);
 display.printf("it.schule");</code></pre>
+        </section>
 
-            
+        <section id="pdf-docs">
+    <h2>Formelsammlung</h2>
+    <button id="pdf-button">📄 PDF öffnen</button>
+    <div id="pdf-container" style="display: none; margin-top: 20px;">
+        <button id="pdf-close">Schließen ✕</button>
+        <iframe id="pdf-viewer" src="" type="application/pdf" width="100%" height="600px"></iframe>
+    </div>
+</section>
         </section>
     </main>
 
     <footer>
-        <p>&copy; 2026 Meine Website</p>
+        <p>&copy; 2026 leo</p>
     </footer>
 
     <script src="index.js"></script>
