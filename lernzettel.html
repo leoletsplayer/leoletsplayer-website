@@ -1,0 +1,1404 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernzettel KA GGK · Weimarer Republik</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ecd8;
+    --paper-dark: #e8dcc0;
+    --ink: #1a1614;
+    --ink-soft: #3d342c;
+    --red: #a8321f;
+    --red-dark: #7a1f12;
+    --gold: #b8893d;
+    --green: #4a6b3a;
+    --shadow: rgba(26, 22, 20, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 18px;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(184, 137, 61, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(168, 50, 31, 0.05), transparent 50%);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 50px 32px 120px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 36px;
+    margin-bottom: 40px;
+    position: relative;
+  }
+
+  .stamp {
+    position: absolute;
+    top: 8px;
+    right: 0;
+    border: 3px solid var(--red);
+    color: var(--red);
+    padding: 8px 16px;
+    font-family: 'Bebas Neue', sans-serif;
+    letter-spacing: 3px;
+    font-size: 13px;
+    transform: rotate(8deg);
+    opacity: 0.75;
+  }
+
+  .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 18px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(44px, 7vw, 84px);
+    letter-spacing: 2px;
+    line-height: 0.95;
+    color: var(--ink);
+  }
+
+  h1 span {
+    display: block;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 0.32em;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+    margin-top: 14px;
+  }
+
+  .subtitle {
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 600px;
+    margin: 14px auto 0;
+  }
+
+  /* PROGRESS */
+  .progress-wrap {
+    background: rgba(26,22,20,0.08);
+    height: 4px;
+    border-radius: 2px;
+    margin: 28px 0 12px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: var(--red);
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+  .progress-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+    text-align: right;
+  }
+
+  /* NAVIGATION */
+  nav {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 14px 18px;
+    margin: 30px 0 50px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    justify-content: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  nav a {
+    color: var(--paper);
+    text-decoration: none;
+    padding: 6px 10px;
+    border: 1px solid transparent;
+    transition: all 0.2s;
+  }
+
+  nav a:hover {
+    border-color: var(--gold);
+    color: var(--gold);
+  }
+
+  /* SECTIONS */
+  section {
+    margin: 70px 0;
+    position: relative;
+    scroll-margin-top: 20px;
+  }
+
+  .section-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 130px;
+    color: var(--red);
+    opacity: 0.13;
+    position: absolute;
+    top: -50px;
+    left: -10px;
+    z-index: 0;
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(32px, 5vw, 44px);
+    letter-spacing: 1px;
+    margin-bottom: 6px;
+    position: relative;
+    z-index: 1;
+    border-bottom: 2px solid var(--ink);
+    padding-bottom: 8px;
+  }
+
+  .section-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: var(--red);
+    text-transform: uppercase;
+    margin-bottom: 22px;
+    display: block;
+  }
+
+  h3 {
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 600;
+    font-size: 24px;
+    margin: 28px 0 10px;
+    color: var(--red-dark);
+    font-style: italic;
+  }
+
+  h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin: 18px 0 8px;
+  }
+
+  p { margin-bottom: 14px; }
+
+  /* CARDS / BOXES */
+  .card {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(26,22,20,0.15);
+    padding: 22px 26px;
+    margin: 18px 0;
+    border-radius: 2px;
+    box-shadow: 2px 4px 12px var(--shadow);
+    position: relative;
+  }
+
+  .card.red {
+    border-left: 4px solid var(--red);
+  }
+  .card.gold {
+    border-left: 4px solid var(--gold);
+  }
+  .card.green {
+    border-left: 4px solid var(--green);
+  }
+  .card.ink {
+    border-left: 4px solid var(--ink);
+  }
+
+  /* COMPARISON GRID */
+  .compare {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin: 22px 0;
+  }
+  .compare > div {
+    padding: 22px;
+    border-radius: 2px;
+    box-shadow: 2px 4px 12px var(--shadow);
+    background: rgba(255,255,255,0.5);
+  }
+  .compare h4 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 22px;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: var(--ink);
+  }
+  .compare .left { border-top: 4px solid var(--red); }
+  .compare .right { border-top: 4px solid var(--ink); }
+
+  @media (max-width: 700px) {
+    .compare { grid-template-columns: 1fr; }
+  }
+
+  /* LIST STYLES */
+  ul, ol { padding-left: 22px; margin: 10px 0 18px; }
+  li { margin-bottom: 6px; }
+
+  ul.fancy { list-style: none; padding-left: 0; }
+  ul.fancy li {
+    padding-left: 24px;
+    position: relative;
+    margin-bottom: 8px;
+  }
+  ul.fancy li::before {
+    content: '§';
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: var(--red);
+    font-weight: 700;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 22px;
+  }
+
+  /* INLINE STYLES */
+  strong { color: var(--red-dark); font-weight: 600; }
+  em { color: var(--ink-soft); }
+  .term {
+    background: rgba(184, 137, 61, 0.18);
+    padding: 1px 6px;
+    border-radius: 2px;
+    font-weight: 500;
+  }
+  .date {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.9em;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 6px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  /* QUOTE */
+  blockquote {
+    font-style: italic;
+    font-size: 19px;
+    border-left: 3px solid var(--red);
+    padding: 6px 0 6px 20px;
+    margin: 18px 0;
+    color: var(--ink-soft);
+  }
+
+  /* FLIP CARDS */
+  .flipgrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+    gap: 16px;
+    margin: 22px 0;
+  }
+  .flip {
+    perspective: 1000px;
+    height: 200px;
+    cursor: pointer;
+  }
+  .flip-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+  }
+  .flip.flipped .flip-inner { transform: rotateY(180deg); }
+  .flip-front, .flip-back {
+    position: absolute;
+    inset: 0;
+    backface-visibility: hidden;
+    padding: 20px;
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-shadow: 2px 4px 12px var(--shadow);
+  }
+  .flip-front {
+    background: var(--ink);
+    color: var(--paper);
+    border: 2px solid var(--ink);
+  }
+  .flip-front .label {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 8px;
+  }
+  .flip-front .term-name {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 26px;
+    letter-spacing: 1px;
+    line-height: 1.1;
+  }
+  .flip-front .hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    margin-top: auto;
+    color: rgba(244, 236, 216, 0.5);
+    text-align: right;
+  }
+  .flip-back {
+    background: var(--paper-dark);
+    color: var(--ink);
+    transform: rotateY(180deg);
+    border: 2px solid var(--ink);
+    font-size: 15px;
+    line-height: 1.5;
+    overflow-y: auto;
+  }
+
+  /* QUIZ */
+  .quiz {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 30px;
+    border-radius: 2px;
+    margin: 30px 0;
+  }
+  .quiz h3 {
+    color: var(--gold);
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 30px;
+    letter-spacing: 1px;
+    margin-bottom: 18px;
+    font-style: normal;
+  }
+  .quiz-question {
+    margin-bottom: 22px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid rgba(244,236,216,0.15);
+  }
+  .quiz-question:last-of-type { border-bottom: none; }
+  .quiz-q {
+    font-size: 19px;
+    margin-bottom: 14px;
+  }
+  .quiz-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .quiz-opt {
+    padding: 10px 16px;
+    background: rgba(244,236,216,0.08);
+    border: 1px solid rgba(244,236,216,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 16px;
+    color: var(--paper);
+    text-align: left;
+    transition: all 0.2s;
+  }
+  .quiz-opt:hover:not(:disabled) {
+    background: rgba(244,236,216,0.15);
+    border-color: var(--gold);
+  }
+  .quiz-opt.correct {
+    background: rgba(74, 107, 58, 0.5);
+    border-color: var(--green);
+    color: #d6f0c8;
+  }
+  .quiz-opt.wrong {
+    background: rgba(168, 50, 31, 0.5);
+    border-color: var(--red);
+  }
+  .quiz-opt:disabled { cursor: default; }
+  .quiz-feedback {
+    margin-top: 12px;
+    font-style: italic;
+    font-size: 15px;
+    color: rgba(244,236,216,0.7);
+    min-height: 22px;
+  }
+
+  /* TIMELINE */
+  .timeline {
+    position: relative;
+    padding-left: 30px;
+    margin: 24px 0;
+    border-left: 2px solid var(--ink);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 22px;
+    padding-left: 16px;
+  }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -38px;
+    top: 8px;
+    width: 12px;
+    height: 12px;
+    background: var(--red);
+    border: 2px solid var(--paper);
+    border-radius: 50%;
+  }
+  .tl-date {
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    color: var(--red);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+  }
+  .tl-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+  }
+
+  /* PARTY TABLE */
+  .partytable {
+    overflow-x: auto;
+    margin: 24px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 15px;
+    background: rgba(255,255,255,0.5);
+  }
+  th, td {
+    padding: 10px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(26,22,20,0.15);
+    vertical-align: top;
+  }
+  th {
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  td:first-child {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 18px;
+    letter-spacing: 1px;
+    color: var(--red-dark);
+    white-space: nowrap;
+  }
+
+  /* TOGGLE / DETAILS */
+  details {
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(26,22,20,0.15);
+    padding: 16px 22px;
+    margin: 12px 0;
+    border-radius: 2px;
+    cursor: pointer;
+  }
+  details[open] {
+    background: rgba(255,255,255,0.6);
+    border-color: var(--red);
+  }
+  summary {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 20px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    list-style: none;
+    position: relative;
+    padding-right: 30px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after {
+    content: '+';
+    position: absolute;
+    right: 0;
+    top: -2px;
+    color: var(--red);
+    font-size: 26px;
+    font-family: 'Cormorant Garamond', serif;
+    transition: transform 0.2s;
+  }
+  details[open] summary::after { content: '−'; }
+  details > *:not(summary) { margin-top: 14px; }
+
+  /* CHECKBOX TODO */
+  .checklist { list-style: none; padding-left: 0; }
+  .checklist li {
+    padding: 8px 12px;
+    background: rgba(255,255,255,0.3);
+    margin-bottom: 6px;
+    border-left: 3px solid var(--gold);
+    cursor: pointer;
+    transition: all 0.2s;
+    user-select: none;
+  }
+  .checklist li.done {
+    text-decoration: line-through;
+    opacity: 0.5;
+    border-left-color: var(--green);
+  }
+  .checklist li::before {
+    content: '☐ ';
+    color: var(--red);
+    font-size: 18px;
+  }
+  .checklist li.done::before {
+    content: '☑ ';
+    color: var(--green);
+  }
+
+  /* FOOTER */
+  footer {
+    margin-top: 80px;
+    padding-top: 30px;
+    border-top: 3px double var(--ink);
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+
+  .ornament {
+    text-align: center;
+    margin: 30px 0;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 24px;
+    color: var(--gold);
+    letter-spacing: 8px;
+  }
+
+  @media print {
+    body { background: white; }
+    nav, .quiz-opt, .stamp, .progress-wrap, .progress-label { display: none; }
+    .flip { height: auto; }
+    .flip-inner { transform: none !important; }
+    .flip-back { position: static; transform: none; }
+    .flip-front { display: none; }
+    details { page-break-inside: avoid; }
+    details > *:not(summary) { display: block !important; }
+  }
+
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="stamp">Klausur · Do.</div>
+  <div class="kicker">Geschichte · Gemeinschaftskunde · J1</div>
+  <h1>Weimarer Republik
+    <span>Vom Kaiserreich zur Diktatur · 1918 bis 1933</span>
+  </h1>
+  <p class="subtitle">Lernzettel zu allen sechs Themenkomplexen der Klausur. Klicke Karten an, öffne Details, teste dich selbst.</p>
+
+  <div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+  <div class="progress-label" id="progressLabel">0 % gelesen</div>
+</header>
+
+<nav>
+  <a href="#thema1">1 · Doppelte Ausrufung</a>
+  <a href="#thema2">2 · Versailler Vertrag</a>
+  <a href="#thema3">3 · Verfassung</a>
+  <a href="#thema4">4 · Parteien</a>
+  <a href="#thema5">5 · Wahlergebnisse</a>
+  <a href="#thema6">6 · Goldene Zwanziger</a>
+  <a href="#thema7">7 · Zerstörung</a>
+  <a href="#quiz">8 · Selbsttest</a>
+</nav>
+
+<!-- ============= THEMA 1: Doppelte Ausrufung ============= -->
+<section id="thema1">
+  <span class="section-num">01</span>
+  <h2>Doppelte Ausrufung der Republik</h2>
+  <span class="section-tag">9. November 1918 · Berlin</span>
+
+  <p>Am 9. November 1918, mitten im Chaos der Novemberrevolution, wird die Republik in Berlin <strong>zweimal an einem Tag</strong> ausgerufen, von zwei verschiedenen Männern, mit zwei völlig verschiedenen Visionen für Deutschland.</p>
+
+  <div class="compare">
+    <div class="left">
+      <h4>Philipp Scheidemann (SPD)</h4>
+      <p><span class="date">14:00 Uhr</span> · vom Balkon des Reichstags</p>
+      <p><strong>Parlamentarische Demokratie</strong></p>
+      <ul>
+        <li>repräsentative Demokratie nach westlichem Vorbild</li>
+        <li>Wahl einer verfassungsgebenden Nationalversammlung</li>
+        <li>Bündnis mit Militär und Großindustrie zur Stabilisierung</li>
+        <li>Friedensverhandlungen statt Bürgerkrieg</li>
+      </ul>
+      <blockquote>„Es lebe die deutsche Republik!"</blockquote>
+    </div>
+    <div class="right">
+      <h4>Karl Liebknecht (Spartakus)</h4>
+      <p><span class="date">16:00 Uhr</span> · vom Balkon des Stadtschlosses</p>
+      <p><strong>Sozialistische Räterepublik</strong></p>
+      <ul>
+        <li>direkte Demokratie nach sowjetischem Vorbild</li>
+        <li>Macht in Hand von Arbeiter- und Soldatenräten</li>
+        <li>Enteignung der Industrie, Sturz des Kapitalismus</li>
+        <li>Anschluss an die Weltrevolution</li>
+      </ul>
+      <blockquote>„Ich proklamiere die freie sozialistische Republik Deutschlands."</blockquote>
+    </div>
+  </div>
+
+  <h3>Was unterscheidet die beiden Systeme?</h3>
+  <div class="partytable">
+    <table>
+      <tr><th>Merkmal</th><th>Parlamentarische Demokratie</th><th>Rätesystem</th></tr>
+      <tr><td>Grundidee</td><td>repräsentativ</td><td>direkt</td></tr>
+      <tr><td>Wahl</td><td>individuell, Parteien</td><td>in Basiseinheiten (Betriebe, Wohngebiete), kollektiv</td></tr>
+      <tr><td>Vertretung</td><td>Abgeordnete im Parlament</td><td>Räte in Pyramidenstruktur, keine Parteien</td></tr>
+      <tr><td>Mandat</td><td>frei, feste Amtszeit</td><td>imperativ, jederzeit absetzbar</td></tr>
+      <tr><td>Gewaltenteilung</td><td>Legislative, Exekutive, Judikative</td><td>keine Gewaltenteilung</td></tr>
+    </table>
+  </div>
+
+  <h3>Wie ging es weiter?</h3>
+  <div class="card red">
+    <p><strong>Rat der Volksbeauftragten:</strong> MSPD und USPD bilden eine gemeinsame Übergangsregierung unter Friedrich Ebert. Eigentliches Ziel: Krieg beenden und eine verfassungsgebende Nationalversammlung wählen.</p>
+    <p><strong>Ebert-Groener-Pakt</strong> (10.11.1918): Ebert verspricht der Obersten Heeresleitung, gegen linke Aufstände vorzugehen. Im Gegenzug stützt das Militär die Regierung. Folge: die monarchistisch geprägte Reichswehr wird nie wirklich reformiert.</p>
+    <p><strong>Stinnes-Legien-Abkommen:</strong> Industrie und Gewerkschaften einigen sich. Acht-Stunden-Tag und Tarifautonomie ja, Verstaatlichung nein.</p>
+    <p><strong>Reichsrätekongress (Dezember 1918):</strong> Die Mehrheit der Räte stimmt für eine Nationalversammlung, also gegen ein Rätesystem. Der Spartakusaufstand (Januar 1919) wird von Reichswehr und Freikorps blutig niedergeschlagen, Liebknecht und Luxemburg ermordet.</p>
+  </div>
+
+  <details>
+    <summary>Klausur-Tipp · Wozu fragt man danach?</summary>
+    <p>Die doppelte Ausrufung zeigt, dass die Weimarer Republik <strong>von Anfang an umkämpft</strong> war. Sie hatte Feinde von links (Räterepublik) und später von rechts. Ebert und die SPD entschieden sich gegen die Räterepublik, aber der Pakt mit den alten Eliten (Militär, Industrie) führte dazu, dass <em>die Republik ohne echte Republikaner an wichtigen Schaltstellen</em> startete. Genau dieses Erblast wird später bei der Zerstörung der Republik wichtig.</p>
+  </details>
+</section>
+
+<!-- ============= THEMA 2: Versailler Vertrag ============= -->
+<section id="thema2">
+  <span class="section-num">02</span>
+  <h2>Der Versailler Vertrag</h2>
+  <span class="section-tag">28. Juni 1919 · ein umstrittener Frieden</span>
+
+  <p>Nach dem Waffenstillstand vom 11.11.1918 verhandeln die Siegermächte ohne Deutschland in den Pariser Vororten. Die Deutschen erhoffen sich einen <em>milden Frieden</em> auf Basis von Wilsons 14 Punkten. Was sie bekommen, ist ein Diktatfrieden.</p>
+
+  <h3>Die Regelungen im Überblick</h3>
+  <div class="flipgrid">
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Artikel 231</div>
+          <div class="term-name">Alleinschuld</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Deutschland und seine Verbündeten werden für allen Schaden des Krieges allein verantwortlich gemacht. Juristische Grundlage für die Reparationen, in Deutschland als „Kriegsschuldlüge" empfunden.
+        </div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Geld & Sachwerte</div>
+          <div class="term-name">Reparationen</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Hohe Zahlungen in Geld, Rohstoffen und Industrieprodukten. Genaue Höhe 1919 noch nicht festgelegt, später auf 132 Milliarden Goldmark beziffert. Belastet die Wirtschaft erheblich.
+        </div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Heer & Marine</div>
+          <div class="term-name">Militär</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Berufsarmee von max. 100.000 Mann, keine Wehrpflicht, keine schweren Waffen, keine Luftwaffe, keine U-Boote. Rheinland entmilitarisiert.
+        </div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">13 % weniger</div>
+          <div class="term-name">Gebiete</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Elsass-Lothringen an Frankreich, Eupen-Malmedy an Belgien, Westpreußen und Posen an Polen, Danzig wird Freie Stadt, Memelgebiet an Litauen, alle Kolonien weg. Saargebiet 15 Jahre Völkerbund.
+        </div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">verboten</div>
+          <div class="term-name">Anschluss Österreich</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Selbstbestimmungsrecht der Völker gilt in Versailles für viele, aber nicht für die Deutschen: Der Anschluss Deutsch-Österreichs an Deutschland wird ausdrücklich verboten.
+        </div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">neue Idee</div>
+          <div class="term-name">Völkerbund</div>
+          <div class="hint">Klick zum Umdrehen</div>
+        </div>
+        <div class="flip-back">
+          Erste internationale Organisation zur Friedenssicherung. Deutschland erst 1926 Mitglied. Die USA selbst traten dem Völkerbund nie bei.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h3>Die Haltung der Siegermächte</h3>
+  <ul class="fancy">
+    <li><strong>Frankreich (Clemenceau):</strong> bereits zweite deutsche Invasion erlebt, will Deutschland militärisch und wirtschaftlich dauerhaft schwächen, hohe Reparationen, profranzösische Pufferstaaten in Osteuropa.</li>
+    <li><strong>Großbritannien (Lloyd George):</strong> moderate Schwächung, Deutschland soll Handelspartner bleiben, aber auch Reparationen.</li>
+    <li><strong>USA (Wilson):</strong> Wiederholung verhindern, keine Demütigung, Selbstbestimmungsrecht, Völkerbund. Setzt sich gegen Frankreich nur teilweise durch.</li>
+  </ul>
+
+  <h3>Zwei Sichtweisen auf den Vertrag</h3>
+  <div class="compare">
+    <div class="left">
+      <h4>Sicht: unbarmherziger Frieden</h4>
+      <p><em>Karikatur Simplicissimus, Plakat „Protestiert!"</em></p>
+      <ul>
+        <li>Deutschland wird wie hingerichtet, gefesselt, gedemütigt</li>
+        <li>„Sklaverei ohne Ende"</li>
+        <li>kein Selbstbestimmungsrecht für Deutsche</li>
+        <li>Aufruf zum Widerstand</li>
+        <li>als ungerecht empfunden</li>
+      </ul>
+    </div>
+    <div class="right">
+      <h4>Sicht: Kompromissfrieden (Kolb 2002)</h4>
+      <p><em>Historische Forschung</em></p>
+      <ul>
+        <li>einzelne Bestimmungen waren weniger hart als möglich</li>
+        <li>kein „karthagischer Frieden"</li>
+        <li>Deutschland blieb europäische Großmacht</li>
+        <li>Hoffnung auf milden „Wilson-Frieden" war Selbstbetrug</li>
+        <li>für kluge Politik gab es Spielräume zur friedlichen Mitte Europas</li>
+        <li>Deutschland warf diese Chance durch maßlosen Hass auf das „Versailler System" weg</li>
+      </ul>
+    </div>
+  </div>
+
+  <details>
+    <summary>Klausur-Tipp · Was solltest du beurteilen können?</summary>
+    <p>Wichtig: Der Vertrag <strong>wirkt</strong> härter, als er objektiv war, aber das ist beinahe egal. Die <em>subjektive</em> Wahrnehmung als Demütigung wird von den Gegnern der Republik (vor allem von der NSDAP) gezielt instrumentalisiert. Hitler verspricht die Aufhebung des Vertrages und macht damit Stimmung. Der Vertrag ist also weniger durch seine Bestimmungen, sondern durch seine <strong>politische Wirkung</strong> ein Belastungsfaktor für die Republik.</p>
+  </details>
+</section>
+
+<!-- ============= THEMA 3: Verfassung ============= -->
+<section id="thema3">
+  <span class="section-num">03</span>
+  <h2>Die Weimarer Verfassung</h2>
+  <span class="section-tag">11. August 1919 · Inhalt und Problematik</span>
+
+  <p>Die Nationalversammlung tagt im Theater von Weimar (Berlin ist zu unruhig) und beschließt eine moderne, fortschrittliche Verfassung. Sie enthält jedoch einige Konstruktionsfehler, die später bei der Zerstörung der Republik eine Rolle spielen.</p>
+
+  <h3>Was war fortschrittlich?</h3>
+  <div class="card green">
+    <ul>
+      <li><strong>Allgemeines Wahlrecht</strong> für alle ab 20 Jahren, erstmals auch für Frauen</li>
+      <li><strong>Verhältniswahlrecht</strong>, jede Stimme zählt gleich</li>
+      <li>umfangreicher <strong>Grundrechtskatalog</strong> (Meinungsfreiheit, Versammlungsfreiheit, Gleichberechtigung)</li>
+      <li><strong>Volkssouveränität</strong>, das Volk ist Quelle der Macht</li>
+      <li>Direktwahl des Reichspräsidenten</li>
+      <li>Volksentscheid und Volksbegehren als Mittel direkter Demokratie</li>
+    </ul>
+  </div>
+
+  <h3>Die Konstruktionsfehler</h3>
+  <div class="card red">
+    <h4>Fehlende 5-Prozent-Hürde</h4>
+    <p>Jede noch so kleine Splitterpartei kommt in den Reichstag. Folge: bis zu 16 Parteien gleichzeitig, Mehrheitsbildung extrem schwer, häufige Regierungswechsel.</p>
+
+    <h4>Starke Stellung des Reichspräsidenten („Ersatzkaiser")</h4>
+    <p>Direkt vom Volk gewählt, kann den Reichstag <strong>auflösen</strong>, ernennt und entlässt den Reichskanzler, ist <strong>Oberbefehlshaber der Reichswehr</strong>, kann per <span class="term">Artikel 48</span> Notverordnungen erlassen, also Gesetze ohne Reichstag. Diese Macht wird ab 1930 systematisch zur Aushöhlung der Demokratie genutzt.</p>
+
+    <h4>Schwache Stellung des Reichskanzlers</h4>
+    <p>Der Reichskanzler ist vom Vertrauen des Reichspräsidenten abhängig, nicht primär vom Reichstag.</p>
+
+    <h4>Mangelnde Verankerung der Grundrechte</h4>
+    <p>Grundrechte können per Artikel 48 außer Kraft gesetzt werden. Sie sind nicht <em>unantastbar</em> wie heute im Grundgesetz.</p>
+
+    <h4>Übergewicht Preußens</h4>
+    <p>Preußen umfasst rund zwei Drittel des Reichsgebiets. Wer Preußen kontrolliert, kontrolliert Deutschland (siehe Preußenschlag 1932).</p>
+  </div>
+
+  <h3>Artikel 48 · der gefährlichste Paragraph</h3>
+  <div class="card ink" style="background: var(--ink); color: var(--paper);">
+    <p style="color: var(--paper);">Der Reichspräsident kann bei „erheblicher Störung der öffentlichen Sicherheit und Ordnung" Notverordnungen erlassen, Grundrechte aussetzen und die Reichswehr einsetzen. Gedacht als Ausnahme. Wird ab 1930 zur <strong style="color: var(--gold);">Regel</strong>: 1930 noch 5 Notverordnungen, 1932 schon 66.</p>
+  </div>
+</section>
+
+<!-- ============= THEMA 4: Parteien ============= -->
+<section id="thema4">
+  <span class="section-num">04</span>
+  <h2>Parteien der Weimarer Republik</h2>
+  <span class="section-tag">Programme · Verfassung und Verwaltung</span>
+
+  <p>Das Parteienspektrum reicht von kommunistisch bis nationalsozialistisch. Drei Parteien (SPD, Zentrum, DDP) bilden die <strong>Weimarer Koalition</strong>, die als die <em>Verfassungsparteien</em> oder Republikaner gelten. Andere stehen der Demokratie kritisch oder feindlich gegenüber.</p>
+
+  <div class="partytable">
+    <table>
+      <tr>
+        <th>Partei</th>
+        <th>Position</th>
+        <th>Verfassung & Staatsform</th>
+        <th>Haltung zur Republik</th>
+      </tr>
+      <tr>
+        <td>KPD</td>
+        <td>radikal links</td>
+        <td>proletarische Diktatur, zentralistische Rätedemokratie, Bündnis mit UdSSR</td>
+        <td>republikfeindlich, will Räterepublik</td>
+      </tr>
+      <tr>
+        <td>SPD</td>
+        <td>links</td>
+        <td>Einheitsrepublik, parlamentarische Demokratie, republiktreue Reichswehr</td>
+        <td>Verfassungspartei, Republikaner</td>
+      </tr>
+      <tr>
+        <td>DDP</td>
+        <td>linksliberal</td>
+        <td>Volks- und Rechtsstaat, gleiches Recht für alle, Berufsbeamtentum</td>
+        <td>Verfassungspartei, Republikaner</td>
+      </tr>
+      <tr>
+        <td>Zentrum</td>
+        <td>katholisch, Mitte</td>
+        <td>starke Exekutive, gegen gewaltsamen Umsturz, Reichswehr als Bestandteil der Republik</td>
+        <td>Verfassungspartei, Republikaner</td>
+      </tr>
+      <tr>
+        <td>DVP</td>
+        <td>rechtsliberal</td>
+        <td>starke Staatsgewalt, Wiedererrichtung des Kaisertums per Volksbeschluss</td>
+        <td>monarchistisch, Vernunftrepublikaner</td>
+      </tr>
+      <tr>
+        <td>DNVP</td>
+        <td>rechts, deutschnational</td>
+        <td>Monarchie über den Parteien, starke Exekutive, Wehrpflicht zurück</td>
+        <td>republikfeindlich, monarchistisch</td>
+      </tr>
+      <tr>
+        <td>NSDAP</td>
+        <td>rechtsextrem</td>
+        <td>starke Zentralgewalt, Diktatur, Staatsbürger nur „Volksgenossen deutschen Blutes"</td>
+        <td>republikfeindlich, totalitär</td>
+      </tr>
+    </table>
+  </div>
+
+  <h3>Haltung zum Versailler Vertrag</h3>
+  <ul class="fancy">
+    <li><strong>SPD:</strong> friedliche Lösung internationaler Konflikte, internationale Abrüstung, gegen Imperialismus.</li>
+    <li><strong>Zentrum:</strong> Befreiung der besetzten Gebiete mit rechtmäßigen Mitteln, internationale Prüfung der Kriegsschuld.</li>
+    <li><strong>DDP:</strong> Revision des Vertrages, Selbstbestimmungsrecht.</li>
+    <li><strong>DVP:</strong> gegen „aufgezwungenen Gewaltfrieden", Vereinigung aller Deutschen einschließlich Österreichs.</li>
+    <li><strong>DNVP:</strong> gegen „fremde Zwangsherrschaft", Änderung des Versailler Vertrages, allgemeine Wehrpflicht zurück.</li>
+    <li><strong>NSDAP:</strong> Aufhebung der Friedensverträge, Zusammenschluss aller Deutschen zu „Groß-Deutschland", Forderung nach Kolonien.</li>
+  </ul>
+
+  <details>
+    <summary>Hitlers Wahlkampfrede in Eberswalde, 27.7.1932 · die wichtigsten Aspekte</summary>
+    <ol>
+      <li><strong>Schicksalswahl:</strong> Hitler stilisiert die Wahl zur Entscheidung zwischen zwei Systemen, nicht zwischen Parteien.</li>
+      <li><strong>Schuldzuweisung an die „13 Jahre":</strong> Bürgertum und marxistische Parteien hätten Deutschland 13 Jahre lang ruiniert, sie tragen die Verantwortung.</li>
+      <li><strong>Bilanz der „Anderen":</strong> wirtschaftlich zerstört, Bauernstand ruiniert, Mittelstand verelendet, Millionen Arbeitslose.</li>
+      <li><strong>Anti-Internationalismus:</strong> die Gegner bauen auf „internationale Vorstellungen", die NSDAP konzentriere sich auf die im Volk vorhandenen Kräfte.</li>
+      <li><strong>Volksgemeinschaft:</strong> nationales Deutschland „ohne Klassen, ohne Stände, ohne Konfessionen".</li>
+      <li><strong>Bekenntnis zur Intoleranz:</strong> „Wir sind intolerant! Ich habe mir ein Ziel gestellt: nämlich die 30 Parteien aus Deutschland hinauszufegen!" Offene Ankündigung der Diktatur.</li>
+    </ol>
+    <p><strong>Beurteilung des Zitats „Sie können sich winden, wie sie wollen: dafür sind sie verantwortlich!":</strong> Hitler nutzt eine rhetorisch wirkungsvolle Vereinfachung. Tatsächlich tragen die Weimarer Parteien zwar Mitverantwortung, aber die Krise hat <em>multiple Ursachen</em>: Versailler Vertrag, Weltwirtschaftskrise (USA-Crash 1929), Konstruktionsfehler der Verfassung, Verhalten der konservativen Eliten. Hitler blendet bewusst aus, dass auch sein eigenes Verhalten (Blockadepolitik der NSDAP im Reichstag, Straßengewalt der SA) zur politischen Lähmung beiträgt. Die Aussage ist <strong>demagogisch</strong>, weil sie eine komplexe Lage auf einen Schuldigen reduziert.</p>
+  </details>
+</section>
+
+<!-- ============= THEMA 5: Wahlergebnisse ============= -->
+<section id="thema5">
+  <span class="section-num">05</span>
+  <h2>Wahlergebnisse · das Schrumpfen der Mitte</h2>
+  <span class="section-tag">Reichstagswahlen 1919 bis 1933</span>
+
+  <p>Die Wahlergebnisse zeigen ein dramatisches Bild: <strong>Die Verfassungsparteien</strong> der Weimarer Koalition (SPD, DDP/Staatspartei, Zentrum, BVP) <strong>verlieren stetig an Zustimmung</strong>, die Ränder gewinnen, vor allem die NSDAP ab 1930.</p>
+
+  <h3>Die zentralen Zahlen im Kopf</h3>
+  <div class="partytable">
+    <table>
+      <tr><th>Wahl</th><th>Datum</th><th>Verfassungsparteien</th><th>NSDAP</th><th>KPD</th></tr>
+      <tr><td>Nat.-Vers.</td><td>19.1.1919</td><td>76,2 %</td><td>—</td><td>5,9 % (USPD)</td></tr>
+      <tr><td>1. Reichstag</td><td>6.6.1920</td><td>47,7 %</td><td>—</td><td>2 %</td></tr>
+      <tr><td>2. Reichstag</td><td>4.5.1924</td><td>43,6 %</td><td>(Völkische 6,5 %)</td><td>12,6 %</td></tr>
+      <tr><td>3. Reichstag</td><td>7.12.1924</td><td>49,8 %</td><td>3 %</td><td>9 %</td></tr>
+      <tr><td>4. Reichstag</td><td>20.5.1928</td><td>49,8 %</td><td>2,6 %</td><td>10,6 %</td></tr>
+      <tr><td>5. Reichstag</td><td>14.9.1930</td><td>42,8 %</td><td><strong>18,3 %</strong></td><td>13,1 %</td></tr>
+      <tr><td>6. Reichstag</td><td>31.7.1932</td><td>37,9 %</td><td><strong>37,3 %</strong></td><td>14,3 %</td></tr>
+      <tr><td>7. Reichstag</td><td>6.11.1932</td><td>36,3 %</td><td>33,1 %</td><td>16,8 %</td></tr>
+      <tr><td>8. Reichstag</td><td>5.3.1933</td><td>33,3 %</td><td><strong>43,9 %</strong></td><td>12,3 %</td></tr>
+    </table>
+  </div>
+
+  <h3>Was zeigt das Schaubild „Schrumpfen der Mitte"?</h3>
+  <div class="card gold">
+    <ol>
+      <li><strong>1919 als Höhepunkt:</strong> Die Weimarer Koalition hat 76 Prozent. Eine demokratische Mehrheit, aber nur dieses eine Mal.</li>
+      <li><strong>Schon 1920 dramatischer Einbruch</strong> auf unter 50 Prozent. Die Republik hat danach <em>nie wieder eine sichere demokratische Mehrheit</em>.</li>
+      <li><strong>Stabilisierungsphase 1924 bis 1928:</strong> moderate Werte, NSDAP marginal.</li>
+      <li><strong>Bruch 1930:</strong> NSDAP springt von 2,6 % auf 18,3 % (Wahl nach Beginn der Weltwirtschaftskrise).</li>
+      <li><strong>Juli 1932:</strong> NSDAP wird mit 37,3 % stärkste Partei. Erstmals haben <strong>NSDAP und KPD zusammen die Mehrheit</strong> im Reichstag, also eine Mehrheit aus zwei Anti-System-Parteien. Die Weimarer Republik ist regierungsunfähig.</li>
+      <li><strong>Schwankende Mittelparteien</strong> (DVP, kleine Parteien) verlieren früher und stetiger als die Pole.</li>
+    </ol>
+  </div>
+</section>
+
+<!-- ============= THEMA 6: Goldene Zwanziger ============= -->
+<section id="thema6">
+  <span class="section-num">06</span>
+  <h2>Die Goldenen Zwanziger</h2>
+  <span class="section-tag">1924 bis 1929 · Licht und Schatten</span>
+
+  <p>Nach den Krisenjahren 1919 bis 1923 (Hyperinflation, Putschversuche, Ruhrbesetzung) folgt eine Phase relativer Stabilität. Aber waren sie wirklich so golden?</p>
+
+  <h3>Das Licht</h3>
+  <div class="card green">
+    <h4>Wirtschaft</h4>
+    <ul>
+      <li><strong>Dawes-Plan 1924:</strong> US-Kredite, neue Reparationsregelung</li>
+      <li><strong>Währungsreform:</strong> Ende der Hyperinflation, stabile Reichsmark</li>
+      <li>Industriewachstum, neue Industriezweige</li>
+      <li>Modernisierung der Infrastruktur</li>
+    </ul>
+
+    <h4>Außenpolitik (Stresemann)</h4>
+    <ul>
+      <li><strong>Locarno 1925:</strong> Anerkennung der Westgrenzen, bessere Beziehungen zu F und B</li>
+      <li><strong>Völkerbund 1926:</strong> Deutschland wieder gleichberechtigt</li>
+      <li><strong>Young-Plan 1929:</strong> weitere Reparationserleichterung</li>
+    </ul>
+
+    <h4>Gesellschaft & Kultur</h4>
+    <ul>
+      <li>neues Frauenbild, Berufstätigkeit, Wahlrecht, Mode</li>
+      <li><strong>Arbeitslosenversicherung 1927</strong></li>
+      <li>Bauhaus, neue Sachlichkeit, Kabarett, Film</li>
+      <li>Berlin als kulturelle Metropole</li>
+    </ul>
+  </div>
+
+  <h3>Der Schatten</h3>
+  <div class="card red">
+    <ul>
+      <li>politische Stabilität nur an der Oberfläche, häufige Regierungswechsel</li>
+      <li>konservative Eliten (Hindenburg seit 1925) stehen der Demokratie skeptisch gegenüber</li>
+      <li>extreme Parteien sind <em>geschwächt, aber nicht weg</em></li>
+      <li>Wirtschaft <strong>abhängig von US-Krediten</strong>, also auf Sand gebaut</li>
+      <li>Landwirtschaft wird vernachlässigt, Land bleibt konservativ und traditionell</li>
+      <li>nicht alle Bevölkerungsgruppen profitieren, Arbeitslosigkeit bleibt</li>
+      <li>viele Menschen akzeptieren die Demokratie nicht innerlich</li>
+    </ul>
+  </div>
+
+  <h3>Das abrupte Ende</h3>
+  <p>Mit dem <strong>Schwarzen Donnerstag</strong> (24.10.1929, NY-Börsencrash) endet die Phase. US-Banken fordern ihre Kredite zurück, deutsche Firmen gehen pleite, die Arbeitslosigkeit explodiert. Ab da: Weltwirtschaftskrise und beginnende Zerstörung der Republik.</p>
+
+  <details>
+    <summary>Beurteilung der Leitfrage · Waren sie wirklich golden?</summary>
+    <p>Eine differenzierte Antwort gehört in jede Klausur: <strong>Ja und Nein.</strong> Oberflächlich gab es echten Aufschwung in Wirtschaft, Kultur und Außenpolitik. Aber die Stabilität war <em>fragil und auf Pump</em>, das Land blieb gespalten zwischen modernen Großstädten und konservativem Land, und die Demokratie war nicht ausreichend in der Bevölkerung verankert. Sobald die wirtschaftliche Grundlage wegbrach, brach auch die politische Stabilität zusammen.</p>
+  </details>
+</section>
+
+<!-- ============= THEMA 7: Zerstörung ============= -->
+<section id="thema7">
+  <span class="section-num">07</span>
+  <h2>Zerstörung der Weimarer Republik</h2>
+  <span class="section-tag">1930 bis 30.1.1933 · politische Krisenzeichen</span>
+
+  <p>Genau dieser Bereich ist Brenners Hausaufgabe gewesen. Die Frage: <em>Woran zeigt sich, dass die Weimarer Republik in ihrer Endphase schon sehr geschwächt war?</em> Es geht um <strong>politische</strong> Krisenzeichen, nicht primär um die Wirtschaft (auch wenn die Wirtschaftskrise der Auslöser war).</p>
+
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-date">März 1930</div>
+      <div class="tl-title">Ende der letzten Mehrheitskoalition</div>
+      <p>Die Große Koalition (SPD, Zentrum, DDP, DVP) zerbricht am Streit über die Arbeitslosenversicherung. <strong>Letzte parlamentarische Mehrheitsregierung der Weimarer Republik.</strong></p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">ab März 1930</div>
+      <div class="tl-title">Präsidialkabinette · Brüning</div>
+      <p>Hindenburg ernennt Brüning ohne Reichstagsmehrheit. Regierung per Notverordnung (Art. 48). <strong>Die parlamentarische Demokratie wird systematisch umgangen.</strong> Wenn der Reichstag eine Notverordnung ablehnt, wird er aufgelöst.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">14.9.1930</div>
+      <div class="tl-title">Reichstagswahl: NSDAP wird zweitstärkste Partei</div>
+      <p>Sprung von 2,6 auf 18,3 Prozent. Wirtschaftskrise treibt Wähler in Extrempositionen. Eine Koalition ohne NSDAP oder KPD wird arithmetisch fast unmöglich.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">1930 bis 1932</div>
+      <div class="tl-title">Brünings Sparkurs · „Hungerkanzler"</div>
+      <p>Deflationspolitik per Notverordnung: Löhne runter, Sozialleistungen runter, Steuern hoch. Ziel: Reparationen loswerden. Folge: Massenarbeitslosigkeit, soziale Not, Vertrauen in den Staat schwindet, radikale Kräfte profitieren.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">April 1932</div>
+      <div class="tl-title">SA-Verbot</div>
+      <p>Brünings Regierung verbietet die SA wegen ihrer Straßengewalt. Hindenburgs Umfeld ist gegen das Verbot.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Mai 1932</div>
+      <div class="tl-title">Entlassung Brünings · Intrige</div>
+      <p>Hindenburgs persönliches Umfeld (Großagrarier, Offiziere, Bankiers) intrigiert gegen Brüning. Sie wollen schnelleren autoritären Umbau und sehen ihre Wirtschaftsinteressen bedroht. <strong>Die Regierung hängt nicht mehr vom Reichstag ab, sondern vom Reichspräsidenten und seiner „Kamarilla".</strong></p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Juni 1932</div>
+      <div class="tl-title">Kabinett von Papen · „Kabinett der Barone"</div>
+      <p>Adelige Konservative, parteilos, ohne jede Reichstagsmehrheit. Aufhebung des SA-Verbots. Die Eskalation der Straßengewalt geht weiter.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">20.7.1932</div>
+      <div class="tl-title">Preußenschlag</div>
+      <p>Reichsregierung setzt die rechtmäßige preußische SPD-Regierung per Art. 48 ab und übernimmt die Macht. <strong>Die wichtigste noch demokratisch regierte Landesregierung wird ausgeschaltet.</strong> Verfassungsbruch ohne Konsequenzen.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">31.7.1932</div>
+      <div class="tl-title">Reichstagswahl Juli</div>
+      <p>NSDAP wird mit 37,3 Prozent stärkste Partei. Wahlkampf von Gewalt geprägt (über 300 Tote). NSDAP und KPD haben zusammen die Mehrheit, eine regierungsfähige Mehrheit ist <strong>strukturell ausgeschlossen</strong>.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">6.11.1932</div>
+      <div class="tl-title">Reichstagswahl November</div>
+      <p>NSDAP verliert leicht, bleibt aber stärkste Partei. Misstrauensvotum der KPD gegen Papen. Reichstag aufgelöst.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">Dez 1932 bis Jan 1933</div>
+      <div class="tl-title">Kabinett Schleicher</div>
+      <p>Versuch, NSDAP zu spalten und linken Flügel der NSDAP einzubinden. Scheitert. Papen intrigiert gegen Schleicher und überzeugt Hindenburg, Hitler zum Kanzler zu machen.</p>
+    </div>
+    <div class="tl-item">
+      <div class="tl-date">30.1.1933</div>
+      <div class="tl-title">Ernennung Hitlers zum Reichskanzler</div>
+      <p>Hindenburg, fast 86 Jahre alt, ernennt Hitler. Sein Umfeld ist überzeugt: ein konservatives Kabinett kann Hitler „einrahmen". Falsche Annahme. <strong>Ende der Weimarer Republik, Beginn der NS-Diktatur.</strong></p>
+    </div>
+  </div>
+
+  <h3>Die politischen Krisenzeichen · Antwort auf Brenners Frage</h3>
+  <div class="card red">
+    <ol>
+      <li><strong>Verlust parlamentarischer Mehrheiten</strong> seit März 1930. Demokratie funktioniert nur, wenn der Reichstag Mehrheiten bilden kann.</li>
+      <li><strong>Präsidialkabinette und Notverordnungen</strong> als neue Normalität. Art. 48 wird vom Ausnahme- zum Normalfall.</li>
+      <li><strong>Häufige Reichstagsauflösungen</strong> entwerten den Reichstag als Institution.</li>
+      <li><strong>Erstarken der Anti-System-Parteien</strong> (NSDAP, KPD), die zusammen ab Juli 1932 die Reichstagsmehrheit bilden.</li>
+      <li><strong>Politische Gewalt auf der Straße:</strong> SA, Stahlhelm, Reichsbanner, Rotfrontkämpfer. Das Gewaltmonopol des Staates erodiert.</li>
+      <li><strong>Preußenschlag</strong> als Verfassungsbruch ohne Konsequenz. Demokratische Gegenwehr fehlt.</li>
+      <li><strong>Einfluss der Kamarilla</strong> auf den Reichspräsidenten, also Großagrarier, Großindustrielle, Militärs. Politik wird hinter den Kulissen gemacht.</li>
+      <li><strong>Demokratiefeindlichkeit der Eliten</strong> in Verwaltung, Justiz, Militär, Wirtschaft. Die alten Strukturen aus der Kaiserzeit haben überdauert.</li>
+      <li><strong>Verlust des Vertrauens in die Demokratie</strong> in der Bevölkerung, vor allem in der Mittelschicht und auf dem Land.</li>
+      <li><strong>Demokratie ohne Demokraten:</strong> die meisten Eliten und viele Wähler stehen der Republik distanziert oder feindlich gegenüber.</li>
+    </ol>
+  </div>
+
+  <h3>Warum scheiterte die Weimarer Republik insgesamt? · die sechs Faktoren</h3>
+  <div class="flipgrid">
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 1</div>
+          <div class="term-name">Fehlende 5 %-Hürde</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">Bis zu 16 Parteien im Reichstag, Mehrheitsbildung sehr schwer, Splitterparteien blockieren Politik.</div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 2</div>
+          <div class="term-name">Starker Reichspräsident</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">Art. 48, Auflösungsrecht, Notverordnungen, Oberbefehl. „Ersatzkaiser". Schwacher Reichskanzler im Vergleich.</div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 3</div>
+          <div class="term-name">Schwache Grundrechte</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">Grundrechte können per Art. 48 ausgesetzt werden. Sie sind nicht unantastbar wie heute im Grundgesetz.</div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 4</div>
+          <div class="term-name">Übergewicht Preußens</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">Preußen umfasst zwei Drittel des Reichs. Wer Preußen kontrolliert, kontrolliert Deutschland. Preußenschlag 1932.</div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 5</div>
+          <div class="term-name">Wirtschaftliche Krisen</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">Hyperinflation 1923, Weltwirtschaftskrise ab 1929. Soziale Not, Massenarbeitslosigkeit. Wenig sozialer Rückhalt für die Demokratie.</div>
+      </div>
+    </div>
+    <div class="flip" onclick="this.classList.toggle('flipped')">
+      <div class="flip-inner">
+        <div class="flip-front">
+          <div class="label">Faktor 6</div>
+          <div class="term-name">Konservative Eliten</div>
+          <div class="hint">Klick</div>
+        </div>
+        <div class="flip-back">In Verwaltung, Justiz, Wirtschaft, Militär, Bildung. Aus dem Kaiserreich übernommen, der Republik gegenüber distanziert oder feindlich.</div>
+      </div>
+    </div>
+  </div>
+
+  <details>
+    <summary>Kernsatz für die Klausur</summary>
+    <p>Die Weimarer Republik scheiterte <strong>nicht an einem einzelnen Ereignis</strong>, sondern an einem Zusammenspiel aus strukturellen Schwächen der Verfassung, dem Erbe der nicht erneuerten Eliten, der Wirtschaftskrise und einer politischen Klasse, die ab 1930 bereit war, die Demokratie aktiv auszuhöhlen. Hitler wurde Kanzler, weil konservative Eliten ihn ins Amt brachten, in der falschen Überzeugung, ihn kontrollieren zu können.</p>
+  </details>
+</section>
+
+<div class="ornament">✦ ✦ ✦</div>
+
+<!-- ============= QUIZ ============= -->
+<section id="quiz">
+  <span class="section-num">08</span>
+  <h2>Selbsttest</h2>
+  <span class="section-tag">Klick die richtige Antwort an</span>
+
+  <div class="quiz">
+    <h3>Frage 1 · Doppelte Ausrufung</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Wer rief am 9. November 1918 um 16 Uhr die „freie sozialistische Republik" aus?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">Friedrich Ebert</button>
+        <button class="quiz-opt" data-correct="false">Philipp Scheidemann</button>
+        <button class="quiz-opt" data-correct="true">Karl Liebknecht</button>
+        <button class="quiz-opt" data-correct="false">Rosa Luxemburg</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 2 · Versailler Vertrag</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Welcher Artikel des Versailler Vertrages legte die Alleinschuld Deutschlands am Krieg fest?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">Artikel 48</button>
+        <button class="quiz-opt" data-correct="true">Artikel 231</button>
+        <button class="quiz-opt" data-correct="false">Artikel 14</button>
+        <button class="quiz-opt" data-correct="false">Artikel 1</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 3 · Verfassung</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Was ermöglichte Artikel 48 der Weimarer Verfassung dem Reichspräsidenten?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">Erlass von Steuern ohne Reichstag</button>
+        <button class="quiz-opt" data-correct="true">Notverordnungen und Aussetzung von Grundrechten</button>
+        <button class="quiz-opt" data-correct="false">direkte Wahl des Reichskanzlers durch das Volk</button>
+        <button class="quiz-opt" data-correct="false">Auflösung der Länder</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 4 · Parteien</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Welche drei Parteien bildeten die „Weimarer Koalition" als Verfassungsparteien?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="true">SPD, Zentrum, DDP</button>
+        <button class="quiz-opt" data-correct="false">SPD, KPD, USPD</button>
+        <button class="quiz-opt" data-correct="false">SPD, DVP, DNVP</button>
+        <button class="quiz-opt" data-correct="false">Zentrum, DDP, DVP</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 5 · Wahlergebnisse</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Bei welcher Wahl wurde die NSDAP erstmals stärkste Partei im Reichstag?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">14.9.1930</button>
+        <button class="quiz-opt" data-correct="true">31.7.1932</button>
+        <button class="quiz-opt" data-correct="false">6.11.1932</button>
+        <button class="quiz-opt" data-correct="false">5.3.1933</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 6 · Goldene Zwanziger</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Welcher Außenminister war hauptsächlich für die Verständigungspolitik (Locarno, Völkerbund) verantwortlich?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">Heinrich Brüning</button>
+        <button class="quiz-opt" data-correct="false">Friedrich Ebert</button>
+        <button class="quiz-opt" data-correct="true">Gustav Stresemann</button>
+        <button class="quiz-opt" data-correct="false">Walther Rathenau</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 7 · Zerstörung</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Was bezeichnet der Begriff „Preußenschlag" vom 20. Juli 1932?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">die Verlegung der Reichshauptstadt nach Königsberg</button>
+        <button class="quiz-opt" data-correct="true">die Absetzung der preußischen SPD-Regierung durch die Reichsregierung per Art. 48</button>
+        <button class="quiz-opt" data-correct="false">einen Putschversuch der SA in Preußen</button>
+        <button class="quiz-opt" data-correct="false">die Auflösung des preußischen Landtags durch Hindenburg</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+
+    <h3>Frage 8 · Zerstörung</h3>
+    <div class="quiz-question">
+      <div class="quiz-q">Welche Aussage über die letzten Jahre der Weimarer Republik trifft NICHT zu?</div>
+      <div class="quiz-options">
+        <button class="quiz-opt" data-correct="false">Brüning regierte fast ausschließlich per Notverordnung.</button>
+        <button class="quiz-opt" data-correct="false">NSDAP und KPD hatten ab Juli 1932 zusammen die Mehrheit im Reichstag.</button>
+        <button class="quiz-opt" data-correct="true">Hindenburg trat 1933 zurück und ermöglichte so Hitlers Kanzlerschaft.</button>
+        <button class="quiz-opt" data-correct="false">Hitler wurde am 30.1.1933 von Hindenburg zum Reichskanzler ernannt.</button>
+      </div>
+      <div class="quiz-feedback"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============= CHECKLISTE ============= -->
+<section id="checkliste">
+  <span class="section-num">09</span>
+  <h2>Lern-Checkliste</h2>
+  <span class="section-tag">Klick zum Abhaken · wird gespeichert</span>
+
+  <p>Geh diese Liste durch und hak ab, was du sicher kannst. Was offen bleibt, schaust du dir nochmal genauer an.</p>
+
+  <ul class="checklist" id="checklist">
+    <li>Doppelte Ausrufung: zwei Personen, zwei Uhrzeiten, zwei Visionen</li>
+    <li>Unterschied parlamentarische Demokratie vs. Rätesystem (Mandat, Gewaltenteilung, Repräsentation)</li>
+    <li>Versailler Vertrag: militärische, finanzielle, territoriale Bestimmungen</li>
+    <li>Artikel 231: Alleinschuldparagraph</li>
+    <li>Zwei Sichtweisen auf Versailles (Diktatfrieden vs. Kompromissfrieden Kolb)</li>
+    <li>Inhalte der Weimarer Verfassung (Grundrechte, Wahlrecht, Volkssouveränität)</li>
+    <li>Vier Konstruktionsfehler der Verfassung können benannt werden</li>
+    <li>Artikel 48 erklären können</li>
+    <li>Sieben Parteien zuordnen können (Position, Verhältnis zur Republik)</li>
+    <li>Hitler-Rede Eberswalde: 6 Hauptaussagen kennen</li>
+    <li>Zentrale Wahlergebnisse 1919, 1928, 1930, Juli 1932 kennen</li>
+    <li>„Schrumpfen der Mitte" am Schaubild erklären können</li>
+    <li>Goldene Zwanziger: Licht und Schatten in fünf Bereichen</li>
+    <li>Stresemanns Außenpolitik: Locarno, Völkerbund, Young-Plan</li>
+    <li>Endphase: Brüning, Papen, Schleicher, Hitler</li>
+    <li>Präsidialkabinette und Bedeutung des Art. 48 in der Endphase</li>
+    <li>Preußenschlag und seine Bedeutung</li>
+    <li>Sechs Faktoren des Scheiterns nennen und erklären</li>
+    <li>Zehn politische Krisenzeichen 1930 bis 1933 (Brenners Frage)</li>
+    <li>30. Januar 1933: was passiert, wer ist beteiligt</li>
+  </ul>
+</section>
+
+<footer>
+  <p>Lernzettel · Klausur GGK · Weimarer Republik</p>
+  <p style="margin-top: 8px; color: var(--gold);">Viel Erfolg am Donnerstag</p>
+</footer>
+
+</div>
+
+<script>
+  // PROGRESS BAR
+  const progressBar = document.getElementById('progressBar');
+  const progressLabel = document.getElementById('progressLabel');
+  function updateProgress() {
+    const scrollTop = window.scrollY;
+    const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+    const pct = Math.round((scrollTop / docHeight) * 100);
+    progressBar.style.width = pct + '%';
+    progressLabel.textContent = pct + ' % gelesen';
+  }
+  window.addEventListener('scroll', updateProgress);
+  updateProgress();
+
+  // QUIZ
+  document.querySelectorAll('.quiz-question').forEach(q => {
+    const opts = q.querySelectorAll('.quiz-opt');
+    const fb = q.querySelector('.quiz-feedback');
+    opts.forEach(opt => {
+      opt.addEventListener('click', () => {
+        const correct = opt.dataset.correct === 'true';
+        opts.forEach(o => {
+          o.disabled = true;
+          if (o.dataset.correct === 'true') o.classList.add('correct');
+          else if (o === opt && !correct) o.classList.add('wrong');
+        });
+        fb.textContent = correct ? '✓ Richtig.' : '✗ Nicht ganz. Die korrekte Antwort ist markiert.';
+      });
+    });
+  });
+
+  // CHECKLIST mit localStorage-Alternative (in-memory, da Artifacts kein localStorage)
+  const checked = new Set();
+  document.querySelectorAll('#checklist li').forEach((li, i) => {
+    li.addEventListener('click', () => {
+      li.classList.toggle('done');
+      if (li.classList.contains('done')) checked.add(i);
+      else checked.delete(i);
+    });
+  });
+</script>
+
+</body>
+</html>
