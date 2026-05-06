@@ -1,0 +1,1286 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wissenstest · Weimarer Republik</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f4ecd8;
+    --paper-dark: #e8dcc0;
+    --ink: #1a1614;
+    --ink-soft: #3d342c;
+    --red: #a8321f;
+    --red-dark: #7a1f12;
+    --gold: #b8893d;
+    --green: #4a6b3a;
+    --green-light: #6b8e5a;
+    --shadow: rgba(26, 22, 20, 0.15);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Cormorant Garamond', serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.6;
+    font-size: 18px;
+    background-image:
+      radial-gradient(ellipse at top left, rgba(184, 137, 61, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(168, 50, 31, 0.05), transparent 50%);
+    min-height: 100vh;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='0.9' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 40px 24px 100px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    border-bottom: 3px double var(--ink);
+    padding-bottom: 28px;
+    margin-bottom: 40px;
+  }
+
+  .kicker {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--red);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(40px, 7vw, 72px);
+    letter-spacing: 2px;
+    line-height: 0.95;
+    color: var(--ink);
+  }
+
+  h1 span {
+    display: block;
+    font-style: italic;
+    font-family: 'Cormorant Garamond', serif;
+    font-weight: 400;
+    font-size: 0.32em;
+    letter-spacing: 0;
+    color: var(--ink-soft);
+    margin-top: 12px;
+  }
+
+  /* SCORE */
+  .scorecard {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 16px 24px;
+    margin: 24px 0 32px;
+    border-radius: 2px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .scorecard .score-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 28px;
+    color: var(--gold);
+    letter-spacing: 1px;
+  }
+  .scorecard > div { display: flex; align-items: center; gap: 10px; }
+
+  /* PROGRESS BAR */
+  .progress-wrap {
+    background: rgba(26,22,20,0.08);
+    height: 4px;
+    border-radius: 2px;
+    margin: 0 0 32px;
+    overflow: hidden;
+  }
+  .progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--red), var(--gold));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  /* QUESTION CARD */
+  .question {
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(26,22,20,0.15);
+    border-radius: 2px;
+    padding: 28px 30px;
+    margin-bottom: 24px;
+    box-shadow: 2px 6px 20px var(--shadow);
+    position: relative;
+  }
+
+  .question.locked { opacity: 0.7; }
+
+  .q-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8px;
+  }
+
+  .q-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 36px;
+    color: var(--red);
+    letter-spacing: 1px;
+    line-height: 1;
+  }
+
+  .q-type {
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+    background: rgba(184, 137, 61, 0.2);
+    padding: 4px 10px;
+    border-radius: 2px;
+  }
+
+  .q-prompt {
+    font-size: 20px;
+    margin: 8px 0 22px;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .q-context {
+    font-style: italic;
+    color: var(--ink-soft);
+    font-size: 16px;
+    margin-bottom: 18px;
+    border-left: 3px solid var(--gold);
+    padding: 4px 0 4px 16px;
+  }
+
+  /* INPUT TEXT */
+  .text-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px;
+    background: rgba(255,255,255,0.7);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    color: var(--ink);
+    transition: border-color 0.2s;
+  }
+  .text-input:focus { outline: none; border-color: var(--red); }
+  .text-input.correct { border-color: var(--green); background: rgba(74, 107, 58, 0.1); }
+  .text-input.wrong { border-color: var(--red); background: rgba(168, 50, 31, 0.08); }
+
+  textarea.text-input {
+    min-height: 100px;
+    resize: vertical;
+    font-family: 'Cormorant Garamond', serif;
+    line-height: 1.5;
+  }
+
+  /* BUTTONS */
+  .btn {
+    background: var(--ink);
+    color: var(--paper);
+    border: none;
+    padding: 10px 20px;
+    font-family: 'DM Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 2px;
+    margin-top: 14px;
+    transition: all 0.2s;
+  }
+  .btn:hover { background: var(--red); }
+  .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+  .btn.secondary {
+    background: transparent;
+    color: var(--ink);
+    border: 1px solid var(--ink);
+  }
+  .btn.secondary:hover { background: var(--ink); color: var(--paper); }
+
+  .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 16px;
+    padding: 14px 18px;
+    border-radius: 2px;
+    font-size: 16px;
+    line-height: 1.5;
+    display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct {
+    background: rgba(74, 107, 58, 0.15);
+    border-left: 3px solid var(--green);
+    color: var(--ink);
+  }
+  .feedback.wrong {
+    background: rgba(168, 50, 31, 0.1);
+    border-left: 3px solid var(--red);
+    color: var(--ink);
+  }
+  .feedback.partial {
+    background: rgba(184, 137, 61, 0.15);
+    border-left: 3px solid var(--gold);
+    color: var(--ink);
+  }
+  .feedback strong { color: var(--red-dark); }
+  .feedback .answer-block {
+    background: rgba(255,255,255,0.5);
+    padding: 10px 14px;
+    margin-top: 10px;
+    border-radius: 2px;
+    font-style: italic;
+  }
+
+  /* MULTIPLE CHOICE */
+  .options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .opt-btn {
+    padding: 12px 18px;
+    background: rgba(255,255,255,0.5);
+    border: 1px solid rgba(26,22,20,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    color: var(--ink);
+    text-align: left;
+    transition: all 0.15s;
+  }
+  .opt-btn:hover:not(:disabled) {
+    background: rgba(255,255,255,0.8);
+    border-color: var(--red);
+  }
+  .opt-btn.correct {
+    background: rgba(74, 107, 58, 0.25);
+    border-color: var(--green);
+    font-weight: 500;
+  }
+  .opt-btn.wrong {
+    background: rgba(168, 50, 31, 0.2);
+    border-color: var(--red);
+  }
+  .opt-btn:disabled { cursor: default; }
+
+  /* DRAG & DROP */
+  .timeline-game {
+    margin-top: 14px;
+  }
+  .events-pool {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 16px;
+    background: rgba(26,22,20,0.04);
+    border: 2px dashed rgba(26,22,20,0.2);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    min-height: 60px;
+  }
+  .event-chip {
+    background: var(--paper-dark);
+    border: 2px solid var(--ink);
+    padding: 8px 14px;
+    border-radius: 2px;
+    cursor: grab;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 16px;
+    user-select: none;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .event-chip:hover { transform: translateY(-2px); box-shadow: 2px 4px 8px var(--shadow); }
+  .event-chip.dragging { opacity: 0.4; }
+  .event-chip.correct-pos { background: rgba(74, 107, 58, 0.3); border-color: var(--green); }
+  .event-chip.wrong-pos { background: rgba(168, 50, 31, 0.2); border-color: var(--red); }
+
+  .timeline-slots {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .slot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.4);
+    border: 1px solid rgba(26,22,20,0.15);
+    border-radius: 2px;
+    min-height: 50px;
+  }
+  .slot-num {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 24px;
+    color: var(--red);
+    width: 30px;
+  }
+  .slot-drop {
+    flex: 1;
+    min-height: 38px;
+    border: 2px dashed rgba(26,22,20,0.2);
+    border-radius: 2px;
+    padding: 4px 8px;
+    display: flex;
+    align-items: center;
+  }
+  .slot-drop.drag-over { background: rgba(184, 137, 61, 0.15); border-color: var(--gold); }
+  .slot-drop .event-chip { margin: 0; cursor: grab; }
+
+  /* MATCHING */
+  .matching {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  .match-col {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .match-col h4 {
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 4px;
+  }
+  .match-item {
+    padding: 10px 14px;
+    background: rgba(255,255,255,0.5);
+    border: 2px solid rgba(26,22,20,0.2);
+    border-radius: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: all 0.15s;
+  }
+  .match-item:hover:not(.matched):not(:disabled) { border-color: var(--red); }
+  .match-item.selected { border-color: var(--gold); background: rgba(184, 137, 61, 0.15); }
+  .match-item.matched { opacity: 0.5; cursor: default; }
+  .match-item.matched.correct { border-color: var(--green); background: rgba(74, 107, 58, 0.15); }
+  .match-item.matched.wrong { border-color: var(--red); background: rgba(168, 50, 31, 0.15); }
+
+  @media (max-width: 700px) {
+    .matching { grid-template-columns: 1fr; }
+  }
+
+  /* GAP FILL */
+  .gap-text {
+    font-size: 18px;
+    line-height: 2;
+    padding: 18px 22px;
+    background: rgba(255,255,255,0.4);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+  }
+  .gap-input {
+    display: inline-block;
+    padding: 4px 10px;
+    margin: 0 2px;
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 17px;
+    background: rgba(255,255,255,0.8);
+    border: 2px solid var(--ink);
+    border-radius: 2px;
+    color: var(--ink);
+    width: auto;
+    min-width: 120px;
+    text-align: center;
+  }
+  .gap-input:focus { outline: none; border-color: var(--red); }
+  .gap-input.correct { background: rgba(74, 107, 58, 0.2); border-color: var(--green); }
+  .gap-input.wrong { background: rgba(168, 50, 31, 0.15); border-color: var(--red); }
+
+  /* SOURCE BOX */
+  .source {
+    background: var(--paper-dark);
+    border: 1px solid var(--ink);
+    padding: 16px 20px;
+    margin: 14px 0 20px;
+    font-style: italic;
+    font-size: 16px;
+    line-height: 1.5;
+    border-radius: 2px;
+    position: relative;
+  }
+  .source::before {
+    content: 'QUELLE';
+    position: absolute;
+    top: -10px;
+    left: 14px;
+    background: var(--ink);
+    color: var(--paper);
+    padding: 2px 8px;
+    font-family: 'DM Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 2px;
+  }
+
+  /* HINT BUTTON */
+  .hint-btn {
+    background: none;
+    border: none;
+    color: var(--gold);
+    font-family: 'DM Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    text-decoration: underline;
+    padding: 4px 0;
+    margin-top: 8px;
+  }
+  .hint-text {
+    display: none;
+    padding: 10px 14px;
+    background: rgba(184, 137, 61, 0.1);
+    border-left: 3px solid var(--gold);
+    border-radius: 2px;
+    margin-top: 8px;
+    font-style: italic;
+    font-size: 15px;
+    color: var(--ink-soft);
+  }
+  .hint-text.show { display: block; }
+
+  /* FINAL */
+  .final-result {
+    text-align: center;
+    padding: 40px 30px;
+    margin-top: 40px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: 2px;
+    display: none;
+  }
+  .final-result.show { display: block; }
+  .final-result h2 {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 40px;
+    letter-spacing: 2px;
+    color: var(--gold);
+    margin-bottom: 16px;
+  }
+  .final-result .big-score {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 80px;
+    line-height: 1;
+    color: var(--paper);
+    margin: 20px 0;
+  }
+  .final-result .verdict {
+    font-style: italic;
+    font-size: 18px;
+    color: rgba(244,236,216,0.8);
+    margin: 14px 0 24px;
+  }
+  .final-result .btn { background: var(--gold); color: var(--ink); }
+  .final-result .btn:hover { background: var(--paper); }
+
+  .checklist-results {
+    text-align: left;
+    max-width: 500px;
+    margin: 24px auto 0;
+    padding: 20px;
+    background: rgba(244,236,216,0.06);
+    border-radius: 2px;
+  }
+  .checklist-results li {
+    list-style: none;
+    padding: 6px 0;
+    font-size: 15px;
+    border-bottom: 1px solid rgba(244,236,216,0.1);
+  }
+  .checklist-results li::before {
+    margin-right: 10px;
+    font-family: 'DM Mono', monospace;
+  }
+  .checklist-results li.ok::before { content: '✓'; color: var(--green-light); }
+  .checklist-results li.bad::before { content: '✗'; color: var(--red); }
+
+  footer {
+    margin-top: 50px;
+    padding-top: 20px;
+    border-top: 1px solid rgba(26,22,20,0.2);
+    text-align: center;
+    font-family: 'DM Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--ink-soft);
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+<header>
+  <div class="kicker">Trainingsmodus · Wissenstest</div>
+  <h1>Weimarer Republik
+    <span>Zwölf Aufgaben in sechs Formaten</span>
+  </h1>
+</header>
+
+<div class="scorecard">
+  <div>Punkte<span class="score-num" id="scoreNum">0</span>von <span id="scoreMax">12</span></div>
+  <div>Frage<span class="score-num" id="qProgress">0</span>/ 12</div>
+</div>
+
+<div class="progress-wrap"><div class="progress-bar" id="progressBar"></div></div>
+
+<!-- ======= FRAGE 1 · KURZANTWORT ======= -->
+<div class="question" data-q="1">
+  <div class="q-header">
+    <div class="q-num">01</div>
+    <div class="q-type">Kurzantwort</div>
+  </div>
+  <div class="q-prompt">Wer rief am 9. November 1918 um 14 Uhr vom Balkon des Reichstagsgebäudes die deutsche Republik aus?</div>
+  <input type="text" class="text-input" id="q1-input" placeholder="Vor- und Nachname">
+  <button class="hint-btn" onclick="toggleHint('q1-hint')">Tipp anzeigen</button>
+  <div class="hint-text" id="q1-hint">Er war SPD-Mitglied und wollte einer Räterepublik zuvorkommen.</div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ1()">Prüfen</button>
+  </div>
+  <div class="feedback" id="q1-fb"></div>
+</div>
+
+<!-- ======= FRAGE 2 · MATCHING ======= -->
+<div class="question" data-q="2">
+  <div class="q-header">
+    <div class="q-num">02</div>
+    <div class="q-type">Zuordnung · Parteien</div>
+  </div>
+  <div class="q-prompt">Ordne jeder Partei ihre Position zu. Klicke links eine Partei an, dann rechts die passende Beschreibung.</div>
+  <div class="matching" id="q2-matching">
+    <div class="match-col">
+      <h4>Partei</h4>
+      <button class="match-item" data-id="kpd">KPD</button>
+      <button class="match-item" data-id="zentrum">Zentrum</button>
+      <button class="match-item" data-id="dvp">DVP</button>
+      <button class="match-item" data-id="dnvp">DNVP</button>
+      <button class="match-item" data-id="nsdap">NSDAP</button>
+    </div>
+    <div class="match-col">
+      <h4>Position</h4>
+      <button class="match-item" data-match="dvp">rechtsliberal, monarchistisch, will Wiedererrichtung des Kaisertums</button>
+      <button class="match-item" data-match="kpd">radikal links, will proletarische Diktatur und Rätedemokratie</button>
+      <button class="match-item" data-match="nsdap">rechtsextrem, totalitär, „Volksgenossen deutschen Blutes"</button>
+      <button class="match-item" data-match="zentrum">katholisch, Mitte, Verfassungspartei der Weimarer Koalition</button>
+      <button class="match-item" data-match="dnvp">rechts, deutschnational, monarchistisch, gegen die Republik</button>
+    </div>
+  </div>
+  <div class="feedback" id="q2-fb"></div>
+</div>
+
+<!-- ======= FRAGE 3 · DRAG TIMELINE ======= -->
+<div class="question" data-q="3">
+  <div class="q-header">
+    <div class="q-num">03</div>
+    <div class="q-type">Zeitleiste · Drag & Drop</div>
+  </div>
+  <div class="q-prompt">Ordne diese sechs Ereignisse aus der Endphase der Weimarer Republik in chronologischer Reihenfolge. Ziehe die Karten in die richtigen Slots.</div>
+  <div class="timeline-game">
+    <div class="events-pool" id="q3-pool">
+      <div class="event-chip" draggable="true" data-order="3">Reichstagswahl Juli 1932 · NSDAP wird stärkste Partei</div>
+      <div class="event-chip" draggable="true" data-order="1">Ende der Großen Koalition unter Müller</div>
+      <div class="event-chip" draggable="true" data-order="6">Hitler wird zum Reichskanzler ernannt</div>
+      <div class="event-chip" draggable="true" data-order="4">Preußenschlag · Absetzung der preußischen SPD-Regierung</div>
+      <div class="event-chip" draggable="true" data-order="2">Reichstagswahl September 1930 · NSDAP zweitstärkste Partei</div>
+      <div class="event-chip" draggable="true" data-order="5">Kabinett Schleicher</div>
+    </div>
+    <div class="timeline-slots" id="q3-slots">
+      <div class="slot"><div class="slot-num">1</div><div class="slot-drop" data-pos="1"></div></div>
+      <div class="slot"><div class="slot-num">2</div><div class="slot-drop" data-pos="2"></div></div>
+      <div class="slot"><div class="slot-num">3</div><div class="slot-drop" data-pos="3"></div></div>
+      <div class="slot"><div class="slot-num">4</div><div class="slot-drop" data-pos="4"></div></div>
+      <div class="slot"><div class="slot-num">5</div><div class="slot-drop" data-pos="5"></div></div>
+      <div class="slot"><div class="slot-num">6</div><div class="slot-drop" data-pos="6"></div></div>
+    </div>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ3()">Prüfen</button>
+  </div>
+  <div class="feedback" id="q3-fb"></div>
+</div>
+
+<!-- ======= FRAGE 4 · LÜCKENTEXT ======= -->
+<div class="question" data-q="4">
+  <div class="q-header">
+    <div class="q-num">04</div>
+    <div class="q-type">Lückentext · Verfassung</div>
+  </div>
+  <div class="q-prompt">Ergänze den Text zur Weimarer Verfassung. Achte auf richtige Schreibweise (Großschreibung egal).</div>
+  <div class="gap-text">
+    Die Weimarer Verfassung trat am 11. August
+    <input type="text" class="gap-input" id="q4-1" data-answer="1919" placeholder="Jahr">
+    in Kraft. Eine ihrer großen Errungenschaften war das Wahlrecht für
+    <input type="text" class="gap-input" id="q4-2" data-answer="frauen" placeholder="Personengruppe">. Der Reichspräsident konnte gemäß Artikel
+    <input type="text" class="gap-input" id="q4-3" data-answer="48" placeholder="Nummer">
+    Notverordnungen erlassen und Grundrechte aussetzen. Da es keine
+    <input type="text" class="gap-input" id="q4-4" data-answer="5-prozent-hürde" placeholder="Wahlhürde">
+    gab, kamen viele Splitterparteien in den Reichstag. Wegen seiner Größe und Macht hatte das Land
+    <input type="text" class="gap-input" id="q4-5" data-answer="preußen" placeholder="Bundesland">
+    ein politisches Übergewicht im Reich.
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ4()">Prüfen</button>
+  </div>
+  <div class="feedback" id="q4-fb"></div>
+</div>
+
+<!-- ======= FRAGE 5 · QUELLENANALYSE ======= -->
+<div class="question" data-q="5">
+  <div class="q-header">
+    <div class="q-num">05</div>
+    <div class="q-type">Quellenarbeit · Hitler-Rede</div>
+  </div>
+  <div class="q-prompt">Aus welcher rhetorischen Strategie spricht die folgende Aussage Hitlers?</div>
+  <div class="source">
+    „13 Jahre lang haben sie wirtschaftlich, politisch bewiesen, was zu leisten sie fähig sind. Eine Nation wirtschaftlich zerstört, den Bauernstand ruiniert, den Mittelstand verelendet [...] und viele Millionen Arbeitslose. Sie können sich winden, wie sie sich winden wollen: dafür sind sie verantwortlich!"
+    <br><span style="font-size: 12px; opacity: 0.7;">Eberswalde, 27. Juli 1932</span>
+  </div>
+  <div class="options" id="q5-opts">
+    <button class="opt-btn" data-correct="false">Sachliche Bilanz auf Basis ökonomischer Daten</button>
+    <button class="opt-btn" data-correct="true">Demagogische Schuldzuweisung an „die 13 Jahre" mit Auslassung der eigenen Mitverantwortung</button>
+    <button class="opt-btn" data-correct="false">Selbstkritische Reflexion der NSDAP über die eigene Politik</button>
+    <button class="opt-btn" data-correct="false">Sachlicher Vergleich verschiedener Wirtschaftsmodelle</button>
+  </div>
+  <div class="feedback" id="q5-fb"></div>
+</div>
+
+<!-- ======= FRAGE 6 · OFFENE FRAGE ======= -->
+<div class="question" data-q="6">
+  <div class="q-header">
+    <div class="q-num">06</div>
+    <div class="q-type">Offene Frage · Selbstprüfung</div>
+  </div>
+  <div class="q-prompt">Erkläre in eigenen Worten den Unterschied zwischen einem freien und einem imperativen Mandat. Schreibe 2 bis 3 Sätze.</div>
+  <textarea class="text-input" id="q6-input" placeholder="Deine Antwort hier..."></textarea>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ6()">Antwort prüfen</button>
+  </div>
+  <div class="feedback" id="q6-fb"></div>
+</div>
+
+<!-- ======= FRAGE 7 · ZUORDNUNG GEBIETE ======= -->
+<div class="question" data-q="7">
+  <div class="q-header">
+    <div class="q-num">07</div>
+    <div class="q-type">Versailler Vertrag · Multiple Select</div>
+  </div>
+  <div class="q-prompt">Welche der folgenden Bestimmungen waren tatsächlich Teil des Versailler Vertrages? Wähle ALLE zutreffenden aus.</div>
+  <div class="options" id="q7-opts">
+    <button class="opt-btn" data-correct="true" data-multi="true">Berufsarmee mit max. 100.000 Mann</button>
+    <button class="opt-btn" data-correct="false" data-multi="true">Verbot der katholischen Kirche</button>
+    <button class="opt-btn" data-correct="true" data-multi="true">Abtretung Elsass-Lothringens an Frankreich</button>
+    <button class="opt-btn" data-correct="true" data-multi="true">Verbot des Anschlusses Österreichs an Deutschland</button>
+    <button class="opt-btn" data-correct="false" data-multi="true">Auflösung des deutschen Bildungssystems</button>
+    <button class="opt-btn" data-correct="true" data-multi="true">Alleinschuld am Krieg laut Artikel 231</button>
+    <button class="opt-btn" data-correct="false" data-multi="true">Sofortige Wiedereinführung der Monarchie</button>
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ7()">Auswertung</button>
+  </div>
+  <div class="feedback" id="q7-fb"></div>
+</div>
+
+<!-- ======= FRAGE 8 · KURZANTWORT ZAHL ======= -->
+<div class="question" data-q="8">
+  <div class="q-header">
+    <div class="q-num">08</div>
+    <div class="q-type">Wahlergebnisse · Kurzantwort</div>
+  </div>
+  <div class="q-prompt">Wieviel Prozent erreichte die NSDAP bei der Reichstagswahl im Juli 1932 (auf eine Nachkommastelle, also z.B. 12,3)?</div>
+  <input type="text" class="text-input" id="q8-input" placeholder="Prozentzahl">
+  <button class="hint-btn" onclick="toggleHint('q8-hint')">Tipp anzeigen</button>
+  <div class="hint-text" id="q8-hint">Es war ihr historisch bestes Ergebnis bei einer halbwegs freien Wahl. Die Zahl liegt zwischen 35 und 40 Prozent.</div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ8()">Prüfen</button>
+  </div>
+  <div class="feedback" id="q8-fb"></div>
+</div>
+
+<!-- ======= FRAGE 9 · OFFENE FRAGE ZERSTÖRUNG ======= -->
+<div class="question" data-q="9">
+  <div class="q-header">
+    <div class="q-num">09</div>
+    <div class="q-type">Offene Frage · politische Krisenzeichen</div>
+  </div>
+  <div class="q-prompt">Brenner hat danach gefragt: Nenne mindestens 4 politische Krisenzeichen, an denen man sieht, dass die Weimarer Republik 1930 bis 1933 geschwächt war. Schreibe sie in Stichpunkten.</div>
+  <div class="q-context">Tipp: Es geht NICHT um die Wirtschaft, sondern um politische Phänomene (Verfassung, Parteien, Regierung, Gewalt etc.).</div>
+  <textarea class="text-input" id="q9-input" placeholder="Krisenzeichen 1: ...&#10;Krisenzeichen 2: ...&#10;..."></textarea>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ9()">Antwort prüfen</button>
+  </div>
+  <div class="feedback" id="q9-fb"></div>
+</div>
+
+<!-- ======= FRAGE 10 · LÜCKENTEXT GOLDENE ======= -->
+<div class="question" data-q="10">
+  <div class="q-header">
+    <div class="q-num">10</div>
+    <div class="q-type">Lückentext · Goldene Zwanziger</div>
+  </div>
+  <div class="q-prompt">Vervollständige den Text über die Stresemann-Außenpolitik.</div>
+  <div class="gap-text">
+    Der Außenminister Gustav
+    <input type="text" class="gap-input" id="q10-1" data-answer="stresemann" placeholder="Nachname">
+    verfolgte eine Politik der Verständigung. Mit den Verträgen von
+    <input type="text" class="gap-input" id="q10-2" data-answer="locarno" placeholder="Stadt">
+    1925 erkannte Deutschland seine Westgrenzen an. 1926 trat Deutschland dem
+    <input type="text" class="gap-input" id="q10-3" data-answer="völkerbund" placeholder="Organisation">
+    bei. Die wirtschaftliche Erholung wurde unter anderem durch den
+    <input type="text" class="gap-input" id="q10-4" data-answer="dawes-plan" placeholder="Plan von 1924">
+    möglich, der amerikanische Kredite ins Land brachte. Das Ende der goldenen Zeit kam mit dem Börsencrash am Schwarzen Donnerstag im Oktober
+    <input type="text" class="gap-input" id="q10-5" data-answer="1929" placeholder="Jahr">.
+  </div>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ10()">Prüfen</button>
+  </div>
+  <div class="feedback" id="q10-fb"></div>
+</div>
+
+<!-- ======= FRAGE 11 · QUELLEN-VERGLEICH ======= -->
+<div class="question" data-q="11">
+  <div class="q-header">
+    <div class="q-num">11</div>
+    <div class="q-type">Sichtweisen · Versailler Vertrag</div>
+  </div>
+  <div class="q-prompt">Lies das Zitat. Welcher Sichtweise auf den Versailler Vertrag entspricht es?</div>
+  <div class="source">
+    „Trotz des Versailler Vertrags behielt das Deutsche Reich den Status einer europäischen Großmacht und besaß auf längere Sicht die Möglichkeit, wieder einen aktiven Part in der europäischen Politik zu spielen [...]. Dass wir sie verfehlt haben und in maßloser Ungeduld, in blindem Hass gegen das sogenannte Versailler System uns einem gewalttätigen Abenteurer in die Arme stürzten, ist [...] der verhängnisvollste Fehltritt unserer neueren Geschichte."
+    <br><span style="font-size: 12px; opacity: 0.7;">Eberhard Kolb, Historiker, 2002</span>
+  </div>
+  <div class="options" id="q11-opts">
+    <button class="opt-btn" data-correct="false">Versailles als gnadenloser Diktatfrieden, der Deutschland versklavte</button>
+    <button class="opt-btn" data-correct="true">Versailles als Kompromissfrieden mit Spielräumen, die Deutschland nicht genutzt hat</button>
+    <button class="opt-btn" data-correct="false">Versailles als gerechte Bestrafung Deutschlands für den Krieg</button>
+    <button class="opt-btn" data-correct="false">Versailles als wirkungslose Übereinkunft ohne reale Bedeutung</button>
+  </div>
+  <div class="feedback" id="q11-fb"></div>
+</div>
+
+<!-- ======= FRAGE 12 · ABSCHLUSS-ANALYSE ======= -->
+<div class="question" data-q="12">
+  <div class="q-header">
+    <div class="q-num">12</div>
+    <div class="q-type">Synthese · Abschlussfrage</div>
+  </div>
+  <div class="q-prompt">Erkläre kurz, warum der 30. Januar 1933 NICHT als „demokratisch legitimierte Machtübernahme" bezeichnet werden kann, obwohl die NSDAP zuvor stärkste Partei geworden war. Nenne mindestens 2 Gründe.</div>
+  <textarea class="text-input" id="q12-input" placeholder="Deine Begründung..."></textarea>
+  <div class="btn-row">
+    <button class="btn" onclick="checkQ12()">Antwort prüfen</button>
+  </div>
+  <div class="feedback" id="q12-fb"></div>
+</div>
+
+<!-- FINALE -->
+<div class="final-result" id="finalResult">
+  <h2>Test abgeschlossen</h2>
+  <div class="big-score"><span id="finalScore">0</span> / 12</div>
+  <div class="verdict" id="verdict"></div>
+  <ul class="checklist-results" id="checklistResults"></ul>
+  <button class="btn" onclick="location.reload()">Nochmal versuchen</button>
+</div>
+
+<footer>
+  Wissenstest · Weimarer Republik · Trainingsmodus
+</footer>
+
+</div>
+
+<script>
+  let score = 0;
+  let answered = 0;
+  const totalQuestions = 12;
+  const results = {};
+
+  function updateScore(qNum, points, label) {
+    if (!results[qNum]) {
+      score += points;
+      answered++;
+      results[qNum] = { points, label };
+      document.getElementById('scoreNum').textContent = score;
+      document.getElementById('qProgress').textContent = answered;
+      document.getElementById('progressBar').style.width = (answered / totalQuestions * 100) + '%';
+      if (answered === totalQuestions) showFinal();
+    }
+  }
+
+  function showFinal() {
+    setTimeout(() => {
+      document.getElementById('finalScore').textContent = score;
+      const pct = score / totalQuestions;
+      let verdict = '';
+      if (pct >= 0.92) verdict = 'Hervorragend. Du bist startklar für die Klausur.';
+      else if (pct >= 0.75) verdict = 'Sehr gut. Schau dir die Lücken nochmal an, dann passt das.';
+      else if (pct >= 0.5) verdict = 'Solide Basis, aber da geht noch was. Geh den Lernzettel nochmal durch.';
+      else verdict = 'Da ist noch Luft nach oben. Der Lernzettel hilft, dann nochmal probieren.';
+      document.getElementById('verdict').textContent = verdict;
+
+      const list = document.getElementById('checklistResults');
+      list.innerHTML = '';
+      Object.entries(results).forEach(([q, r]) => {
+        const li = document.createElement('li');
+        li.className = r.points > 0 ? 'ok' : 'bad';
+        li.textContent = `Frage ${q}: ${r.label}`;
+        list.appendChild(li);
+      });
+
+      document.getElementById('finalResult').classList.add('show');
+      document.getElementById('finalResult').scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+  }
+
+  function showFeedback(id, type, html) {
+    const fb = document.getElementById(id);
+    fb.className = 'feedback show ' + type;
+    fb.innerHTML = html;
+  }
+
+  function lockQuestion(qNum) {
+    const q = document.querySelector(`[data-q="${qNum}"]`);
+    q.classList.add('locked');
+    q.querySelectorAll('button.btn, input, textarea, .opt-btn, .match-item, .event-chip').forEach(el => {
+      if (el.classList.contains('hint-btn')) return;
+      if (el.tagName === 'BUTTON') el.disabled = true;
+      else el.setAttribute('disabled', 'true');
+      el.style.pointerEvents = 'none';
+    });
+  }
+
+  function toggleHint(id) {
+    document.getElementById(id).classList.toggle('show');
+  }
+
+  // ===== FRAGE 1 =====
+  function checkQ1() {
+    const val = document.getElementById('q1-input').value.trim().toLowerCase();
+    const accepted = ['philipp scheidemann', 'scheidemann'];
+    const isCorrect = accepted.some(a => val.includes(a));
+    const input = document.getElementById('q1-input');
+    if (isCorrect) {
+      input.classList.add('correct');
+      showFeedback('q1-fb', 'correct', '<strong>Richtig.</strong> Philipp Scheidemann (SPD) rief um 14 Uhr vom Reichstag aus die deutsche Republik aus, zwei Stunden vor Liebknecht.');
+      updateScore(1, 1, 'Scheidemann · richtig');
+    } else {
+      input.classList.add('wrong');
+      showFeedback('q1-fb', 'wrong', '<strong>Nicht ganz.</strong> Die richtige Antwort: <em>Philipp Scheidemann</em> (SPD).');
+      updateScore(1, 0, 'Scheidemann · falsch');
+    }
+    lockQuestion(1);
+  }
+
+  // ===== FRAGE 2 · MATCHING =====
+  let q2Selected = null;
+  let q2Matches = 0;
+  let q2Correct = 0;
+  document.querySelectorAll('#q2-matching .match-item').forEach(item => {
+    item.addEventListener('click', () => {
+      if (item.classList.contains('matched')) return;
+      const isLeft = item.hasAttribute('data-id');
+      if (!q2Selected) {
+        document.querySelectorAll('#q2-matching .match-item.selected').forEach(i => i.classList.remove('selected'));
+        item.classList.add('selected');
+        q2Selected = item;
+      } else if (q2Selected === item) {
+        item.classList.remove('selected');
+        q2Selected = null;
+      } else {
+        const sel = q2Selected;
+        const selIsLeft = sel.hasAttribute('data-id');
+        if (isLeft === selIsLeft) {
+          // gleiche Spalte, neue Auswahl
+          document.querySelectorAll('#q2-matching .match-item.selected').forEach(i => i.classList.remove('selected'));
+          item.classList.add('selected');
+          q2Selected = item;
+          return;
+        }
+        const left = isLeft ? item : sel;
+        const right = isLeft ? sel : item;
+        const isCorrect = left.dataset.id === right.dataset.match;
+        left.classList.add('matched');
+        right.classList.add('matched');
+        left.classList.remove('selected');
+        right.classList.remove('selected');
+        if (isCorrect) {
+          left.classList.add('correct');
+          right.classList.add('correct');
+          q2Correct++;
+        } else {
+          left.classList.add('wrong');
+          right.classList.add('wrong');
+        }
+        q2Selected = null;
+        q2Matches++;
+        if (q2Matches === 5) {
+          const points = q2Correct >= 4 ? 1 : 0;
+          const type = q2Correct === 5 ? 'correct' : (q2Correct >= 3 ? 'partial' : 'wrong');
+          let msg = `Du hast <strong>${q2Correct} von 5</strong> Zuordnungen richtig.`;
+          if (q2Correct === 5) msg += ' Perfekt.';
+          else if (q2Correct >= 3) msg += ' Schau dir die rot markierten nochmal an.';
+          else msg += ' Geh den Parteienteil im Lernzettel nochmal durch.';
+          showFeedback('q2-fb', type, msg);
+          updateScore(2, points, `Zuordnung Parteien · ${q2Correct}/5`);
+          lockQuestion(2);
+        }
+      }
+    });
+  });
+
+  // ===== FRAGE 3 · DRAG & DROP =====
+  let dragged = null;
+  document.querySelectorAll('#q3-pool .event-chip, .slot-drop').forEach(el => {});
+
+  function setupDrag() {
+    document.querySelectorAll('.event-chip').forEach(chip => {
+      chip.addEventListener('dragstart', (e) => {
+        dragged = chip;
+        chip.classList.add('dragging');
+        e.dataTransfer.effectAllowed = 'move';
+      });
+      chip.addEventListener('dragend', () => {
+        chip.classList.remove('dragging');
+      });
+    });
+    document.querySelectorAll('.slot-drop, #q3-pool').forEach(zone => {
+      zone.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        zone.classList.add('drag-over');
+      });
+      zone.addEventListener('dragleave', () => zone.classList.remove('drag-over'));
+      zone.addEventListener('drop', (e) => {
+        e.preventDefault();
+        zone.classList.remove('drag-over');
+        if (!dragged) return;
+        // Wenn Ziel ein Slot ist und schon belegt, swappen
+        if (zone.classList.contains('slot-drop') && zone.children.length > 0) {
+          const existing = zone.children[0];
+          const draggedParent = dragged.parentNode;
+          draggedParent.appendChild(existing);
+        }
+        zone.appendChild(dragged);
+      });
+    });
+  }
+  setupDrag();
+
+  function checkQ3() {
+    const slots = document.querySelectorAll('#q3-slots .slot-drop');
+    let correct = 0;
+    let allFilled = true;
+    slots.forEach((slot, i) => {
+      const chip = slot.querySelector('.event-chip');
+      if (!chip) { allFilled = false; return; }
+      if (parseInt(chip.dataset.order) === i + 1) {
+        chip.classList.add('correct-pos');
+        correct++;
+      } else {
+        chip.classList.add('wrong-pos');
+      }
+    });
+    if (!allFilled) {
+      showFeedback('q3-fb', 'wrong', 'Bitte alle sechs Slots befüllen.');
+      return;
+    }
+    const points = correct === 6 ? 1 : 0;
+    const type = correct === 6 ? 'correct' : (correct >= 4 ? 'partial' : 'wrong');
+    let msg = `<strong>${correct} von 6</strong> richtig einsortiert.`;
+    if (correct === 6) msg += ' Perfekt geordnet.';
+    else {
+      msg += ' Die richtige Reihenfolge:<br>';
+      msg += '<div class="answer-block">1. Ende der Großen Koalition (März 1930) → 2. Reichstagswahl September 1930 → 3. Reichstagswahl Juli 1932 → 4. Preußenschlag (20.7.1932, kurz vor der Wahl) → 5. Kabinett Schleicher (Dez 1932) → 6. Hitler Reichskanzler (30.1.1933)</div>';
+      msg += '<p style="margin-top:8px;font-size:14px;">Knifflig: Der Preußenschlag fand am 20. Juli 1932 statt, also <em>vor</em> der Reichstagswahl Juli 1932 (31.7.1932). Trotzdem wird die Reichstagswahl oft zuerst genannt, weil sie inhaltlich „größer" wirkt.</p>';
+    }
+    showFeedback('q3-fb', type, msg);
+    updateScore(3, points, `Zeitleiste · ${correct}/6`);
+    lockQuestion(3);
+  }
+
+  // ===== FRAGE 4 · LÜCKENTEXT =====
+  function checkQ4() {
+    const inputs = document.querySelectorAll('#q4-1, #q4-2, #q4-3, #q4-4, #q4-5');
+    let correct = 0;
+    inputs.forEach(inp => {
+      const val = inp.value.trim().toLowerCase().replace(/\s+/g, '');
+      const expected = inp.dataset.answer.toLowerCase().replace(/\s+/g, '');
+      const alternates = {
+        'frauen': ['frauen', 'frau'],
+        '5-prozent-hürde': ['5-prozent-hürde', '5%-hürde', '5%hürde', '5prozenthürde', 'fünfprozenthürde', 'fünf-prozent-hürde', 'sperrklausel'],
+        'preußen': ['preußen', 'preussen']
+      };
+      const validAnswers = alternates[expected] || [expected];
+      if (validAnswers.includes(val)) {
+        inp.classList.add('correct');
+        correct++;
+      } else {
+        inp.classList.add('wrong');
+      }
+    });
+    const points = correct === 5 ? 1 : (correct >= 3 ? 0.5 : 0);
+    const type = correct === 5 ? 'correct' : (correct >= 3 ? 'partial' : 'wrong');
+    let msg = `<strong>${correct} von 5</strong> Lücken richtig.`;
+    if (correct < 5) msg += '<div class="answer-block">Lösung: 1919 · Frauen · 48 · 5-Prozent-Hürde · Preußen</div>';
+    showFeedback('q4-fb', type, msg);
+    updateScore(4, points, `Lückentext Verfassung · ${correct}/5`);
+    lockQuestion(4);
+  }
+
+  // ===== FRAGE 5 · MULTIPLE CHOICE =====
+  document.querySelectorAll('#q5-opts .opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.dataset.correct === 'true';
+      document.querySelectorAll('#q5-opts .opt-btn').forEach(b => {
+        b.disabled = true;
+        if (b.dataset.correct === 'true') b.classList.add('correct');
+        else if (b === btn && !correct) b.classList.add('wrong');
+      });
+      const msg = correct
+        ? '<strong>Richtig.</strong> Hitler nutzt eine demagogische Vereinfachung. Er weist „den 13 Jahren" pauschal die Schuld zu, ohne strukturelle Faktoren wie Versailles oder die Weltwirtschaftskrise zu nennen, und blendet die eigene Mitverantwortung (Blockadepolitik der NSDAP, SA-Gewalt) aus.'
+        : '<strong>Nicht ganz.</strong> Die Aussage ist eine demagogische Schuldzuweisung mit Auslassung der eigenen Mitverantwortung. Hitler vereinfacht eine komplexe Lage auf einen Schuldigen.';
+      showFeedback('q5-fb', correct ? 'correct' : 'wrong', msg);
+      updateScore(5, correct ? 1 : 0, `Quellenanalyse Hitler · ${correct ? 'richtig' : 'falsch'}`);
+    });
+  });
+
+  // ===== FRAGE 6 · OFFENE FRAGE =====
+  function checkQ6() {
+    const val = document.getElementById('q6-input').value.toLowerCase();
+    const keyTerms = {
+      frei: ['frei', 'gewissen', 'eigen'],
+      imperativ: ['imperativ', 'gebund', 'weisung', 'absetzen', 'aufträg']
+    };
+    const hitFrei = keyTerms.frei.some(k => val.includes(k));
+    const hitImp = keyTerms.imperativ.some(k => val.includes(k));
+    const hasMin = val.length >= 60;
+    let score6, type, msg;
+    if (hitFrei && hitImp && hasMin) {
+      score6 = 1;
+      type = 'correct';
+      msg = '<strong>Sieht gut aus.</strong> Du hast beide zentralen Aspekte angesprochen.';
+    } else if ((hitFrei || hitImp) && hasMin) {
+      score6 = 0.5;
+      type = 'partial';
+      msg = '<strong>Teilweise.</strong> Du hast einen Aspekt drin, der andere fehlt oder ist unklar.';
+    } else {
+      score6 = 0;
+      type = 'wrong';
+      msg = '<strong>Da fehlt was.</strong>';
+    }
+    msg += '<div class="answer-block"><strong>Musterantwort:</strong> Beim freien Mandat entscheidet ein Abgeordneter nach seinem eigenen Gewissen und ist nicht an konkrete Weisungen seiner Wähler gebunden, er hat eine festgelegte Amtszeit. Beim imperativen Mandat ist der Vertretende an die Weisungen seiner Gruppe gebunden, kann jederzeit abgesetzt werden und vertritt nur deren Willen. Im Rätesystem gilt das imperative Mandat, in der parlamentarischen Demokratie das freie.</div>';
+    showFeedback('q6-fb', type, msg);
+    updateScore(6, score6, `Mandat-Frage · ${score6 === 1 ? 'gut' : score6 === 0.5 ? 'teilweise' : 'unvollständig'}`);
+    lockQuestion(6);
+  }
+
+  // ===== FRAGE 7 · MULTI SELECT =====
+  const q7Selected = new Set();
+  document.querySelectorAll('#q7-opts .opt-btn').forEach((btn, i) => {
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('selected-multi')) {
+        btn.classList.remove('selected-multi');
+        btn.style.borderColor = '';
+        btn.style.background = '';
+        q7Selected.delete(i);
+      } else {
+        btn.classList.add('selected-multi');
+        btn.style.borderColor = 'var(--gold)';
+        btn.style.background = 'rgba(184, 137, 61, 0.15)';
+        q7Selected.add(i);
+      }
+    });
+  });
+  function checkQ7() {
+    const opts = document.querySelectorAll('#q7-opts .opt-btn');
+    let correct = 0;
+    let total = 4; // 4 richtige
+    opts.forEach((btn, i) => {
+      const isCorrect = btn.dataset.correct === 'true';
+      const wasSelected = q7Selected.has(i);
+      btn.disabled = true;
+      btn.style.borderColor = '';
+      btn.style.background = '';
+      if (isCorrect && wasSelected) {
+        btn.classList.add('correct');
+        correct++;
+      } else if (isCorrect && !wasSelected) {
+        btn.classList.add('correct');
+        btn.style.opacity = '0.6';
+      } else if (!isCorrect && wasSelected) {
+        btn.classList.add('wrong');
+      }
+    });
+    const points = correct === 4 ? 1 : (correct >= 3 ? 0.5 : 0);
+    const type = correct === 4 ? 'correct' : (correct >= 2 ? 'partial' : 'wrong');
+    let msg = `Du hast <strong>${correct} von 4</strong> richtigen Bestimmungen ausgewählt.`;
+    if (correct < 4) msg += '<div class="answer-block">Richtig waren: Berufsarmee 100.000 Mann · Abtretung Elsass-Lothringens · Anschlussverbot Österreich · Artikel 231 Alleinschuld</div>';
+    showFeedback('q7-fb', type, msg);
+    updateScore(7, points, `Versailles Multi-Select · ${correct}/4`);
+    lockQuestion(7);
+  }
+
+  // ===== FRAGE 8 =====
+  function checkQ8() {
+    const val = document.getElementById('q8-input').value.trim().replace(',', '.');
+    const num = parseFloat(val);
+    const isCorrect = !isNaN(num) && num >= 37.0 && num <= 37.5;
+    const input = document.getElementById('q8-input');
+    if (isCorrect) {
+      input.classList.add('correct');
+      showFeedback('q8-fb', 'correct', '<strong>Richtig.</strong> Die NSDAP erreichte 37,3 % bei der Reichstagswahl Juli 1932 und wurde damit erstmals stärkste Partei. Im November 1932 fiel sie wieder auf 33,1 % zurück.');
+      updateScore(8, 1, '37,3 % · richtig');
+    } else {
+      input.classList.add('wrong');
+      showFeedback('q8-fb', 'wrong', '<strong>Nicht ganz.</strong> Die richtige Antwort: <em>37,3 %</em>. Das war ihr Höchststand bei einer freien Wahl.');
+      updateScore(8, 0, 'NSDAP-Prozent · falsch');
+    }
+    lockQuestion(8);
+  }
+
+  // ===== FRAGE 9 · OFFENE LANGE FRAGE =====
+  function checkQ9() {
+    const val = document.getElementById('q9-input').value.toLowerCase();
+    const keywords = [
+      ['präsidialkabin', 'notverordn', 'art. 48', 'artikel 48'],
+      ['mehrheit', 'koalition', 'reichstag aufgelöst', 'auflösung'],
+      ['nsdap', 'kpd', 'extrem', 'radikal', 'anti-system'],
+      ['gewalt', 'sa', 'straße', 'paramilitär'],
+      ['preußenschlag', 'preußen'],
+      ['hindenburg', 'kamarilla', 'umfeld', 'eliten', 'großagrar'],
+      ['vertrauen', 'demokratie', 'demokratiefeind']
+    ];
+    const hits = keywords.filter(group => group.some(k => val.includes(k))).length;
+    const hasEnough = val.length >= 80;
+    let score9, type, msg;
+    if (hits >= 4 && hasEnough) {
+      score9 = 1;
+      type = 'correct';
+      msg = `<strong>Sehr gut.</strong> Du hast ${hits} verschiedene Aspekte angesprochen.`;
+    } else if (hits >= 2 && hasEnough) {
+      score9 = 0.5;
+      type = 'partial';
+      msg = `<strong>Teilweise gut.</strong> Du hast ${hits} Aspekte erwähnt, für die volle Punktzahl wären 4 oder mehr ideal.`;
+    } else {
+      score9 = 0;
+      type = 'wrong';
+      msg = '<strong>Da geht mehr.</strong>';
+    }
+    msg += '<div class="answer-block"><strong>Mögliche Krisenzeichen:</strong><br>· Verlust parlamentarischer Mehrheiten ab März 1930<br>· Präsidialkabinette und Regieren per Notverordnung (Art. 48)<br>· Häufige Reichstagsauflösungen<br>· Erstarken der Anti-System-Parteien NSDAP und KPD<br>· Politische Gewalt auf der Straße (SA, Rotfrontkämpfer)<br>· Preußenschlag als Verfassungsbruch<br>· Einfluss der Kamarilla auf Hindenburg<br>· Demokratiefeindlichkeit der Eliten in Justiz, Verwaltung, Militär<br>· Verlust des Vertrauens der Bevölkerung in die Demokratie</div>';
+    showFeedback('q9-fb', type, msg);
+    updateScore(9, score9, `Krisenzeichen · ${hits} Aspekte`);
+    lockQuestion(9);
+  }
+
+  // ===== FRAGE 10 · LÜCKENTEXT =====
+  function checkQ10() {
+    const inputs = document.querySelectorAll('#q10-1, #q10-2, #q10-3, #q10-4, #q10-5');
+    let correct = 0;
+    inputs.forEach(inp => {
+      const val = inp.value.trim().toLowerCase().replace(/\s+/g, '');
+      const expected = inp.dataset.answer.toLowerCase().replace(/\s+/g, '');
+      const alternates = {
+        'dawes-plan': ['dawes-plan', 'dawesplan', 'dawes plan']
+      };
+      const validAnswers = alternates[expected] || [expected];
+      if (validAnswers.some(a => val === a.replace(/\s+/g, ''))) {
+        inp.classList.add('correct');
+        correct++;
+      } else {
+        inp.classList.add('wrong');
+      }
+    });
+    const points = correct === 5 ? 1 : (correct >= 3 ? 0.5 : 0);
+    const type = correct === 5 ? 'correct' : (correct >= 3 ? 'partial' : 'wrong');
+    let msg = `<strong>${correct} von 5</strong> Lücken richtig.`;
+    if (correct < 5) msg += '<div class="answer-block">Lösung: Stresemann · Locarno · Völkerbund · Dawes-Plan · 1929</div>';
+    showFeedback('q10-fb', type, msg);
+    updateScore(10, points, `Lückentext Stresemann · ${correct}/5`);
+    lockQuestion(10);
+  }
+
+  // ===== FRAGE 11 · MC =====
+  document.querySelectorAll('#q11-opts .opt-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const correct = btn.dataset.correct === 'true';
+      document.querySelectorAll('#q11-opts .opt-btn').forEach(b => {
+        b.disabled = true;
+        if (b.dataset.correct === 'true') b.classList.add('correct');
+        else if (b === btn && !correct) b.classList.add('wrong');
+      });
+      const msg = correct
+        ? '<strong>Richtig.</strong> Kolb gehört zur differenzierten historischen Sicht: Versailles war hart, aber kein gnadenloser Diktatfrieden. Deutschland hatte Spielräume, die es politisch nicht zu nutzen verstand.'
+        : '<strong>Nicht ganz.</strong> Kolb argumentiert, dass Versailles Spielräume ließ, die Deutschland nicht genutzt hat. Diese Sicht steht der „Diktatfrieden"-Sicht der zeitgenössischen Karikaturen und Plakate gegenüber.';
+      showFeedback('q11-fb', correct ? 'correct' : 'wrong', msg);
+      updateScore(11, correct ? 1 : 0, `Sichtweise Versailles · ${correct ? 'richtig' : 'falsch'}`);
+    });
+  });
+
+  // ===== FRAGE 12 · OFFENE =====
+  function checkQ12() {
+    const val = document.getElementById('q12-input').value.toLowerCase();
+    const keywords = [
+      ['mehrheit', '50', 'absolute', 'keine mehrheit'],
+      ['hindenburg', 'ernannt', 'ernannte', 'reichspräsident'],
+      ['kamarilla', 'intrige', 'papen', 'umfeld', 'eliten', 'hinter den kulissen'],
+      ['art. 48', 'artikel 48', 'notverordn', 'präsidialkabinett'],
+      ['reichstagswahl', 'parlament', 'koalition']
+    ];
+    const hits = keywords.filter(group => group.some(k => val.includes(k))).length;
+    const hasEnough = val.length >= 50;
+    let score12, type, msg;
+    if (hits >= 2 && hasEnough) {
+      score12 = 1;
+      type = 'correct';
+      msg = `<strong>Gut argumentiert.</strong> Du hast ${hits} relevante Aspekte angesprochen.`;
+    } else if (hits >= 1 && hasEnough) {
+      score12 = 0.5;
+      type = 'partial';
+      msg = `<strong>Teilweise.</strong> Du hast einen wichtigen Punkt, ein zweiter Grund fehlt.`;
+    } else {
+      score12 = 0;
+      type = 'wrong';
+      msg = '<strong>Antwort zu kurz oder zu unpräzise.</strong>';
+    }
+    msg += '<div class="answer-block"><strong>Mögliche Begründungen:</strong><br>· Die NSDAP erreichte nie eine absolute Mehrheit (max. 37,3 % im Juli 1932, im November 1932 sogar nur noch 33,1 %)<br>· Hitler wurde nicht vom Volk oder Parlament gewählt, sondern von Reichspräsident Hindenburg ernannt<br>· Die Ernennung war das Ergebnis einer Intrige der konservativen Eliten um Papen, die glaubten, Hitler kontrollieren zu können<br>· Die Regierungsbildung erfolgte ohne parlamentarische Mehrheit, im Stil der bisherigen Präsidialkabinette<br>· Die NSDAP hatte mit ihrer Blockadepolitik im Reichstag ohnehin den parlamentarischen Weg torpediert</div>';
+    showFeedback('q12-fb', type, msg);
+    updateScore(12, score12, `30. Januar 1933 · ${score12 === 1 ? 'gut' : score12 === 0.5 ? 'teilweise' : 'unvollständig'}`);
+    lockQuestion(12);
+  }
+</script>
+
+</body>
+</html>
