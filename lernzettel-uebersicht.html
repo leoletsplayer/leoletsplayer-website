@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meine Lernzettel</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .back-btn {
+            display: inline-block;
+            margin-bottom: 24px;
+            color: #87ceeb;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.95em;
+            transition: color 0.2s;
+        }
+        .back-btn:hover { color: #fff; }
+
+        .page-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        .page-header h1 {
+            font-size: 2em;
+            color: #fff;
+            margin-bottom: 8px;
+        }
+        .page-header p {
+            color: #aaa;
+            font-size: 0.95em;
+            margin: 0;
+        }
+
+        .subjects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 18px;
+        }
+
+        .subject-card {
+            background: #454545;
+            border-radius: 8px;
+            padding: 18px 20px;
+            border-left: 5px solid #666;
+        }
+
+        .subject-card h2 {
+            font-size: 1.15em;
+            color: #fff;
+            margin-bottom: 12px;
+        }
+
+        .lernzettel-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .lernzettel-list li {
+            padding: 5px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+        }
+        .lernzettel-list li:last-child { border-bottom: none; }
+
+        .lernzettel-list a {
+            color: #d0d0d0;
+            text-decoration: none;
+            display: block;
+            margin-top: 0;
+            font-size: 0.92em;
+            transition: color 0.2s;
+        }
+        .lernzettel-list a::before { content: '→ '; }
+        .lernzettel-list a:hover { color: #fff; }
+
+        .empty-state {
+            color: #666;
+            font-style: italic;
+            font-size: 0.88em;
+        }
+
+        .add-hint {
+            display: block;
+            margin-top: 10px;
+            color: #555;
+            font-size: 0.8em;
+            font-style: italic;
+        }
+
+        @media (max-width: 600px) {
+            .subjects-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <a href="index.html" class="back-btn">← Zurück zur Startseite</a>
+
+        <div class="page-header">
+            <h1>Meine Lernzettel</h1>
+            <p>Klicke auf einen Lernzettel um ihn zu öffnen</p>
+        </div>
+
+        <!--
+        ╔══════════════════════════════════════════════════════════╗
+        ║  NEUEN LERNZETTEL HINZUFÜGEN                            ║
+        ║                                                          ║
+        ║  1. Erstelle eine HTML-Datei im passenden Fach-Ordner:  ║
+        ║     lernzettel/FACH/thema.html                          ║
+        ║                                                          ║
+        ║  2. Füge unter dem richtigen Fach einen neuen Eintrag   ║
+        ║     in der Liste hinzu:                                  ║
+        ║     <li><a href="lernzettel/FACH/thema.html">Thema</a></li>
+        ║                                                          ║
+        ║  3. Das war's! Einfach speichern und fertig.            ║
+        ╚══════════════════════════════════════════════════════════╝
+        -->
+
+        <div class="subjects-grid">
+
+            <!-- ===== MATHE =====
+                 Beispiel: <li><a href="lernzettel/mathe/analysis.html">Analysis - Ableitungsregeln</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #4a90d9">
+                <h2>Mathe</h2>
+                <ul class="lernzettel-list">
+                    <!-- Mathe-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== PHYSIK =====
+                 Beispiel: <li><a href="lernzettel/physik/mechanik.html">Mechanik</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #8b5cf6">
+                <h2>Physik</h2>
+                <ul class="lernzettel-list">
+                    <!-- Physik-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== GGK =====
+                 Beispiel: <li><a href="lernzettel/ggk/neues-thema.html">Neues Thema</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #c0392b">
+                <h2>GGK</h2>
+                <ul class="lernzettel-list">
+                    <!-- GGK-Lernzettel hier eintragen -->
+                    <li><a href="lernzettel/ggk/weimarer-republik.html">Weimarer Republik</a></li>
+                </ul>
+            </div>
+
+            <!-- ===== ENGLISCH =====
+                 Beispiel: <li><a href="lernzettel/englisch/vokabeln.html">Vokabeln Unit 3</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #27ae60">
+                <h2>Englisch</h2>
+                <ul class="lernzettel-list">
+                    <!-- Englisch-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== DEUTSCH =====
+                 Beispiel: <li><a href="lernzettel/deutsch/faust.html">Faust - Goethe</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #e67e22">
+                <h2>Deutsch</h2>
+                <ul class="lernzettel-list">
+                    <!-- Deutsch-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== IT SOFTWARE =====
+                 Beispiel: <li><a href="lernzettel/it-software/datenbanken.html">Datenbanken</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #1abc9c">
+                <h2>IT Software</h2>
+                <ul class="lernzettel-list">
+                    <!-- IT-Software-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== IT HARDWARE =====
+                 Beispiel: <li><a href="lernzettel/it-hardware/netzwerke.html">Netzwerke</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #e74c3c">
+                <h2>IT Hardware</h2>
+                <ul class="lernzettel-list">
+                    <!-- IT-Hardware-Lernzettel hier eintragen -->
+                    <li><a href="lernzettel/it-hardware/Arbeit3.html">Arbeit3</a></li>
+                </ul>
+            </div>
+
+            <!-- ===== INFORMATIK =====
+                 Beispiel: <li><a href="lernzettel/informatik/algorithmen.html">Algorithmen</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #3498db">
+                <h2>Informatik</h2>
+                <ul class="lernzettel-list">
+                    <!-- Informatik-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== ETHIK =====
+                 Beispiel: <li><a href="lernzettel/ethik/kant.html">Kant - Kategorischer Imperativ</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #9b59b6">
+                <h2>Ethik</h2>
+                <ul class="lernzettel-list">
+                    <!-- Ethik-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+            <!-- ===== WIRTSCHAFT =====
+                 Beispiel: <li><a href="lernzettel/wirtschaft/angebot-nachfrage.html">Angebot und Nachfrage</a></li>
+            -->
+            <div class="subject-card" style="border-left-color: #f1c40f">
+                <h2>Wirtschaft</h2>
+                <ul class="lernzettel-list">
+                    <!-- Wirtschaft-Lernzettel hier eintragen -->
+                    <li class="empty-state">Noch keine Lernzettel</li>
+                </ul>
+            </div>
+
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 leo</p>
+    </footer>
+</body>
+</html>
