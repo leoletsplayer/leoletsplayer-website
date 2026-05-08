@@ -1,0 +1,1154 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernzettel IT Hardware – PWM · ADC · I2C</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f0;
+    color: #2c2c2a;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 40px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #2c2c2a;
+  }
+
+  header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  header p {
+    font-size: 15px;
+    color: #5f5e5a;
+    font-style: italic;
+  }
+
+  nav {
+    background: #fff;
+    border: 1px solid #d3d1c7;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+
+  nav h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #5f5e5a;
+    margin-bottom: 12px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  nav a {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #f5f5f0;
+    border: 1px solid #d3d1c7;
+    border-radius: 999px;
+    color: #2c2c2a;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  nav a.main {
+    background: #2c2c2a;
+    color: #fff;
+    border-color: #2c2c2a;
+    font-weight: 600;
+  }
+
+  nav a:hover {
+    background: #534AB7;
+    color: #fff;
+    border-color: #534AB7;
+  }
+
+  /* Hauptthemen */
+  section.major {
+    background: #fff;
+    border: 2px solid #534AB7;
+    border-radius: 12px;
+    padding: 40px 44px;
+    margin-bottom: 28px;
+    position: relative;
+  }
+
+  section.major::before {
+    content: "Hauptthema";
+    position: absolute;
+    top: -12px;
+    left: 30px;
+    background: #534AB7;
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 999px;
+  }
+
+  /* Refresher */
+  section.refresher {
+    background: #fafaf7;
+    border: 1px solid #d3d1c7;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 16px;
+  }
+
+  section.refresher h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+
+  .refresher-block {
+    background: #fff;
+    border: 1px solid #d3d1c7;
+    border-radius: 12px;
+    padding: 28px 32px;
+    margin-bottom: 28px;
+  }
+
+  .refresher-block > h2 {
+    font-size: 22px;
+    margin-bottom: 16px;
+    color: #5f5e5a;
+  }
+
+  .refresher-block > h2 .tag {
+    font-size: 11px;
+    background: #d3d1c7;
+    color: #5f5e5a;
+    padding: 3px 10px;
+    border-radius: 999px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+  }
+
+  .refresher-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  .refresher-card h3 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: #2c2c2a;
+  }
+
+  .refresher-card p, .refresher-card ul {
+    font-size: 13px;
+    color: #444441;
+  }
+
+  .refresher-card ul {
+    padding-left: 18px;
+  }
+
+  .refresher-card pre {
+    margin: 6px 0;
+    font-size: 12px;
+    padding: 10px 12px;
+  }
+
+  section h2 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  section h2 .num {
+    font-size: 14px;
+    color: #888780;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  section .lead {
+    color: #5f5e5a;
+    font-size: 15px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1efe8;
+  }
+
+  h3 {
+    font-size: 18px;
+    font-weight: 600;
+    margin: 28px 0 12px;
+    color: #2c2c2a;
+  }
+
+  h3:first-of-type {
+    margin-top: 0;
+  }
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin: 18px 0 8px;
+    color: #3C3489;
+  }
+
+  p {
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+
+  ul, ol {
+    margin-bottom: 12px;
+    padding-left: 22px;
+  }
+
+  ul li, ol li {
+    margin-bottom: 5px;
+    font-size: 15px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 18px;
+    font-size: 14px;
+    background: #fafaf7;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th {
+    background: #2c2c2a;
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+
+  td {
+    padding: 10px 14px;
+    border-top: 1px solid #e8e6df;
+    vertical-align: top;
+  }
+
+  tr:nth-child(even) td {
+    background: #f5f5f0;
+  }
+
+  code {
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    background: #f1efe8;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #3C3489;
+  }
+
+  pre {
+    background: #2c2c2a;
+    color: #f5f5f0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 12px 0 18px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 13px;
+  }
+
+  .formula {
+    background: #EEEDFE;
+    border-left: 4px solid #534AB7;
+    padding: 16px 20px;
+    margin: 14px 0;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 15px;
+    border-radius: 0 6px 6px 0;
+    color: #26215C;
+    font-weight: 500;
+  }
+
+  .info-box {
+    background: #E6F1FB;
+    border: 1px solid #B5D4F4;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .info-box strong {
+    color: #0C447C;
+  }
+
+  .warn-box {
+    background: #FAEEDA;
+    border: 1px solid #FAC775;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .warn-box strong {
+    color: #633806;
+  }
+
+  .key-box {
+    background: #EAF3DE;
+    border-left: 4px solid #639922;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-size: 14px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .key-box strong {
+    color: #3B6D11;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .pros, .cons {
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .pros { background: #EAF3DE; border: 1px solid #C0DD97; }
+  .cons { background: #FCEBEB; border: 1px solid #F7C1C1; }
+
+  .pros h4, .cons h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin: 0 0 8px;
+  }
+
+  .pros h4 { color: #3B6D11; }
+  .cons h4 { color: #A32D2D; }
+
+  .pros ul, .cons ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .pros li, .cons li {
+    margin-bottom: 4px;
+  }
+
+  .pwm-visual {
+    background: #f5f5f0;
+    border-radius: 8px;
+    padding: 18px;
+    margin: 16px 0;
+  }
+
+  .pwm-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 10px;
+  }
+
+  .pwm-row:last-child { margin-bottom: 0; }
+
+  .pwm-label {
+    font-size: 13px;
+    font-weight: 600;
+    width: 60px;
+    color: #26215C;
+  }
+
+  .pwm-bar {
+    display: flex;
+    flex: 1;
+    height: 28px;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid #d3d1c7;
+  }
+
+  .pwm-high { background: #534AB7; }
+  .pwm-low  { background: #fafaf7; }
+
+  .pwm-meta {
+    font-size: 12px;
+    color: #5f5e5a;
+    width: 90px;
+    text-align: right;
+  }
+
+  .frame-visual {
+    display: flex;
+    gap: 4px;
+    margin: 16px 0;
+    align-items: stretch;
+    flex-wrap: wrap;
+  }
+
+  .frame-visual .bit {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  .frame-visual .bit.start { background: #D85A30; }
+  .frame-visual .bit.addr  { background: #378ADD; flex: 1.5; }
+  .frame-visual .bit.rw    { background: #EF9F27; color: #412402; }
+  .frame-visual .bit.ack   { background: #1D9E75; }
+  .frame-visual .bit.data  { background: #534AB7; flex: 1.5; }
+  .frame-visual .bit.stop  { background: #A32D2D; }
+
+  .summary {
+    background: linear-gradient(135deg, #2c2c2a, #444441);
+    color: #f5f5f0;
+    padding: 32px 40px;
+    border-radius: 12px;
+    margin-top: 30px;
+  }
+
+  .summary h2 {
+    color: #fff;
+    border: none;
+    margin-bottom: 18px;
+  }
+
+  .summary ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .summary li {
+    padding: 10px 0;
+    border-bottom: 1px solid #5f5e5a;
+    font-size: 14px;
+  }
+
+  .summary li:last-child { border-bottom: none; }
+  .summary li strong { color: #FAC775; }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    color: #888780;
+    font-size: 12px;
+    border-top: 1px solid #d3d1c7;
+  }
+
+  @media (max-width: 700px) {
+    body { padding: 20px 12px; }
+    section.major { padding: 28px 24px; }
+    .refresher-block { padding: 22px 22px; }
+    header h1 { font-size: 28px; }
+    .pros-cons, .refresher-grid { grid-template-columns: 1fr; }
+    table { font-size: 13px; }
+    th, td { padding: 8px 10px; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    section { page-break-inside: avoid; }
+    nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Lernzettel IT Hardware</h1>
+  <p>Fokus: PWM · ADC · I2C</p>
+</header>
+
+<nav>
+  <h3>Inhalt</h3>
+  <ul>
+    <li><a href="#pwm" class="main">PWM</a></li>
+    <li><a href="#adc" class="main">ADC</a></li>
+    <li><a href="#i2c" class="main">I2C</a></li>
+    <li><a href="#refresher">Refresher (Rest)</a></li>
+    <li><a href="#merksaetze">Merksätze</a></li>
+  </ul>
+</nav>
+
+<!-- ============================================== -->
+<!-- HAUPTTHEMA 1: PWM -->
+<!-- ============================================== -->
+<section id="pwm" class="major">
+  <h2><span class="num">01</span> PWM – Pulsweitenmodulation</h2>
+  <p class="lead">Pseudo-analoge Ausgabe mit nur einem digitalen Pin. Wird verwendet, um z. B. LEDs zu dimmen, Motoren in der Drehzahl zu regeln oder Servos anzusteuern.</p>
+
+  <h3>Theorie: Grundidee</h3>
+  <p>Ein Mikrocontroller-Pin kann nur zwei Zustände ausgeben: HIGH (3,3 V) oder LOW (0 V). Trotzdem will man oft eine Spannung dazwischen erzeugen, z. B. um eine LED auf 50 % Helligkeit zu dimmen. Lösung: Der Pin wird so schnell zwischen HIGH und LOW umgeschaltet, dass am Verbraucher im <strong>zeitlichen Mittel</strong> die gewünschte Leistung ankommt. Das menschliche Auge oder die Trägheit des Motors sieht/spürt nur den Mittelwert.</p>
+
+  <div class="key-box"><strong>Kernidee:</strong> PWM erzeugt keine echte analoge Spannung. Es schaltet sehr schnell zwischen 0 V und 3,3 V hin und her. Der Verbraucher mittelt das selbst.</div>
+
+  <h3>Wichtige Begriffe</h3>
+  <table>
+    <tr><th>Begriff</th><th>Symbol</th><th>Bedeutung</th></tr>
+    <tr><td>Periodendauer</td><td>T</td><td>Dauer einer kompletten Schwingung (HIGH + LOW)</td></tr>
+    <tr><td>Frequenz</td><td>f</td><td>Anzahl Schwingungen pro Sekunde, f = 1 / T</td></tr>
+    <tr><td>Einschaltdauer</td><td>t_HIGH</td><td>Zeit, in der der Pin HIGH ist</td></tr>
+    <tr><td>Tastgrad / Duty Cycle</td><td>D</td><td>Verhältnis t_HIGH zu T, in % (0 – 100)</td></tr>
+  </table>
+
+  <h3>Wichtige Formeln</h3>
+  <div class="formula">Tastgrad D = t_HIGH / T &nbsp;·&nbsp; 100 %</div>
+  <div class="formula">U_mittel = D · U_max</div>
+  <div class="formula">f = 1 / T</div>
+
+  <h3>Visualisierung des Tastgrads</h3>
+  <div class="pwm-visual">
+    <div class="pwm-row">
+      <div class="pwm-label">10 %</div>
+      <div class="pwm-bar"><div class="pwm-high" style="width:10%;"></div><div class="pwm-low" style="width:90%;"></div></div>
+      <div class="pwm-meta">U ≈ 0,33 V</div>
+    </div>
+    <div class="pwm-row">
+      <div class="pwm-label">25 %</div>
+      <div class="pwm-bar"><div class="pwm-high" style="width:25%;"></div><div class="pwm-low" style="width:75%;"></div></div>
+      <div class="pwm-meta">U ≈ 0,83 V</div>
+    </div>
+    <div class="pwm-row">
+      <div class="pwm-label">50 %</div>
+      <div class="pwm-bar"><div class="pwm-high" style="width:50%;"></div><div class="pwm-low" style="width:50%;"></div></div>
+      <div class="pwm-meta">U = 1,65 V</div>
+    </div>
+    <div class="pwm-row">
+      <div class="pwm-label">75 %</div>
+      <div class="pwm-bar"><div class="pwm-high" style="width:75%;"></div><div class="pwm-low" style="width:25%;"></div></div>
+      <div class="pwm-meta">U ≈ 2,48 V</div>
+    </div>
+    <div class="pwm-row">
+      <div class="pwm-label">100 %</div>
+      <div class="pwm-bar"><div class="pwm-high" style="width:100%;"></div></div>
+      <div class="pwm-meta">U = 3,3 V</div>
+    </div>
+  </div>
+  <p style="font-size: 13px; color: #5f5e5a;">(Werte für U_max = 3,3 V)</p>
+
+  <h3>Frequenzwahl: warum so hoch?</h3>
+  <p>Die Frequenz muss hoch genug sein, damit der Verbraucher den Wechsel nicht mehr wahrnimmt:</p>
+  <ul>
+    <li><strong>LEDs:</strong> ab ca. <strong>200 Hz</strong> nimmt das Auge kein Flackern mehr wahr</li>
+    <li><strong>Motoren:</strong> typisch im <strong>kHz-Bereich</strong>, sonst pfeift der Motor hörbar</li>
+    <li><strong>Servos:</strong> brauchen genau <strong>50 Hz</strong> (das Steuerprotokoll fordert das)</li>
+  </ul>
+  <div class="warn-box"><strong>Achtung:</strong> Wenn die Frequenz zu niedrig gewählt wird, sieht man bei LEDs ein Flackern und hört bei Motoren ein Pfeifen oder Surren.</div>
+
+  <h3>Tastgrad ≠ Frequenz</h3>
+  <p>Wichtig zu unterscheiden:</p>
+  <ul>
+    <li>Der <strong>Tastgrad</strong> verändert die mittlere Leistung (Helligkeit, Drehzahl)</li>
+    <li>Die <strong>Frequenz</strong> bestimmt nur, wie schnell geschaltet wird, nicht wie hell die LED ist</li>
+  </ul>
+
+  <h3>Programmierung am STM32 (Arduino)</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>analogWrite(pin, wert);</code></td><td>PWM ausgeben. Default 8 Bit → Werte 0 bis 255</td></tr>
+    <tr><td><code>analogWriteResolution(bit);</code></td><td>Auflösung des Tastgrads ändern (z. B. 10 Bit → 0–1023)</td></tr>
+    <tr><td><code>analogWriteFrequency(hz);</code></td><td>PWM-Frequenz setzen</td></tr>
+  </table>
+
+  <div class="info-box"><strong>Umrechnung Tastgrad → Wert:</strong><br>
+  Bei 8 Bit (Default) entspricht der Wert 0 einem Tastgrad von 0 % und der Wert 255 einem Tastgrad von 100 %. Beispiel: 50 % Tastgrad = Wert 128.</div>
+
+  <h3>Beispiel: LED dimmen mit Potentiometer</h3>
+<pre><code>#define POTI PA0
+#define LED  PC6
+
+void setup() {
+  analogReadResolution(8);          // ADC: 0..255
+  analogWriteFrequency(200);        // 200 Hz, kein Flackern
+  pinMode(LED, OUTPUT);
+}
+
+void loop() {
+  int wert = analogRead(POTI);      // Poti einlesen, 0..255
+  analogWrite(LED, wert);           // direkt als Tastgrad
+  delay(500);
+}</code></pre>
+
+  <h3>Beispiel: festen Tastgrad ausgeben</h3>
+<pre><code>analogWriteFrequency(1000);   // 1 kHz
+analogWrite(PC6, 64);          // 64/255 ≈ 25 % Tastgrad</code></pre>
+
+  <h3>Vorteile / Nachteile</h3>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Einfacher als ein DAC</li>
+        <li>Sehr effizient: Transistor ganz an oder ganz aus, kaum Verlustleistung</li>
+        <li>Universell: LEDs, Motoren, Servos, Audio</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>Frequenz muss richtig gewählt werden</li>
+        <li>Kein echtes Analogsignal</li>
+        <li>Kann Störungen (EMV, Pfeifen) erzeugen</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- HAUPTTHEMA 2: ADC -->
+<!-- ============================================== -->
+<section id="adc" class="major">
+  <h2><span class="num">02</span> ADC – Analog Digital Converter</h2>
+  <p class="lead">Wandelt analoge Spannungen (z. B. von Sensoren oder Potentiometern) in digitale Werte um, mit denen der Mikrocontroller rechnen kann. Gegenstück: DAC.</p>
+
+  <h3>Theorie: Warum digital?</h3>
+  <table>
+    <tr><th></th><th>Vorteile</th><th>Nachteile</th></tr>
+    <tr><td><strong>Analog</strong></td><td>Stufenlos, beliebig viele Zwischenwerte</td><td>Störanfällig, Verzerrungen, Ablesefehler</td></tr>
+    <tr><td><strong>Digital</strong></td><td>Störsicher, einfach speicherbar, flexibel weiterverarbeitbar, leichter ablesbar</td><td>Endlich viele Zustände, Informationsverlust beim Wandeln</td></tr>
+  </table>
+
+  <h3>Funktionsprinzip</h3>
+  <p>Die Wandlung läuft in zwei Schritten ab:</p>
+  <ol>
+    <li><strong>Abtastung (Sampling):</strong> in regelmäßigen Abständen wird der Spannungswert stichprobenartig gemessen</li>
+    <li><strong>Digitalisierung (Quantisierung):</strong> dem gemessenen Spannungswert wird ein digitaler Wert zugeordnet</li>
+  </ol>
+
+  <h3>Shannon-Abtasttheorem</h3>
+  <p>Das Theorem gibt vor, mit welcher Frequenz mindestens abgetastet werden muss, damit das analoge Signal später wieder rekonstruiert werden kann:</p>
+  <div class="formula">f_abtast &gt; 2 · f_max</div>
+  <p>f_max ist die höchste Frequenz, die im analogen Signal vorkommt. Wird zu langsam abgetastet, geht Information verloren (Aliasing).</p>
+
+  <h3>Auflösung</h3>
+  <p>Die Auflösung gibt an, in wie vielen Stufen der ADC die Spannung abbildet. Mehr Bit = feinere Auflösung = genauere Messung.</p>
+  <table>
+    <tr><th>Auflösung</th><th>Stufen</th><th>ΔU bei U_ref = 3,3 V</th></tr>
+    <tr><td>8 Bit</td><td>2⁸ = 256</td><td>≈ 12,9 mV</td></tr>
+    <tr><td>10 Bit (Arduino-Default)</td><td>2¹⁰ = 1024</td><td>≈ 3,22 mV</td></tr>
+    <tr><td>12 Bit (STM32)</td><td>2¹² = 4096</td><td>≈ 0,806 mV</td></tr>
+  </table>
+
+  <h3>Wichtige Formeln</h3>
+  <div class="formula">ΔU = U_ref / 2ⁿ</div>
+  <p>ΔU ist die Spannungsauflösung, also der Abstand zwischen zwei benachbarten Stufen. n ist die Bit-Auflösung des ADC.</p>
+
+  <div class="formula">U_eingang = ADC_wert · U_ref / (2ⁿ − 1)</div>
+  <p>Damit lässt sich aus dem digitalen ADC-Wert die ursprüngliche Spannung zurückrechnen.</p>
+
+  <div class="info-box"><strong>Hinweis aus dem Unterricht:</strong> In der Formelsammlung steht für ΔU manchmal U_ref / (2ⁿ − 1). Beide Schreibweisen werden als richtig gewertet.</div>
+
+  <h3>Beispiel-Rechnungen</h3>
+  <div class="key-box"><strong>Beispiel 1:</strong> 12-Bit-ADC, U_ref = 3,3 V → ΔU = 3,3 V / 4096 ≈ 0,806 mV</div>
+  <div class="key-box"><strong>Beispiel 2:</strong> Gemessener ADC-Wert = 2048, U_ref = 3,3 V, 12 Bit → U = 2048 · 3,3 / 4095 ≈ 1,65 V</div>
+
+  <h3>Wägeverfahren (sukzessive Approximation)</h3>
+  <p>Der STM32-ADC arbeitet nach dem Wägeverfahren. Ein internes Register (SAR = Successive Approximation Register) wird Bit für Bit gefüllt, beginnend mit dem MSB:</p>
+  <ol>
+    <li>Alle Bits werden auf 0 gesetzt</li>
+    <li>Das MSB wird auf 1 gesetzt, ein interner DAC erzeugt die entsprechende Spannung</li>
+    <li>Komparator vergleicht: Ist DAC-Spannung &lt; Eingangsspannung → Bit bleibt 1, sonst wird es zurückgesetzt</li>
+    <li>Verfahren wird mit dem nächsten Bit wiederholt, bis das LSB erreicht ist</li>
+  </ol>
+  <p>Bei jedem Takt wird ein Bit angenähert. Bei 12 Bit braucht der ADC also 12 Takte plus etwas Overhead.</p>
+
+  <h3>ADC am STM32L152RE</h3>
+  <ul>
+    <li>12-Bit-Auflösung, sukzessive Approximation</li>
+    <li>bis zu 42 Kanäle (40 extern, 2 intern)</li>
+    <li>Wandlungszeit: 1 µs (max. Speed) bis 4 µs (low Speed)</li>
+    <li>Referenzspannung U_ref = 3,3 V</li>
+  </ul>
+  <p><strong>Analog-fähige Pins (Nucleo L152RE):</strong></p>
+  <ul>
+    <li>PA0 – PA7</li>
+    <li>PB0, PB1, PB12 – PB15</li>
+    <li>PC0 – PC5</li>
+  </ul>
+
+  <h3>Programmierung</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>analogReadResolution(12);</code></td><td>Auflösung auf 12 Bit setzen (Default 10 Bit)</td></tr>
+    <tr><td><code>int wert = analogRead(PA0);</code></td><td>Spannung an Pin einlesen</td></tr>
+  </table>
+
+  <h3>Beispiel: Potentiometer einlesen</h3>
+<pre><code>#define POTI    PA0
+#define U_MAX   3.3
+#define ADC_MAX 4095
+
+void setup() {
+  analogReadResolution(12);
+}
+
+void loop() {
+  int adc_wert = analogRead(POTI);
+  float U = (float) adc_wert * U_MAX / ADC_MAX;
+  // adc_wert: 0..4095
+  // U: 0..3,3 V
+}</code></pre>
+  <div class="warn-box"><strong>Casting nicht vergessen:</strong> Bei <code>adc_wert * U_MAX / ADC_MAX</code> ohne <code>(float)</code> rechnet C ganzzahlig und das Ergebnis ist 0 oder 1. Erst durch das Casting auf float wird sauber gerechnet.</div>
+
+  <h3>Beispiel: ADC mit Hardware-Timer (Übungsaufgabe)</h3>
+  <p>Ein analoger Sensor an PA0 wird alle 2 Sekunden mit einem Timer abgefragt, abhängig vom Wert wird ein LED-Muster ausgegeben:</p>
+<pre><code>#include &lt;Arduino.h&gt;
+#include &lt;HardwareTimer.h&gt;
+
+#define SENSOR PA0
+#define GRENZE_40  1638   // 40 % von 4095
+#define GRENZE_60  2457   // 60 % von 4095
+
+HardwareTimer *timer = new HardwareTimer(TIM6);
+volatile bool messen = false;
+
+void timer_isr() { messen = true; }
+
+void setup() {
+  for (int i = 0; i &lt; 8; i++) pinMode(PC0 + i, OUTPUT);
+  analogReadResolution(12);
+
+  timer-&gt;setOverflow(2000000, MICROSEC_FORMAT);  // alle 2 s
+  timer-&gt;attachInterrupt(timer_isr);
+  timer-&gt;resume();
+}
+
+void loop() {
+  if (messen) {
+    messen = false;
+    int wert = analogRead(SENSOR);
+
+    unsigned char muster;
+    if (wert &lt; GRENZE_40)       muster = 0x01;
+    else if (wert &lt; GRENZE_60)  muster = 0x81;
+    else                        muster = 0xff;
+
+    GPIOC-&gt;ODR = (GPIOC-&gt;ODR &amp; 0xFF00) | muster;
+  }
+}</code></pre>
+</section>
+
+<!-- ============================================== -->
+<!-- HAUPTTHEMA 3: I2C -->
+<!-- ============================================== -->
+<section id="i2c" class="major">
+  <h2><span class="num">03</span> I2C – Inter Integrated Circuit</h2>
+  <p class="lead">Synchroner 2-Draht-Bus mit Adressierung. Ideal, wenn man mehrere Sensoren oder Module mit wenigen Leitungen anschließen will.</p>
+
+  <h3>Theorie: Grundprinzip</h3>
+  <p>I2C wurde 1982 von Philips entwickelt und ist ein <strong>synchroner serieller 2-Draht-Bus</strong>. Mehrere Bausteine teilen sich dieselben zwei Leitungen. Master-Slave-Prinzip (neu: Controller / Target). Halbduplex – die beiden Seiten können nicht gleichzeitig senden.</p>
+
+  <h3>Leitungen</h3>
+  <table>
+    <tr><th>Leitung</th><th>Bedeutung</th></tr>
+    <tr><td><code>SDA</code></td><td>Serial Data – die Datenleitung</td></tr>
+    <tr><td><code>SCL</code></td><td>Serial Clock – das Taktsignal vom Master</td></tr>
+  </table>
+
+  <h3>Open Drain und Pull-Ups</h3>
+  <p>Beide Leitungen sind <strong>Open Drain</strong>. Das heißt: jeder Teilnehmer kann die Leitung nur auf 0 V (LOW) ziehen, nicht aktiv auf HIGH treiben. Damit die Leitung im Ruhezustand HIGH ist, brauchen <strong>SDA und SCL jeweils einen Pull-Up-Widerstand</strong>.</p>
+  <ul>
+    <li>Typische Werte: <strong>4,3 kΩ bis 10 kΩ</strong> bei 5 V Betriebsspannung</li>
+    <li>Viele Module bringen die Pull-Ups schon mit</li>
+    <li>Zu viele parallel geschaltete Pull-Ups → Gesamtwiderstand sinkt → Bus wird überlastet</li>
+  </ul>
+  <div class="info-box"><strong>Warum Open Drain?</strong> So können sich mehrere Teilnehmer dieselbe Leitung teilen, ohne dass es zum Kurzschluss kommt, wenn zwei gleichzeitig senden wollen.</div>
+
+  <h3>Geschwindigkeiten</h3>
+  <table>
+    <tr><th>Modus</th><th>Geschwindigkeit</th></tr>
+    <tr><td>Standard Mode (Sm)</td><td>100 kbit/s</td></tr>
+    <tr><td>Fast Mode (Fm)</td><td>400 kbit/s</td></tr>
+    <tr><td>Fast Mode Plus (Fm+)</td><td>1 Mbit/s</td></tr>
+    <tr><td>High Speed Mode (Hs)</td><td>3,4 Mbit/s</td></tr>
+  </table>
+  <p>Reichweite: typischerweise nur Platinengröße (ca. 50 cm).</p>
+
+  <h3>Adressierung</h3>
+  <p>Jeder Slave hat eine <strong>7-Bit-Adresse</strong>. Die oberen 4 Bit sind oft vom Hersteller fest, die unteren 3 Bit am Baustein über Pins (A0, A1, A2) einstellbar. Damit lassen sich z. B. bis zu 8 PCF8574 am selben Bus betreiben.</p>
+
+  <h4>Adressbyte</h4>
+  <table style="font-family: 'SF Mono', monospace; font-size: 13px;">
+    <tr><th>Bit</th><th>A6</th><th>A5</th><th>A4</th><th>A3</th><th>A2</th><th>A1</th><th>A0</th><th>R/W</th></tr>
+    <tr>
+      <td>Inhalt</td>
+      <td colspan="4" style="text-align:center; background:#E6F1FB;">herstellerfest</td>
+      <td colspan="3" style="text-align:center; background:#FAEEDA;">einstellbar</td>
+      <td style="text-align:center; background:#EAF3DE;">0=W, 1=R</td>
+    </tr>
+  </table>
+  <ul>
+    <li><strong>R/W = 0</strong> → schreiben (Master sendet an Slave)</li>
+    <li><strong>R/W = 1</strong> → lesen (Slave sendet an Master)</li>
+  </ul>
+  <div class="warn-box"><strong>Achtung:</strong> Mit 7 Bit gibt es nur 128 mögliche Adressen, davon sind 16 reserviert. Adressen sind oft mehrfach vergeben, dann braucht man mehrere I2C-Busse.</div>
+
+  <h3>Frame-Aufbau</h3>
+  <p>Ein I2C-Frame zum Schreiben sieht so aus:</p>
+  <div class="frame-visual">
+    <div class="bit start">START</div>
+    <div class="bit addr">7-Bit Adresse</div>
+    <div class="bit rw">R/W</div>
+    <div class="bit ack">ACK</div>
+    <div class="bit data">Datenbyte</div>
+    <div class="bit ack">ACK</div>
+    <div class="bit stop">STOP</div>
+  </div>
+  <ol>
+    <li><strong>START:</strong> Master zieht SDA auf LOW, während SCL HIGH ist</li>
+    <li><strong>Adresse + R/W-Bit:</strong> 7 Adress-Bits + 1 Richtungsbit</li>
+    <li><strong>ACK:</strong> Slave bestätigt mit 0, dass er angesprochen wurde</li>
+    <li><strong>Datenbytes:</strong> jeweils mit ACK des Empfängers</li>
+    <li><strong>STOP:</strong> Master zieht SDA von LOW auf HIGH, während SCL HIGH ist</li>
+  </ol>
+
+  <h3>Ablauf: Schreiben (Output mode)</h3>
+  <p>Beispiel mit dem PCF8574 (Port-Expander):</p>
+  <ol>
+    <li>Master sendet START + Adresse + R/W = 0</li>
+    <li>Slave sendet ACK</li>
+    <li>Master sendet Datenbyte (z. B. das LED-Muster)</li>
+    <li>Slave sendet ACK und schaltet seine Pins entsprechend</li>
+    <li>Master sendet STOP</li>
+  </ol>
+
+  <h3>Ablauf: Lesen (Input mode)</h3>
+  <ol>
+    <li>Master sendet START + Adresse + R/W = 1</li>
+    <li>Slave sendet ACK</li>
+    <li>Slave sendet Datenbyte</li>
+    <li>Master sendet ACK (für weiter lesen) oder NACK (Schluss)</li>
+    <li>Master sendet STOP</li>
+  </ol>
+
+  <h3>I2C-Pins am Nucleo L152RE</h3>
+  <table>
+    <tr><th>Bus</th><th>SDA</th><th>SCL</th></tr>
+    <tr><td>I2C1</td><td>PB9</td><td>PB8</td></tr>
+    <tr><td>I2C1 (alt)</td><td>PB7</td><td>PB6</td></tr>
+    <tr><td>I2C2</td><td>PB11</td><td>PB10</td></tr>
+  </table>
+
+  <h3>Programmierung mit Wire-Library</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>#include &lt;Wire.h&gt;</code></td><td>Bibliothek einbinden</td></tr>
+    <tr><td><code>Wire.begin();</code></td><td>Bus initialisieren (Master-Mode)</td></tr>
+    <tr><td><code>Wire.setClock(400000);</code></td><td>Geschwindigkeit setzen (z. B. Fast Mode)</td></tr>
+    <tr><td><code>Wire.beginTransmission(addr);</code></td><td>Übertragung an Slave starten</td></tr>
+    <tr><td><code>Wire.write(byte);</code></td><td>Byte in Sendepuffer schreiben</td></tr>
+    <tr><td><code>Wire.endTransmission();</code></td><td>Sendepuffer übertragen + STOP</td></tr>
+    <tr><td><code>Wire.requestFrom(addr, n);</code></td><td>n Bytes vom Slave anfordern</td></tr>
+    <tr><td><code>Wire.available();</code></td><td>Anzahl ungelesener Bytes</td></tr>
+    <tr><td><code>Wire.read();</code></td><td>Byte aus Empfangspuffer lesen</td></tr>
+  </table>
+  <div class="info-box"><strong>Wichtig:</strong> <code>Wire.write()</code> schreibt nur in einen Pufferspeicher. Erst <code>Wire.endTransmission()</code> sendet die Daten wirklich auf den Bus.</div>
+
+  <h3>Beispiel: Daten an einen Slave senden</h3>
+<pre><code>#include &lt;Arduino.h&gt;
+#include &lt;Wire.h&gt;
+
+#define SENSOR_ADDRESS 0x4A
+
+void setup() {
+  Wire.begin();
+}
+
+void loop() {
+  // Ein Byte senden
+  Wire.beginTransmission(SENSOR_ADDRESS);
+  Wire.write(0x9f);
+  Wire.endTransmission();
+
+  // Zwei Bytes lesen
+  Wire.requestFrom(SENSOR_ADDRESS, 2);
+  unsigned char b1 = Wire.read();
+  unsigned char b2 = Wire.read();
+}</code></pre>
+
+  <h3>Beispiel: PCF8574 Lauflicht</h3>
+<pre><code>#define PCF1_ADDRESS 0x22
+
+unsigned char muster[6] = {0x07, 0x0E, 0x1C, 0x38, 0x70, 0xE0};
+
+void loop() {
+  for (int i = 0; i &lt; 6; i++) {
+    Wire.beginTransmission(PCF1_ADDRESS);
+    Wire.write(~muster[i]);   // invertieren, weil LEDs low-aktiv
+    Wire.endTransmission();
+    delay(200);
+  }
+}</code></pre>
+
+  <h3>I2C-Bus-Scanner</h3>
+  <p>Praktisch, um die Adresse unbekannter Bausteine zu finden. Man geht alle Adressen 1 bis 127 durch und prüft, ob <code>endTransmission()</code> 0 (= erfolgreich) zurückgibt:</p>
+<pre><code>for (int addr = 1; addr &lt; 128; addr++) {
+  Wire.beginTransmission(addr);
+  Wire.write(0x00);
+  if (Wire.endTransmission() == 0) {
+    // Baustein an dieser Adresse gefunden
+    lcd.printf("0x%2X gefunden", addr);
+  }
+}</code></pre>
+
+  <h3>Vorteile / Nachteile</h3>
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Nur 2 Leitungen für viele Slaves</li>
+        <li>Adressierung statt CS-Pins</li>
+        <li>ACK-Bestätigung jedes Bytes</li>
+        <li>Standardisiert, sehr verbreitet</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>Pull-Up-Widerstände nötig</li>
+        <li>Begrenzte Reichweite (ca. 50 cm)</li>
+        <li>Nur Halbduplex</li>
+        <li>Adressen oft mehrfach vergeben</li>
+        <li>Langsamer als SPI</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- REFRESHER -->
+<!-- ============================================== -->
+<div id="refresher">
+
+<div class="refresher-block">
+  <h2>Pin & Port <span class="tag">Refresher</span></h2>
+  <div class="refresher-grid">
+    <div class="refresher-card">
+      <h3>Pin-Modi</h3>
+      <ul>
+        <li><code>OUTPUT</code> – Ausgabe</li>
+        <li><code>INPUT_PULLUP</code> – low-aktiv</li>
+        <li><code>INPUT_PULLDOWN</code> – high-aktiv</li>
+      </ul>
+<pre><code>pinMode(PC0, OUTPUT);
+digitalWrite(PC0, HIGH);
+int x = digitalRead(PA1);</code></pre>
+    </div>
+    <div class="refresher-card">
+      <h3>Port-Register</h3>
+      <ul>
+        <li><code>GPIOx-&gt;ODR</code> – schreiben</li>
+        <li><code>GPIOx-&gt;IDR</code> – lesen</li>
+      </ul>
+<pre><code>GPIOC-&gt;ODR = 0xFF;
+// Nur untere 8 Bit
+GPIOC-&gt;ODR = (GPIOC-&gt;ODR & 0xFF00) | muster;</code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="refresher-block">
+  <h2>Datentypen, Arrays, Operatoren <span class="tag">Refresher</span></h2>
+  <div class="refresher-grid">
+    <div class="refresher-card">
+      <h3>Wichtige Typen</h3>
+      <ul>
+        <li><code>unsigned char</code> – 0..255 (LED-Muster)</li>
+        <li><code>int</code> – ±2 Mrd</li>
+        <li><code>float</code> – Kommazahlen</li>
+        <li><code>volatile</code> – für ISR-Variablen!</li>
+      </ul>
+    </div>
+    <div class="refresher-card">
+      <h3>Bit-Tricks</h3>
+<pre><code>x |= (1&lt;&lt;n);     // Bit setzen
+x &amp;= ~(1&lt;&lt;n);    // Bit löschen
+x ^= (1&lt;&lt;n);     // Bit toggeln
+if (x &amp; (1&lt;&lt;n))  // Bit testen</code></pre>
+    </div>
+    <div class="refresher-card">
+      <h3>Arrays</h3>
+<pre><code>unsigned char m[4] = {0x01, 0x02, 0x04, 0x08};
+m[2] = 0x10;
+
+// 2D
+unsigned char b[2][3] = { {1,2,3}, {4,5,6} };</code></pre>
+    </div>
+    <div class="refresher-card">
+      <h3>Casting</h3>
+<pre><code>int a = 100;
+float f = (float) a / 4095;</code></pre>
+      <p>Ohne Cast → Integer-Division → 0!</p>
+    </div>
+  </div>
+</div>
+
+<div class="refresher-block">
+  <h2>Taster: Polling vs. Interrupt <span class="tag">Refresher</span></h2>
+  <div class="refresher-grid">
+    <div class="refresher-card">
+      <h3>Polling</h3>
+<pre><code>if (digitalRead(PA1) == LOW) {
+  // gedrückt
+}</code></pre>
+      <p>Einfach, aber CPU ständig beschäftigt.</p>
+    </div>
+    <div class="refresher-card">
+      <h3>Externer Interrupt</h3>
+<pre><code>volatile bool flag = false;
+void isr() { flag = true; }
+
+attachInterrupt(
+  digitalPinToInterrupt(PA1),
+  isr, FALLING);</code></pre>
+      <p>Trigger: <code>RISING</code>, <code>FALLING</code>, <code>CHANGE</code></p>
+    </div>
+  </div>
+  <div class="key-box" style="margin-top: 14px;"><strong>ISR-Regeln:</strong> Kurz halten, nur Flag setzen, geteilte Variablen <code>volatile</code>, kein <code>Serial.print</code>, <code>delay(20)</code> nur zum Entprellen.</div>
+</div>
+
+<div class="refresher-block">
+  <h2>LEDs & Schrittmotor <span class="tag">Refresher</span></h2>
+  <div class="refresher-grid">
+    <div class="refresher-card">
+      <h3>LEDs</h3>
+      <p>High-aktiv: leuchtet bei HIGH. Low-aktiv: leuchtet bei LOW (z. B. Keypad).</p>
+<pre><code>GPIOC-&gt;ODR = 0b10000001;
+digitalWrite(PC0, !digitalRead(PC0));</code></pre>
+    </div>
+    <div class="refresher-card">
+      <h3>Schrittmotor</h3>
+      <p>4 Spulen, Reihenfolge bestimmt Drehrichtung:</p>
+<pre><code>unsigned char s[4] = {0x01, 0x02, 0x04, 0x08};
+// Hoch: 0x01 → 0x08
+// Runter: 0x08 → 0x01</code></pre>
+    </div>
+  </div>
+</div>
+
+<div class="refresher-block">
+  <h2>LCD-Ausgabe <span class="tag">Refresher</span></h2>
+  <table>
+    <tr><th>Methode</th><th>Bedeutung</th></tr>
+    <tr><td><code>lcd.clear();</code></td><td>Display löschen</td></tr>
+    <tr><td><code>lcd.setCursor(spalte, zeile);</code></td><td>Cursor positionieren (0–15, 0–1)</td></tr>
+    <tr><td><code>lcd.print("Text");</code></td><td>Text ausgeben</td></tr>
+    <tr><td><code>lcd.printf("%.2f V", u);</code></td><td>Formatierte Ausgabe</td></tr>
+  </table>
+  <h4>printf-Format</h4>
+  <p><code>%d</code> int · <code>%4d</code> 4 Stellen · <code>%f</code> float · <code>%.2f</code> 2 Nachkommastellen · <code>%X</code> hex · <code>%s</code> String</p>
+  <div class="warn-box" style="margin-top: 8px;"><strong>Float in printf:</strong> in <code>platformio.ini</code> ergänzen:<br><code>build_flags = -D PIO_FRAMEWORK_ARDUINO_NANOLIB_FLOAT_PRINTF</code></div>
+</div>
+
+<div class="refresher-block">
+  <h2>HardwareTimer + Timer-Interrupt <span class="tag">Refresher</span></h2>
+  <p>Zeitsteuerung ohne <code>delay()</code>. Läuft parallel im Hintergrund.</p>
+<pre><code>#include &lt;HardwareTimer.h&gt;
+
+HardwareTimer *timer = new HardwareTimer(TIM6);
+volatile bool tick = false;
+
+void timer_isr() { tick = true; }
+
+void setup() {
+  timer-&gt;setOverflow(2000000, MICROSEC_FORMAT);  // alle 2 s
+  timer-&gt;attachInterrupt(timer_isr);
+  timer-&gt;resume();
+}
+
+void loop() {
+  if (tick) {
+    tick = false;
+    // Aktion
+  }
+}</code></pre>
+  <table>
+    <tr><th>Format</th><th>Beispiel</th></tr>
+    <tr><td><code>MICROSEC_FORMAT</code></td><td><code>2000000</code> = 2 s</td></tr>
+    <tr><td><code>HERTZ_FORMAT</code></td><td><code>2</code> = 2 Hz</td></tr>
+  </table>
+</div>
+
+</div>
+
+<!-- ============================================== -->
+<!-- MERKSÄTZE -->
+<!-- ============================================== -->
+<section id="merksaetze" class="summary">
+  <h2><span class="num" style="color:#FAC775;">★</span> Merksätze</h2>
+  <ul>
+    <li><strong>PWM:</strong> D = t_HIGH / T · 100 % &nbsp;·&nbsp; U_mittel = D · U_max &nbsp;·&nbsp; LEDs ab 200 Hz flimmerfrei</li>
+    <li><strong>PWM Tastgrad ≠ Frequenz:</strong> Tastgrad = Helligkeit/Drehzahl, Frequenz = Schaltgeschwindigkeit</li>
+    <li><strong>ADC Auflösung:</strong> ΔU = U_ref / 2ⁿ &nbsp;·&nbsp; STM32 = 12 Bit = 4096 Stufen</li>
+    <li><strong>ADC Rückrechnen:</strong> U = ADC_wert · U_ref / (2ⁿ − 1)</li>
+    <li><strong>Shannon:</strong> f_abtast &gt; 2 · f_max</li>
+    <li><strong>STM32-ADC:</strong> Wägeverfahren / sukzessive Approximation, Bit-für-Bit ab MSB</li>
+    <li><strong>I2C:</strong> 2 Leitungen (SDA, SCL), Pull-Ups nötig, Open Drain, 7-Bit-Adresse</li>
+    <li><strong>I2C Frame:</strong> START → Adresse + R/W → ACK → Daten + ACK → STOP</li>
+    <li><strong>I2C Wire:</strong> <code>write()</code> nur in Puffer, erst <code>endTransmission()</code> sendet</li>
+    <li><strong>Casting:</strong> bei Float-Berechnungen aus int IMMER <code>(float)</code> davorschreiben</li>
+  </ul>
+</section>
+
+<footer>
+  Lernzettel IT Hardware · PWM · ADC · I2C · STM32L152RE
+</footer>
+
+</div>
+
+</body>
+</html>
