@@ -1,0 +1,846 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lernzettel IT Hardware</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background: #f5f5f0;
+    color: #2c2c2a;
+    line-height: 1.6;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 50px;
+    padding-bottom: 30px;
+    border-bottom: 2px solid #2c2c2a;
+  }
+
+  header h1 {
+    font-size: 36px;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+    margin-bottom: 8px;
+  }
+
+  header p {
+    font-size: 15px;
+    color: #5f5e5a;
+    font-style: italic;
+  }
+
+  nav {
+    background: #fff;
+    border: 1px solid #d3d1c7;
+    border-radius: 8px;
+    padding: 20px 24px;
+    margin-bottom: 40px;
+  }
+
+  nav h3 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: #5f5e5a;
+    margin-bottom: 12px;
+  }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  nav a {
+    display: inline-block;
+    padding: 6px 14px;
+    background: #f5f5f0;
+    border: 1px solid #d3d1c7;
+    border-radius: 999px;
+    color: #2c2c2a;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 500;
+    transition: all 0.15s;
+  }
+
+  nav a:hover {
+    background: #2c2c2a;
+    color: #fff;
+    border-color: #2c2c2a;
+  }
+
+  section {
+    background: #fff;
+    border: 1px solid #d3d1c7;
+    border-radius: 12px;
+    padding: 36px 40px;
+    margin-bottom: 28px;
+  }
+
+  section h2 {
+    font-size: 26px;
+    font-weight: 700;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  section h2 .num {
+    font-size: 14px;
+    color: #888780;
+    font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+
+  section .lead {
+    color: #5f5e5a;
+    font-size: 14px;
+    margin-bottom: 24px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid #f1efe8;
+  }
+
+  h3 {
+    font-size: 17px;
+    font-weight: 600;
+    margin: 24px 0 10px;
+    color: #2c2c2a;
+  }
+
+  h3:first-of-type {
+    margin-top: 0;
+  }
+
+  p {
+    margin-bottom: 12px;
+    font-size: 15px;
+  }
+
+  ul, ol {
+    margin-bottom: 12px;
+    padding-left: 22px;
+  }
+
+  ul li, ol li {
+    margin-bottom: 5px;
+    font-size: 15px;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0 18px;
+    font-size: 14px;
+    background: #fafaf7;
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  th {
+    background: #2c2c2a;
+    color: #fff;
+    text-align: left;
+    padding: 10px 14px;
+    font-weight: 500;
+    font-size: 13px;
+    letter-spacing: 0.3px;
+  }
+
+  td {
+    padding: 9px 14px;
+    border-top: 1px solid #e8e6df;
+  }
+
+  tr:nth-child(even) td {
+    background: #f5f5f0;
+  }
+
+  code {
+    font-family: "SF Mono", Monaco, Consolas, monospace;
+    background: #f1efe8;
+    padding: 1px 6px;
+    border-radius: 4px;
+    font-size: 13px;
+    color: #3C3489;
+  }
+
+  pre {
+    background: #2c2c2a;
+    color: #f5f5f0;
+    padding: 16px 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    margin: 12px 0 18px;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+
+  pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 13px;
+  }
+
+  .formula {
+    background: #f5f5f0;
+    border-left: 4px solid #534AB7;
+    padding: 14px 18px;
+    margin: 14px 0;
+    font-family: "SF Mono", Monaco, monospace;
+    font-size: 14px;
+    border-radius: 0 6px 6px 0;
+  }
+
+  .info-box {
+    background: #E6F1FB;
+    border: 1px solid #B5D4F4;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .info-box strong {
+    color: #0C447C;
+  }
+
+  .warn-box {
+    background: #FAEEDA;
+    border: 1px solid #FAC775;
+    padding: 14px 18px;
+    border-radius: 8px;
+    margin: 14px 0;
+    font-size: 14px;
+  }
+
+  .warn-box strong {
+    color: #633806;
+  }
+
+  .pros-cons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin: 16px 0;
+  }
+
+  .pros, .cons {
+    padding: 16px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+  }
+
+  .pros {
+    background: #EAF3DE;
+    border: 1px solid #C0DD97;
+  }
+
+  .cons {
+    background: #FCEBEB;
+    border: 1px solid #F7C1C1;
+  }
+
+  .pros h4, .cons h4 {
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+
+  .pros h4 { color: #3B6D11; }
+  .cons h4 { color: #A32D2D; }
+
+  .pros ul, .cons ul {
+    margin: 0;
+    padding-left: 18px;
+  }
+
+  .pros li, .cons li {
+    margin-bottom: 4px;
+  }
+
+  .frame-visual {
+    display: flex;
+    gap: 4px;
+    margin: 14px 0;
+    align-items: stretch;
+  }
+
+  .frame-visual .bit {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #fff;
+    text-align: center;
+    letter-spacing: 0.3px;
+  }
+
+  .frame-visual .bit.start { background: #D85A30; }
+  .frame-visual .bit.data  { background: #378ADD; flex: 1; }
+  .frame-visual .bit.par   { background: #EF9F27; color: #412402; }
+  .frame-visual .bit.stop  { background: #1D9E75; }
+
+  .summary {
+    background: linear-gradient(135deg, #2c2c2a, #444441);
+    color: #f5f5f0;
+    padding: 32px 40px;
+    border-radius: 12px;
+    margin-top: 30px;
+  }
+
+  .summary h2 {
+    color: #fff;
+    border: none;
+    margin-bottom: 18px;
+  }
+
+  .summary ul {
+    list-style: none;
+    padding: 0;
+  }
+
+  .summary li {
+    padding: 10px 0;
+    border-bottom: 1px solid #5f5e5a;
+    font-size: 14px;
+  }
+
+  .summary li:last-child { border-bottom: none; }
+
+  .summary li strong {
+    color: #FAC775;
+  }
+
+  footer {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    color: #888780;
+    font-size: 12px;
+    border-top: 1px solid #d3d1c7;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    section { padding: 24px 22px; }
+    header h1 { font-size: 28px; }
+    .pros-cons { grid-template-columns: 1fr; }
+    table { font-size: 13px; }
+    th, td { padding: 8px 10px; }
+  }
+
+  @media print {
+    body { background: #fff; padding: 0; }
+    section { page-break-inside: avoid; box-shadow: none; }
+    nav { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="container">
+
+<header>
+  <h1>Lernzettel IT Hardware</h1>
+  <p>UART · SPI · I2C · Analoger Eingang · PWM</p>
+</header>
+
+<nav>
+  <h3>Inhalt</h3>
+  <ul>
+    <li><a href="#grundlagen">Grundlagen</a></li>
+    <li><a href="#uart">UART</a></li>
+    <li><a href="#spi">SPI</a></li>
+    <li><a href="#i2c">I2C</a></li>
+    <li><a href="#vergleich">Vergleich</a></li>
+    <li><a href="#adc">Analoger Eingang</a></li>
+    <li><a href="#pwm">PWM</a></li>
+    <li><a href="#merksaetze">Merksätze</a></li>
+  </ul>
+</nav>
+
+<section id="grundlagen">
+  <h2><span class="num">01</span> Serielle Datenübertragung</h2>
+  <p class="lead">Grundlagen, die für UART, SPI und I2C wichtig sind.</p>
+
+  <h3>Seriell vs. parallel</h3>
+  <p>Bei serieller Übertragung werden Bits nacheinander auf einer Leitung gesendet, bei paralleler gleichzeitig auf mehreren. Seriell hat den Vorteil, dass Laufzeitunterschiede einzelner Leitungen entfallen und damit höhere Taktfrequenzen möglich sind. Heute Standard bei USB, HDMI, SPI, I2C, UART.</p>
+
+  <h3>Synchron vs. asynchron</h3>
+  <ul>
+    <li><strong>Synchron:</strong> Sender und Empfänger werden über ein zusätzliches Taktsignal synchronisiert (SPI, I2C).</li>
+    <li><strong>Asynchron:</strong> Kein gemeinsamer Takt, beide Seiten müssen vorher dieselbe Geschwindigkeit (Baudrate) eingestellt haben (UART).</li>
+  </ul>
+
+  <h3>Betriebsarten</h3>
+  <table>
+    <tr><th>Begriff</th><th>Bedeutung</th><th>Beispiel</th></tr>
+    <tr><td>Simplex</td><td>Nur in eine Richtung</td><td>Radio, TV</td></tr>
+    <tr><td>Halbduplex</td><td>Beide Richtungen, aber nicht gleichzeitig</td><td>Amateurfunk, I2C</td></tr>
+    <tr><td>Vollduplex</td><td>Beide Richtungen gleichzeitig</td><td>Telefon, SPI</td></tr>
+  </table>
+</section>
+
+<section id="uart">
+  <h2><span class="num">02</span> UART</h2>
+  <p class="lead">Universal Asynchronous Receiver / Transmitter. Einfaches, asynchrones Punkt-zu-Punkt-Protokoll.</p>
+
+  <h3>Grundprinzip</h3>
+  <p>UART nutzt nur zwei Leitungen plus GND und arbeitet asynchron, also ohne gemeinsames Taktsignal. Dadurch müssen beide Seiten dieselbe Baudrate eingestellt haben.</p>
+
+  <h3>Anschlüsse</h3>
+  <table>
+    <tr><th>Pin</th><th>Bedeutung</th></tr>
+    <tr><td><code>TX</code></td><td>Transmitter (Sender)</td></tr>
+    <tr><td><code>RX</code></td><td>Receiver (Empfänger)</td></tr>
+    <tr><td><code>GND</code></td><td>Masse</td></tr>
+  </table>
+  <p>Verbindung: <strong>TX des einen Geräts an RX des anderen</strong> (gekreuzt).</p>
+
+  <h3>Baudrate</h3>
+  <p>Baud ist die Einheit für die Symbolrate. Bei UART codiert ein Symbol genau 1 Bit.</p>
+  <div class="formula">Baudrate = 1 / T &nbsp;&nbsp;&nbsp; (T = Dauer eines Symbols)</div>
+  <p>Übliche Baudraten: <code>4800</code>, <code>9600</code>, <code>19200</code>, <code>57600</code>, <code>115200</code>.</p>
+
+  <h3>Rahmenformat (Frame)</h3>
+  <p>Damit der Empfänger den Datenanfang erkennt, werden die Bits in einen Rahmen gepackt:</p>
+  <div class="frame-visual">
+    <div class="bit start">Start</div>
+    <div class="bit data">Datenbits (5–9, typisch 8)</div>
+    <div class="bit par">Parität</div>
+    <div class="bit stop">Stop</div>
+  </div>
+  <ul>
+    <li><strong>Startbit:</strong> immer 0, signalisiert den Beginn</li>
+    <li><strong>Datenbits:</strong> typisch 8 Bit</li>
+    <li><strong>Paritätsbit:</strong> optional, zur Fehlererkennung</li>
+    <li><strong>Stoppbit:</strong> 1 oder 2 Bit</li>
+  </ul>
+
+  <h3>Einsatzgebiete</h3>
+  <p>Früher: serielle Ports, RS-232, Modems. Heute: einfache, langsame Verbindungen, z. B. zum Bluetooth-Modul HM-10, ST-Link USB-UART-Brücke zum PC, Konfiguration von Routern (Cisco-Befehle).</p>
+
+  <h3>UART am Nucleo L152RE</h3>
+  <ul>
+    <li><strong>USART2:</strong> PA2 (TX), PA3 (RX) – fest mit ST-Link verbunden</li>
+    <li><strong>USART3:</strong> PB10 (TX), PB11 (RX) – z. B. fürs Bluetooth-Modul</li>
+  </ul>
+
+  <h3>HardwareSerial-Befehle</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>HardwareSerial SerialPC(RX, TX);</code></td><td>Objekt mit Pins erzeugen</td></tr>
+    <tr><td><code>SerialPC.begin(9600);</code></td><td>Baudrate festlegen</td></tr>
+    <tr><td><code>SerialPC.available();</code></td><td>true, wenn Daten im Puffer</td></tr>
+    <tr><td><code>SerialPC.read();</code></td><td>Ein Zeichen aus Puffer lesen</td></tr>
+    <tr><td><code>readStringUntil('\n');</code></td><td>Puffer bis Zeilenumbruch lesen</td></tr>
+    <tr><td><code>SerialPC.println(...);</code></td><td>Senden mit Zeilenumbruch</td></tr>
+  </table>
+
+  <h3>Beispiel: LED über UART steuern</h3>
+<pre><code>#include &lt;Arduino.h&gt;
+HardwareSerial SerialPC(PA3, PA2);
+
+void setup() {
+  SerialPC.begin(9600);
+  pinMode(PC0, OUTPUT);
+}
+
+void loop() {
+  if (SerialPC.available()) {
+    String s = SerialPC.readStringUntil('\n');
+    if (s.equals("LED0_ein")) digitalWrite(PC0, HIGH);
+    if (s.equals("LED0_aus")) digitalWrite(PC0, LOW);
+  }
+}</code></pre>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Einfach, nur 2 Drähte</li>
+        <li>Kostengünstig</li>
+        <li>Vollduplex möglich</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>Nur Punkt-zu-Punkt</li>
+        <li>Beide Seiten brauchen dieselbe Baudrate</li>
+        <li>Eher langsam</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="spi">
+  <h2><span class="num">03</span> SPI</h2>
+  <p class="lead">Serial Peripheral Interface. Synchroner, schneller Bus mit 4 Leitungen, vollduplex.</p>
+
+  <h3>Grundprinzip</h3>
+  <p>Synchroner, serieller Bus nach Master-Slave-Prinzip (neu: Controller/Target). Vollduplex, also gleichzeitiges Senden und Empfangen über getrennte Leitungen.</p>
+
+  <h3>Leitungen (4 Stück, alle unidirektional)</h3>
+  <table>
+    <tr><th>Leitung</th><th>Bedeutung</th></tr>
+    <tr><td><code>SCLK</code></td><td>Taktsignal vom Master</td></tr>
+    <tr><td><code>MOSI</code></td><td>Master Out, Slave In</td></tr>
+    <tr><td><code>MISO</code></td><td>Master In, Slave Out</td></tr>
+    <tr><td><code>SS / CS</code></td><td>Slave Select / Chip Select (low-aktiv, eine pro Slave)</td></tr>
+  </table>
+
+  <h3>Ablauf einer Übertragung</h3>
+  <ol>
+    <li>Master zieht <strong>CS des gewünschten Slaves auf LOW</strong></li>
+    <li>Master erzeugt Takt auf SCLK</li>
+    <li>Mit jedem Taktpuls wird gleichzeitig 1 Bit auf MOSI gesendet und 1 Bit auf MISO empfangen (Schieberegister-Prinzip)</li>
+    <li>Master zieht CS wieder auf HIGH</li>
+  </ol>
+
+  <h3>Betriebsarten (CPOL / CPHA)</h3>
+  <table>
+    <tr><th>Mode</th><th>CPOL</th><th>CPHA</th><th>Ruhepegel SCLK</th><th>Einlesen bei</th></tr>
+    <tr><td>0</td><td>0</td><td>0</td><td>Low</td><td>1. Flanke (steigend)</td></tr>
+    <tr><td>1</td><td>0</td><td>1</td><td>Low</td><td>2. Flanke (fallend)</td></tr>
+    <tr><td>2</td><td>1</td><td>0</td><td>High</td><td>1. Flanke (fallend)</td></tr>
+    <tr><td>3</td><td>1</td><td>1</td><td>High</td><td>2. Flanke (steigend)</td></tr>
+  </table>
+  <ul>
+    <li><strong>CPOL</strong> = Clock Polarity (Ruhepegel des Takts)</li>
+    <li><strong>CPHA</strong> = Clock Phase (welche Flanke abgetastet wird)</li>
+  </ul>
+  <div class="warn-box"><strong>Wichtig:</strong> Master und Slave müssen denselben Mode benutzen, sonst klappt die Kommunikation nicht.</div>
+
+  <h3>SPI-Pins am Nucleo L152RE</h3>
+  <table>
+    <tr><th>Bus</th><th>MOSI</th><th>MISO</th><th>SCLK</th></tr>
+    <tr><td>SPI2</td><td>PB15</td><td>PB14</td><td>PB13</td></tr>
+    <tr><td>SPI1</td><td>PB5</td><td>PB4</td><td>PB3</td></tr>
+    <tr><td>SPI1 (alt)</td><td>PA7</td><td>PA6</td><td>PA5</td></tr>
+  </table>
+
+  <h3>Wichtige SPI-Befehle (Arduino)</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>#include &lt;SPI.h&gt;</code></td><td>Bibliothek einbinden</td></tr>
+    <tr><td><code>SPI.setMOSI(PB15);</code></td><td>Alternative Pins setzen</td></tr>
+    <tr><td><code>SPI.begin();</code></td><td>Bus initialisieren</td></tr>
+    <tr><td><code>SPI.beginTransaction(SPISettings(...));</code></td><td>Übertragung mit Frequenz, Bit-Order, Mode starten</td></tr>
+    <tr><td><code>SPI.transfer(byte);</code></td><td>1 Byte senden &amp; empfangen</td></tr>
+    <tr><td><code>SPI.endTransaction();</code></td><td>Übertragung beenden</td></tr>
+  </table>
+
+  <h3>Beispiel: 8x8 LED-Matrix (MAX7219)</h3>
+<pre><code>void send_data(unsigned char address, unsigned char data) {
+  digitalWrite(CS, LOW);
+  SPI.transfer(address);
+  SPI.transfer(data);
+  digitalWrite(CS, HIGH);
+}</code></pre>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Schnell (schneller als I2C)</li>
+        <li>Vollduplex</li>
+        <li>Kein Adress-System nötig</li>
+        <li>Kontinuierliches Streamen möglich</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>4 Leitungen, jeder Slave eigene CS</li>
+        <li>Nur ein Master</li>
+        <li>Keine Empfangsbestätigung (kein ACK)</li>
+        <li>Keine eingebaute Fehlerprüfung</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="i2c">
+  <h2><span class="num">04</span> I2C</h2>
+  <p class="lead">Inter Integrated Circuit. Synchroner 2-Draht-Bus mit Adressierung, halbduplex.</p>
+
+  <h3>Grundprinzip</h3>
+  <p>Synchroner, serieller 2-Draht-Bus, von Philips 1982 entwickelt. Halbduplex, Master-Slave-Prinzip (neu: Controller/Target). Mehrere Teilnehmer an denselben zwei Leitungen.</p>
+
+  <h3>Leitungen</h3>
+  <table>
+    <tr><th>Leitung</th><th>Bedeutung</th></tr>
+    <tr><td><code>SDA</code></td><td>Serial Data</td></tr>
+    <tr><td><code>SCL</code></td><td>Serial Clock</td></tr>
+  </table>
+  <div class="warn-box"><strong>Open Drain:</strong> Beide Leitungen brauchen <strong>Pull-Up-Widerstände</strong> (typisch 4,3 kΩ bis 10 kΩ bei 5 V). Viele Module bringen die Widerstände schon mit.</div>
+
+  <h3>Eigenschaften</h3>
+  <ul>
+    <li>Reichweite: typischerweise nur Platinengröße (ca. 50 cm)</li>
+    <li>Standard Mode: 100 kbit/s</li>
+    <li>Fast Mode: 400 kbit/s</li>
+    <li>Fast Mode Plus: 1 Mbit/s</li>
+    <li>High Speed: 3,4 Mbit/s</li>
+  </ul>
+
+  <h3>Adressierung</h3>
+  <p>Jeder Slave hat eine <strong>7-Bit-Adresse</strong>. Die oberen 4 Bit sind oft vom Hersteller fest, die unteren 3 Bit am Baustein einstellbar (Pins A0–A2). Damit lassen sich z. B. bis zu 8 PCF8574 am selben Bus betreiben.</p>
+  <table>
+    <tr><th>Bit</th><th>A6</th><th>A5</th><th>A4</th><th>A3</th><th>A2</th><th>A1</th><th>A0</th><th>R/W</th></tr>
+    <tr><td>Inhalt</td><td colspan="4" style="text-align:center;">herstellerfest</td><td colspan="3" style="text-align:center;">einstellbar</td><td>0=W, 1=R</td></tr>
+  </table>
+
+  <h3>Frame-Aufbau</h3>
+  <ol>
+    <li><strong>START</strong> (Master zieht SDA auf LOW während SCL HIGH)</li>
+    <li><strong>Adresse + R/W-Bit</strong> (7+1 Bit)</li>
+    <li><strong>ACK</strong> vom Slave (0 = OK)</li>
+    <li><strong>Datenbytes</strong> mit jeweils ACK</li>
+    <li><strong>STOP</strong> (SDA von LOW auf HIGH während SCL HIGH)</li>
+  </ol>
+
+  <h3>I2C-Pins am Nucleo L152RE</h3>
+  <table>
+    <tr><th>Bus</th><th>SDA</th><th>SCL</th></tr>
+    <tr><td>I2C1</td><td>PB9</td><td>PB8</td></tr>
+    <tr><td>I2C1 (alt)</td><td>PB7</td><td>PB6</td></tr>
+    <tr><td>I2C2</td><td>PB11</td><td>PB10</td></tr>
+  </table>
+
+  <h3>Wire-Library Befehle</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>Wire.begin();</code></td><td>Bus initialisieren (Master)</td></tr>
+    <tr><td><code>Wire.beginTransmission(addr);</code></td><td>Übertragung an Slave starten</td></tr>
+    <tr><td><code>Wire.write(byte);</code></td><td>Byte in Sendepuffer schreiben</td></tr>
+    <tr><td><code>Wire.endTransmission();</code></td><td>Sendepuffer übertragen, STOP senden</td></tr>
+    <tr><td><code>Wire.requestFrom(addr, n);</code></td><td>n Bytes von Slave anfordern</td></tr>
+    <tr><td><code>Wire.read();</code></td><td>Byte aus Empfangspuffer lesen</td></tr>
+  </table>
+  <div class="info-box"><strong>Hinweis:</strong> <code>Wire.write()</code> schreibt nur in den Puffer. Erst <code>endTransmission()</code> sendet wirklich.</div>
+
+  <h3>Beispiel: Schreiben und Lesen</h3>
+<pre><code>// Schreiben
+Wire.beginTransmission(SENSOR_ADDRESS);
+Wire.write(0x9f);
+Wire.endTransmission();
+
+// Lesen
+Wire.requestFrom(SENSOR_ADDRESS, 2);
+unsigned char b1 = Wire.read();
+unsigned char b2 = Wire.read();</code></pre>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Nur 2 Leitungen</li>
+        <li>Mehrere Slaves an einem Bus</li>
+        <li>Adressierung statt CS-Pins</li>
+        <li>ACK zur Bestätigung</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>Pull-Ups nötig</li>
+        <li>Begrenzte Reichweite</li>
+        <li>Nur Halbduplex</li>
+        <li>Adressen oft mehrfach vergeben</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="vergleich">
+  <h2><span class="num">05</span> UART vs. SPI vs. I2C</h2>
+  <p class="lead">Direkter Vergleich der drei Bussysteme im Überblick.</p>
+
+  <table>
+    <tr><th>Eigenschaft</th><th>UART</th><th>SPI</th><th>I2C</th></tr>
+    <tr><td>Synchronisation</td><td>asynchron</td><td>synchron</td><td>synchron</td></tr>
+    <tr><td>Leitungen</td><td>2 (TX, RX)</td><td>4 (MOSI, MISO, SCLK, CS)</td><td>2 (SDA, SCL)</td></tr>
+    <tr><td>Topologie</td><td>Punkt-zu-Punkt</td><td>1 Master, n Slaves (CS)</td><td>1 Master, n Slaves (Adresse)</td></tr>
+    <tr><td>Duplex</td><td>Vollduplex</td><td>Vollduplex</td><td>Halbduplex</td></tr>
+    <tr><td>Geschwindigkeit</td><td>langsam</td><td>sehr hoch</td><td>mittel</td></tr>
+    <tr><td>Adressierung</td><td>keine</td><td>über CS-Leitung</td><td>7-Bit-Adresse</td></tr>
+    <tr><td>Bestätigung</td><td>Paritätsbit (optional)</td><td>keine</td><td>ACK</td></tr>
+    <tr><td>Pull-Ups nötig</td><td>nein</td><td>nein</td><td>ja</td></tr>
+  </table>
+</section>
+
+<section id="adc">
+  <h2><span class="num">06</span> Analoger Eingang (ADC)</h2>
+  <p class="lead">Wandelt analoge Spannungen in digitale Werte um. Gegenstück: DAC.</p>
+
+  <h3>Vor- und Nachteile</h3>
+  <table>
+    <tr><th></th><th>Vorteile</th><th>Nachteile</th></tr>
+    <tr><td>Analog</td><td>Stufenlos, beliebig viele Zwischenwerte</td><td>Störanfällig, Verzerrungen, Ablesefehler</td></tr>
+    <tr><td>Digital</td><td>Störsicher, einfach speicherbar, flexibel</td><td>Endlich viele Zustände, Informationsverlust</td></tr>
+  </table>
+
+  <h3>Funktionsprinzip</h3>
+  <ol>
+    <li><strong>Abtastung:</strong> in regelmäßigen Abständen wird die Spannung gemessen</li>
+    <li><strong>Digitalisierung:</strong> der Spannung wird ein digitaler Wert zugeordnet</li>
+  </ol>
+
+  <h3>Shannon-Abtasttheorem</h3>
+  <p>Die Abtastfrequenz muss <strong>mehr als doppelt so hoch</strong> wie die höchste im Signal vorkommende Frequenz sein:</p>
+  <div class="formula">f_abtast &gt; 2 · f_max</div>
+  <p>Sonst kann das Signal nicht korrekt rekonstruiert werden.</p>
+
+  <h3>Auflösung</h3>
+  <ul>
+    <li>8-Bit-ADC: 2⁸ = <strong>256 Stufen</strong></li>
+    <li>12-Bit-ADC (STM32): 2¹² = <strong>4096 Stufen</strong></li>
+  </ul>
+  <div class="formula">ΔU = U_ref / 2ⁿ</div>
+  <div class="info-box"><strong>Beispiel:</strong> 12-Bit-ADC mit U_ref = 3,3 V (Nucleo)<br>ΔU = 3,3 V / 4096 ≈ 0,806 mV</div>
+
+  <h3>Wägeverfahren (sukzessive Approximation)</h3>
+  <p>Verfahren des STM32-ADC: ein internes Register (SAR) wird Bit für Bit gefüllt, beginnend mit dem MSB. Mit einem internen DAC und Komparator wird geprüft, ob das Bit gesetzt bleibt. Bei jedem Takt wird ein Bit angenähert.</p>
+
+  <h3>ADC am STM32L152RE</h3>
+  <ul>
+    <li>12 Bit, sukzessive Approximation</li>
+    <li>bis zu 42 Kanäle</li>
+    <li>Wandlungszeit 1 µs (max. Speed) bis 4 µs (low Speed)</li>
+    <li>Referenzspannung: 3,3 V</li>
+  </ul>
+  <p><strong>Analog-fähige Pins:</strong> PA0–PA7, PB0, PB1, PB12–PB15, PC0–PC5</p>
+
+  <h3>Programmierung</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>analogReadResolution(12);</code></td><td>Auflösung auf 12 Bit setzen</td></tr>
+    <tr><td><code>int wert = analogRead(PA0);</code></td><td>Spannung an Pin einlesen</td></tr>
+  </table>
+
+  <h3>Beispiel: Potentiometer einlesen</h3>
+<pre><code>#define POTI PA0
+#define U_MAX 3.3
+#define ADC_MAX 4095
+
+void setup() {
+  analogReadResolution(12);
+}
+
+void loop() {
+  int adc_wert = analogRead(POTI);
+  float U = adc_wert * U_MAX / ADC_MAX;
+}</code></pre>
+  <div class="info-box"><strong>Hinweis:</strong> Vor Float-Berechnung mit Integern besser explizit casten:<br><code>float adc_norm = (float) adc_wert / 4095;</code></div>
+</section>
+
+<section id="pwm">
+  <h2><span class="num">07</span> PWM</h2>
+  <p class="lead">Pulsweitenmodulation. Pseudo-analoge Ausgabe mit nur einem digitalen Pin.</p>
+
+  <h3>Grundidee</h3>
+  <p>Bei PWM wird ein <strong>digitales Signal</strong> (HIGH/LOW) so schnell ein- und ausgeschaltet, dass im <strong>zeitlichen Mittel</strong> eine bestimmte Leistung am Verbraucher ankommt. Damit lassen sich z. B. LEDs dimmen oder Motoren in der Drehzahl regeln, ohne einen DAC.</p>
+
+  <h3>Wichtige Begriffe</h3>
+  <table>
+    <tr><th>Begriff</th><th>Bedeutung</th></tr>
+    <tr><td>Periodendauer T</td><td>Dauer einer kompletten Schwingung</td></tr>
+    <tr><td>Frequenz f</td><td>f = 1 / T</td></tr>
+    <tr><td>Tastgrad (Duty Cycle)</td><td>Verhältnis Einschaltzeit zu Periodendauer</td></tr>
+  </table>
+
+  <h3>Tastgrad</h3>
+  <div class="formula">Tastgrad = t_HIGH / T</div>
+  <ul>
+    <li>0 % → dauerhaft LOW (LED aus)</li>
+    <li>50 % → halbe Helligkeit</li>
+    <li>100 % → dauerhaft HIGH (LED maximal hell)</li>
+  </ul>
+
+  <h3>Frequenzwahl</h3>
+  <ul>
+    <li>LEDs: ab ca. <strong>200 Hz</strong> flimmerfrei</li>
+    <li>Motoren: typisch im kHz-Bereich</li>
+  </ul>
+
+  <h3>Programmierung am Nucleo</h3>
+  <table>
+    <tr><th>Befehl</th><th>Bedeutung</th></tr>
+    <tr><td><code>analogWrite(pin, wert);</code></td><td>PWM ausgeben (Default 8 Bit, 0–255)</td></tr>
+    <tr><td><code>analogWriteResolution(bit);</code></td><td>Auflösung ändern</td></tr>
+    <tr><td><code>analogWriteFrequency(hz);</code></td><td>PWM-Frequenz setzen</td></tr>
+  </table>
+
+  <h3>Beispiel: LED dimmen mit Potentiometer</h3>
+<pre><code>#define POTI PA0
+#define LED  PC6
+
+void setup() {
+  analogReadResolution(8);          // 0..255
+  analogWriteFrequency(200);        // 200 Hz, kein Flackern
+  pinMode(LED, OUTPUT);
+}
+
+void loop() {
+  int wert = analogRead(POTI);      // 0..255
+  analogWrite(LED, wert);           // direkt als Tastgrad
+  delay(500);
+}</code></pre>
+
+  <div class="pros-cons">
+    <div class="pros">
+      <h4>Vorteile</h4>
+      <ul>
+        <li>Einfacher als ein DAC</li>
+        <li>Sehr effizient (kaum Verlustleistung)</li>
+        <li>Universell: LEDs, Motoren, Servos, Audio</li>
+      </ul>
+    </div>
+    <div class="cons">
+      <h4>Nachteile</h4>
+      <ul>
+        <li>Frequenz muss richtig gewählt werden</li>
+        <li>Kein echtes Analogsignal</li>
+        <li>Kann hörbares Pfeifen erzeugen</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section id="merksaetze" class="summary">
+  <h2><span class="num" style="color:#FAC775;">08</span> Merksätze für die Prüfung</h2>
+  <ul>
+    <li><strong>UART</strong> = asynchron, 2 Leitungen, Punkt-zu-Punkt, Baudrate vorher festlegen</li>
+    <li><strong>SPI</strong> = synchron, 4 Leitungen, schnell, Vollduplex, ein CS pro Slave</li>
+    <li><strong>I2C</strong> = synchron, 2 Leitungen, Halbduplex, 7-Bit-Adressen, Pull-Ups nötig</li>
+    <li><strong>ADC</strong>: ΔU = U_ref / 2ⁿ &nbsp;·&nbsp; Shannon: f_abtast &gt; 2 · f_max</li>
+    <li><strong>PWM</strong>: digitaler Pin + Tastgrad → Pseudo-analoge Ausgabe, Frequenz hoch genug wählen</li>
+  </ul>
+</section>
+
+<footer>
+  Lernzettel IT Hardware · UART · SPI · I2C · ADC · PWM
+</footer>
+
+</div>
+
+</body>
+</html>
