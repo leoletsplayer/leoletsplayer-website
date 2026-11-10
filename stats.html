@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <meta name="robots" content="noindex">
+    <title>Statistik</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" href="style.css?v=3">
+    <script src="site.js?v=1"></script>
+    <style>
+        .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 170px), 1fr)); gap: 16px; }
+        .tile b { font-size: 34px; letter-spacing: -.03em; line-height: 1.1; font-variant-numeric: tabular-nums; }
+        .tile span { color: var(--muted); font-size: 14px; }
+        .tablewrap { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; font-size: 15px; font-variant-numeric: tabular-nums; }
+        th, td { text-align: right; padding: 10px 12px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+        th:first-child, td:first-child { text-align: left; }
+        th { color: var(--muted); font-weight: 500; font-size: 13.5px; }
+        tr:last-child td { border-bottom: 0; }
+        input[type=password] { font: inherit; padding: 11px 14px; border: 0; border-radius: 12px; background: var(--cell); color: inherit; min-width: 0; flex: 1 1 200px; }
+        .out { font: 13px/1.5 var(--mono); background: var(--cell); border-radius: 12px; padding: 12px 14px; overflow-wrap: anywhere; }
+        ol { padding-left: 22px; color: var(--muted); display: flex; flex-direction: column; gap: 6px; }
+    </style>
+</head>
+<body>
+    <main>
+        <header class="top">
+            <a class="brand" href="index.html"><i>L</i>leoletsplayer</a>
+            <div class="row">
+                <a class="btn" href="index.html">Zur Startseite</a>
+                <button id="logout">Abmelden</button>
+            </div>
+        </header>
+
+        <div class="intro">
+            <h1>Statistik</h1>
+            <p id="lead">Seitenaufrufe deiner Website.</p>
+        </div>
+
+        <div id="content" hidden>
+            <section class="card" id="setup" hidden>
+                <h2>Zählung einrichten</h2>
+                <p>Die Zählung ist noch nicht eingeschaltet. So richtest du sie ein:</p>
+                <ol>
+                    <li>Lege auf goatcounter.com ein kostenloses Konto an und merke dir den Namen deiner Seite, zum Beispiel <code>leoletsplayer</code>.</li>
+                    <li>Schalte dort in den Einstellungen die Option ein, mit der Besucherzahlen auf der eigenen Website angezeigt werden dürfen (Visitor counter).</li>
+                    <li>Trag den Namen in der Datei <code>site.js</code> bei <code>goatcounter</code> ein, oder nenn ihn Claude.</li>
+                </ol>
+            </section>
+
+            <div id="stats" hidden>
+                <div class="tiles" id="tiles"></div>
+                <section class="card" style="margin-top:16px">
+                    <h2>Aufrufe pro Seite</h2>
+                    <div class="tablewrap"><table>
+                        <thead><tr><th>Seite</th><th>Heute</th><th>7 Tage</th><th>30 Tage</th><th>Gesamt</th></tr></thead>
+                        <tbody id="rows"></tbody>
+                    </table></div>
+                    <p id="note"></p>
+                    <div class="row"><a class="btn" id="dash" target="_blank" rel="noopener">Alle Details bei GoatCounter</a></div>
+                </section>
+            </div>
+
+            <section class="card" style="margin-top:16px">
+                <h2>Passwort ändern</h2>
+                <p>Gib ein neues Passwort ein. Du bekommst eine Prüfsumme, die du in <code>site.js</code> bei <code>passHash</code> (Besucher) oder <code>adminHash</code> (Statistik) einträgst. Das Passwort selbst steht dann nirgends im Quelltext.</p>
+                <div class="row"><input type="password" id="newpass" aria-label="Neues Passwort" autocomplete="new-password"><button class="primary" id="mkhash">Prüfsumme erzeugen</button></div>
+                <div class="out" id="hashout" hidden></div>
+            </section>
+        </div>
+    </main>
+
+    <script>
+    document.addEventListener('site:ready', function () {
+        var $ = function (id) { return document.getElementById(id); };
+        var gc = Site.config.goatcounter;
+        var PAGES = [
+            ['Startseite', ['/', '/index.html']],
+            ['Lernzettel-Übersicht', ['/lernzettel-uebersicht.html', '/lernzettel-uebersicht']],
+            ['Handschrift-Studio', ['/handschrift.html', '/handschrift']],
+            ['Lernzettel Weimarer Republik', ['/lernzettel.html', '/lernzettel']],
+            ['Lernzettel IT-Hardware', ['/Lernzettel_IT_Hardware.html', '/Lernzettel_IT_Hardware']],
+            ['Lernzettel PWM, ADC, I2C', ['/Lernzettel_IT_Hardware_PWM_ADC_I2C.html', '/Lernzettel_IT_Hardware_PWM_ADC_I2C']],
+            ['Lernzettel Netze', ['/Lernzettel IT-H KA J2-1 (Netze) (2).html', '/Lernzettel IT-H KA J2-1 (Netze) (2)']]
+        ];
+        var today = new Date(), iso = today.getFullYear() + '-' + String(today.getMonth() + 1).padStart(2, '0') + '-' + String(today.getDate()).padStart(2, '0');
+        var RANGES = [['Heute', 'start=' + iso], ['7 Tage', 'start=week'], ['30 Tage', 'start=month'], ['Gesamt', '']];
+        var failed = false;
+        // Öffentlicher Zähler von GoatCounter: liefert {"count": "1 234"}; ohne Aufrufe antwortet er mit 404.
+        function counter(path, range) {
+            var url = 'https://' + gc + '.goatcounter.com/counter/' + encodeURIComponent(path) + '.json' + (range ? '?' + range : '');
+            return fetch(url).then(function (r) {
+                if (r.status === 404) return 0;
+                if (!r.ok) throw new Error(r.status);
+                return r.json().then(function (j) { return parseInt(String(j.count).replace(/\D/g, ''), 10) || 0; });
+            }).catch(function () { failed = true; return null; });
+        }
+        function sum(paths, range) {
+            return Promise.all(paths.map(function (p) { return counter(p, range); })).then(function (v) {
+                return v.every(function (x) { return x === null; }) ? null : v.reduce(function (a, b) { return a + (b || 0); }, 0);
+            });
+        }
+        var show = function (n) { return n === null ? 'k. A.' : n.toLocaleString('de-DE'); };
+        function load() {
+            $('content').hidden = false;
+            if (!gc) { $('setup').hidden = false; $('lead').textContent = 'Die Zählung ist noch nicht eingerichtet.'; return; }
+            $('stats').hidden = false; $('dash').href = 'https://' + gc + '.goatcounter.com';
+            RANGES.forEach(function (r) {
+                var t = document.createElement('div'); t.className = 'card tile';
+                var b = document.createElement('b'); b.textContent = '…'; var s = document.createElement('span'); s.textContent = r[0];
+                t.appendChild(b); t.appendChild(s); $('tiles').appendChild(t);
+                counter('TOTAL', r[1]).then(function (n) { b.textContent = show(n); });
+            });
+            var jobs = PAGES.map(function (pg) {
+                var tr = document.createElement('tr'), td = document.createElement('td'); td.textContent = pg[0]; tr.appendChild(td); $('rows').appendChild(tr);
+                return Promise.all(RANGES.map(function (r) {
+                    var c = document.createElement('td'); c.textContent = '…'; tr.appendChild(c);
+                    return sum(pg[1], r[1]).then(function (n) { c.textContent = show(n); });
+                }));
+            });
+            Promise.all(jobs).then(function () {
+                $('note').textContent = failed
+                    ? 'Einige Zahlen konnten nicht geladen werden. Prüfe, ob bei GoatCounter die Anzeige von Besucherzahlen auf der eigenen Website eingeschaltet ist.'
+                    : 'Deine eigenen Besuche werden nicht mitgezählt, solange du hier angemeldet bist.';
+            });
+        }
+        $('logout').onclick = function () { Site.logout(); location.href = 'index.html'; };
+        $('mkhash').onclick = function () {
+            var v = $('newpass').value; if (!v) return;
+            Site.hash(v).then(function (h) { $('hashout').hidden = false; $('hashout').textContent = h; });
+        };
+        if (Site.isAdmin()) load(); else Site.adminLogin(load, true);
+    });
+    </script>
+</body>
+</html>
