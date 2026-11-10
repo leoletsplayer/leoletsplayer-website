@@ -4,8 +4,8 @@
     'use strict';
     var CONFIG = {
         // Prüfsummen der Passwörter (nicht die Passwörter selbst). Neue Prüfsummen erzeugst du auf stats.html.
-        passHash: '84c3db98dc194bb8eb168cd5c96ffb6b2f91cfd53414af8262b086c9ee58e969',
-        adminHash: '4ca96230c35e20c3d16c71628c11c185ba016fd64b1bb3f6b236437f2d28fe43',
+        passHash: '003940c9f89ba5c3a059dc60d286d7efe638bc3a10f7d30cd323625d270ecb37',
+        adminHash: 'db7ef4ca3d6a7eb4fe265ea7258b27b9c3f26f3a051c6d57b86406492ece921b',
         // Dein GoatCounter-Name, z. B. 'leoletsplayer' für https://leoletsplayer.goatcounter.com. Leer = Zählung aus.
         goatcounter: 'leoletsplayer'
     };
