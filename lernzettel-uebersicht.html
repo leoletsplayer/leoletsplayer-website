@@ -5,100 +5,34 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meine Lernzettel</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <style>
-        .back-btn {
-            display: inline-block;
-            margin-bottom: 24px;
-            color: #87ceeb;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.95em;
-            transition: color 0.2s;
-        }
-        .back-btn:hover { color: #fff; }
-
-        .page-header {
-            text-align: center;
-            margin-bottom: 32px;
-        }
-        .page-header h1 {
-            font-size: 2em;
-            color: #fff;
-            margin-bottom: 8px;
-        }
-        .page-header p {
-            color: #aaa;
-            font-size: 0.95em;
-            margin: 0;
-        }
-
-        .subjects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 18px;
-        }
-
-        .subject-card {
-            background: #454545;
-            border-radius: 8px;
-            padding: 18px 20px;
-            border-left: 5px solid #666;
-        }
-
-        .subject-card h2 {
-            font-size: 1.15em;
-            color: #fff;
-            margin-bottom: 12px;
-        }
-
-        .lernzettel-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .lernzettel-list li {
-            padding: 5px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.08);
-        }
-        .lernzettel-list li:last-child { border-bottom: none; }
-
-        .lernzettel-list a {
-            color: #d0d0d0;
-            text-decoration: none;
-            display: block;
-            margin-top: 0;
-            font-size: 0.92em;
-            transition: color 0.2s;
-        }
-        .lernzettel-list a::before { content: '→ '; }
-        .lernzettel-list a:hover { color: #fff; }
-
-        .empty-state {
-            color: #666;
-            font-style: italic;
-            font-size: 0.88em;
-        }
-
-        .add-hint {
-            display: block;
-            margin-top: 10px;
-            color: #555;
-            font-size: 0.8em;
-            font-style: italic;
-        }
-
-        @media (max-width: 600px) {
-            .subjects-grid { grid-template-columns: 1fr; }
-        }
+        .subjects-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 230px), 1fr)); gap: 16px; }
+        .subject-card { background: var(--surface); border-radius: 20px; box-shadow: var(--shadow); padding: 20px; border-left: 0 solid var(--muted); }
+        .subject-card h2 { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; border-left: 0 solid; border-left-color: inherit; }
+        /* Farbpunkt je Fach: übernimmt die Farbe, die an der Karte steht */
+        .subject-card h2::before { content: ""; width: 0; height: 10px; border-left: 10px solid; border-left-color: inherit; border-radius: 50%; flex: none; }
+        .lernzettel-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+        .lernzettel-list a { display: block; padding: 9px 12px; border-radius: 10px; background: var(--cell); color: var(--fg); text-decoration: none; font-size: 14.5px; font-weight: 500; transition: background .15s; }
+        .lernzettel-list a::after { content: " →"; color: var(--accent); }
+        .lernzettel-list a:hover { background: var(--accent-soft); }
+        .empty-state { color: var(--muted); font-size: 14px; }
     </style>
 </head>
 <body>
     <main>
-        <a href="index.html" class="back-btn">← Zurück zur Startseite</a>
+        <header class="top">
+            <a class="brand" href="index.html"><i>L</i>leoletsplayer</a>
+            <nav class="nav" aria-label="Seiten">
+                <a href="index.html">Start</a>
+                <a href="lernzettel-uebersicht.html" aria-current="page">Lernzettel</a>
+                <a href="handschrift.html">Handschrift-Studio</a>
+            </nav>
+        </header>
 
-        <div class="page-header">
+        <div class="intro">
             <h1>Meine Lernzettel</h1>
-            <p>Klicke auf einen Lernzettel um ihn zu öffnen</p>
+            <p>Klicke auf einen Lernzettel, um ihn zu öffnen.</p>
         </div>
 
         <!--

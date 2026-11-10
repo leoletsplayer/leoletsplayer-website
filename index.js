@@ -1,12 +1,23 @@
-// Öffnen
-document.getElementById('pdf-button').addEventListener('click', function() {
-    document.getElementById('pdf-container').style.display = 'block';
-    document.getElementById('pdf-viewer').src = 'Formelsammlung.pdf';
-    this.style.display = 'none';
+// Formelsammlung auf der Seite ein- und ausblenden
+const pdfButton = document.getElementById('pdf-button');
+const pdfContainer = document.getElementById('pdf-container');
+pdfButton.addEventListener('click', function () {
+    const open = pdfContainer.hidden;
+    pdfContainer.hidden = !open;
+    if (open) document.getElementById('pdf-viewer').src = 'Formelsammlung.pdf';
+    pdfButton.textContent = open ? 'PDF schließen' : 'PDF hier öffnen';
 });
 
-// Schließen
-document.getElementById('pdf-close').addEventListener('click', function() {
-    document.getElementById('pdf-container').style.display = 'none';
-    document.getElementById('pdf-button').style.display = 'block';
+// Code-Vorlagen kopieren
+document.querySelectorAll('.copy').forEach(function (btn) {
+    btn.addEventListener('click', async function () {
+        const text = btn.closest('.snippet').querySelector('pre').innerText;
+        try {
+            await navigator.clipboard.writeText(text);
+            btn.textContent = 'Kopiert';
+        } catch (e) {
+            btn.textContent = 'Bitte von Hand markieren';
+        }
+        setTimeout(function () { btn.textContent = 'Kopieren'; }, 1800);
+    });
 });

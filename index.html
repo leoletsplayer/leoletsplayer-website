@@ -2,70 +2,86 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>Meine Seite</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <main>
-        <section id="github">
-            <h2>GitHub Repository</h2>
-            <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
-            <a href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank" rel="noreferrer noopener">
-                <img src="github.png" alt="GitHub Repository Link">
+        <header class="top">
+            <a class="brand" href="index.html"><i>L</i>leoletsplayer</a>
+            <nav class="nav" aria-label="Seiten">
+                <a href="index.html" aria-current="page">Start</a>
+                <a href="lernzettel-uebersicht.html">Lernzettel</a>
+                <a href="handschrift.html">Handschrift-Studio</a>
+            </nav>
+        </header>
+
+        <div class="intro">
+            <h1>Meine Seite</h1>
+            <p>Lernzettel, Vorlagen und Werkzeuge für die Schule, alles an einem Ort.</p>
+        </div>
+
+        <div class="grid">
+            <a class="card" href="lernzettel-uebersicht.html" id="lernzettel">
+                <span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4h10l4 4v12H5z"/><path d="M9 12h6M9 16h6M9 8h3"/></svg></span>
+                <h2>Lernzettel</h2>
+                <p>Meine Lernzettel und Notizen, nach Fächern sortiert.</p>
+                <span class="go">Zu den Lernzetteln</span>
             </a>
+            <a class="card" href="handschrift.html" id="handschrift">
+                <span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20l4-1 11-11-3-3L5 16z"/><path d="M14 7l3 3"/></svg></span>
+                <h2>Handschrift-Studio</h2>
+                <p>Bring der Seite deine Handschrift bei und wandle getippten Text in deine Schrift um, zum Beispiel für GoodNotes.</p>
+                <span class="go">Studio öffnen</span>
+            </a>
+            <a class="card" href="https://github.com/leoletsplayer/ALLEHEI-ENGLEICH.git" target="_blank" rel="noreferrer noopener" id="github">
+                <span class="icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 7l-5 5 5 5M16 7l5 5-5 5M13.5 5l-3 14"/></svg></span>
+                <h2>GitHub Repository</h2>
+                <p>Hier sind all meine Arduino-Projekte, die ich für die Schule gemacht habe. Es ist zwar nicht alles geordnet, aber das kommt noch.</p>
+                <span class="go">Auf GitHub ansehen</span>
+            </a>
+        </div>
+
+        <section class="card" id="pdf-docs">
+            <h2>Formelsammlung</h2>
+            <p>Die Formelsammlung als PDF, direkt hier auf der Seite oder in einem eigenen Tab.</p>
+            <div class="row">
+                <button class="primary" id="pdf-button">PDF hier öffnen</button>
+                <a class="btn" href="Formelsammlung.pdf" target="_blank" rel="noopener">In neuem Tab öffnen</a>
+            </div>
+            <div id="pdf-container" hidden>
+                <iframe id="pdf-viewer" src="" title="Formelsammlung"></iframe>
+            </div>
         </section>
 
-        <section id="library-vorlagen">
+        <section class="card" id="library-vorlagen">
             <h2>LCD-Vorlagen</h2>
-            <p>In der <code>platformio.ini</code>:</p>
-            <pre><code>lib_deps = mathertel/LiquidCrystal_PCF8574@^2.2.0</code></pre>
-
-            <p>In der C++-Datei:</p>
-            <pre><code>#include &lt;Wire.h&gt;
+            <p>Die drei Bausteine für ein LCD mit <code>LiquidCrystal_PCF8574</code>.</p>
+            <div class="snippet">
+                <div class="row"><span class="label">In der <code>platformio.ini</code></span><button class="small copy">Kopieren</button></div>
+                <pre><code>lib_deps = mathertel/LiquidCrystal_PCF8574@^2.2.0</code></pre>
+            </div>
+            <div class="snippet">
+                <div class="row"><span class="label">In der C++-Datei</span><button class="small copy">Kopieren</button></div>
+                <pre><code>#include &lt;Wire.h&gt;
 #include "LiquidCrystal_PCF8574.h"
 LiquidCrystal_PCF8574 display(0x27);</code></pre>
-
-            <p>Im <code>setup()</code>:</p>
-            <pre><code>display.begin(16, 2);
+            </div>
+            <div class="snippet">
+                <div class="row"><span class="label">Im <code>setup()</code></span><button class="small copy">Kopieren</button></div>
+                <pre><code>display.begin(16, 2);
 display.setBacklight(255);
 display.clear();
 display.setCursor(0, 0);
 display.printf("it.schule");</code></pre>
-        </section>
-
-        <section id="pdf-docs">
-    <h2>Formelsammlung</h2>
-    <button id="pdf-button">📄 PDF öffnen</button>
-    <div id="pdf-container" style="display: none; margin-top: 20px;">
-        <button id="pdf-close">Schließen ✕</button>
-        <iframe id="pdf-viewer" src="" type="application/pdf" width="100%" height="600px"></iframe>
-    </div>
-</section>
-        
-
-        <section id="lernzettel">
-            <h2>Lernzettel</h2>
-            <p>Meine Lernzettel und Notizen</p>
-            <a href="lernzettel-uebersicht.html" style="display: inline-block;">
-                <button>Zu den Lernzetteln</button>
-            </a>
-            <a href="wissenstest.html" style="display: inline-block;">
-                <button>Test zu Lernzettel</button>
-            </a>
-        </section>
-
-        <section id="handschrift">
-            <h2>Handschrift-Studio</h2>
-            <p>Bring der Seite deine Handschrift bei und wandle getippten Text in deine Schrift um, zum Beispiel für GoodNotes.</p>
-            <a href="handschrift.html" style="display: inline-block;">
-                <button>Zum Handschrift-Studio</button>
-            </a>
+            </div>
         </section>
     </main>
 
     <footer>
-        
+        <p>&copy; 2026 leo</p>
     </footer>
 
     <script src="index.js"></script>
