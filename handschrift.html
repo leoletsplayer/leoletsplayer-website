@@ -6,7 +6,7 @@
 <title>Handschrift-Studio</title>
 </head>
 <body>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Andika&family=Inter:wght@400;500;600;700&display=swap">
 <style>
 /* Layout: ruhige Kopfzeile mit Umschalter, darunter wenige große Karten. Eine Akzentfarbe, viel Luft. */
 :root{
@@ -96,7 +96,7 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
   <section id="view-learn" class="stack">
     <div class="intro">
       <h2>Schreib deine Buchstaben</h2>
-      <p class="hint">Schreib jedes Zeichen groß und in Ruhe in das Feld, am besten mit dem Stift. Die durchgezogene Linie ist die Grundlinie, die gestrichelte die Höhe der Kleinbuchstaben.</p>
+      <p class="hint">Zeichne das graue Zeichen im Feld in deiner eigenen Schrift nach, am besten mit dem Stift. Halte dich an seine Größe und die Linien, dann passen später alle Buchstaben zueinander.</p>
     </div>
     <div class="card">
       <div class="bar">
@@ -114,7 +114,10 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
           <button id="redo">Neu schreiben</button>
           <button id="next" class="primary">Weiter</button>
         </div>
-        <label class="chk"><input type="checkbox" id="auto"> Nach dem Schreiben automatisch weiter</label>
+        <div class="bar">
+          <label class="chk"><input type="checkbox" id="guide"> Vorlage zum Nachzeichnen</label>
+          <label class="chk"><input type="checkbox" id="auto"> Automatisch weiter</label>
+        </div>
       </div>
       <div class="tiles" id="tiles"></div>
       <div class="bar">
@@ -195,7 +198,7 @@ const GROUPS=[
   {name:'Ziffern und Zeichen',chars:[...'0123456789.,!?:;-()"\'/+=%&@€*#']}
 ];
 const ALL=GROUPS.flatMap(g=>g.chars);
-const ASC=.16,BASE=.66,XH=.40,DESC=.9;      // Hilfslinien als Anteil der Feldhöhe
+const ASC=.14,BASE=.68;      // Hilfslinien als Anteil der Feldhöhe
 const INKS=['#1f3fae','#0d2a6b','#1b1b1f','#b3261e','#1e6b3a'];
 const DEFAULT_TEXT='# Meine Notizen\nDieser Text wurde getippt und erscheint in meiner eigenen Handschrift. Jedes Zeichen wechselt zwischen den Varianten, die ich geschrieben habe.\n\nEinkaufen: 2 Brote, 6 Eier, Milch und Kaffee!';
 
@@ -244,10 +247,14 @@ for(const c of 'acemnorsuvwxz')CLS[c]='xb';
 for(const c of 'bdfhklß')CLS[c]='as';
 for(const c of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')CLS[c]='cp';
 for(const c of 'gpqy')CLS[c]='xd';
-for(const c of 'tiäöüÄÖÜ!?%&@€#.:')CLS[c]='lb';
+for(const c of 'tiäöü')CLS[c]='lo';
+for(const c of 'ÄÖÜ!?%&@€#')CLS[c]='hi';
+for(const c of '.:')CLS[c]='bl';
 const med=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
+const clamp=(v,a,b)=>Math.min(b,Math.max(a,v));
 const B0=-1.3,BH=.1,NB=19;
-/* Gleicht die Zeichen an: gleiche Grundlinie, gleiche Höhe je Buchstabenart, dazu Randprofile für gleichmäßige Abstände. */
+/* Bringt alle Zeichen in feste Größenverhältnisse: gleiche Grundlinie, Kleinbuchstaben, lange Buchstaben und
+   Großbuchstaben jeweils gleich hoch, egal wie groß sie ins Feld geschrieben wurden. Dazu Randprofile für die Abstände. */
 function variants(){
   if(variantsCache)return variantsCache;
   const raw=[];
@@ -257,18 +264,18 @@ function variants(){
     for(const a of st)for(let i=0;i<a.length;i+=2){if(a[i]<x0)x0=a[i];if(a[i]>x1)x1=a[i];if(a[i+1]<y0)y0=a[i+1];if(a[i+1]>y1)y1=a[i+1]}
     raw.push({ch,st,x0,x1,y0,y1,c:CLS[ch]});
   }
-  const of=(cs,f)=>med(raw.filter(g=>cs.includes(g.c)).map(f));
-  const base=of(['xb','as','cp','lb'],g=>g.y1)??0;
-  const xTop=of(['xb','xd'],g=>g.y0)??base-.52;
-  const capTop=of(['as','cp'],g=>g.y0)??base-1;
-  const hs={};for(const c of ['xb','as','cp','xd'])hs[c]=of([c],g=>g.y1-g.y0);
-  const G=Math.min(1.8,Math.max(.6,1/Math.max(.2,base-capTop)));
+  const m={};for(const c of ['xb','as','cp','xd','lo','hi'])m[c]=med(raw.filter(g=>g.c===c).map(g=>g.y1-g.y0));
+  const em=Math.max(.15,m.as||m.cp||(m.xb?m.xb/.62:1));
+  const ratio=(c,lo,hi,d)=>m[c]?clamp(m[c]/em,lo,hi):d;
+  const T={as:1,xb:ratio('xb',.5,.72,.62),cp:ratio('cp',.9,1.05,.95),lo:ratio('lo',.75,1,.88),hi:ratio('hi',.95,1.25,1.05)};
+  T.xd=T.xb*(m.xd&&m.xb?clamp(m.xd/m.xb,1.35,1.9):1.6);
+  const base=med(raw.filter(g=>g.c&&g.c!=='xd').map(g=>g.y1))??0,G=1/em;
   const V={};
   for(const g of raw){
     const h=g.y1-g.y0;let s=1,ay=base,ty=0;
-    if(hs[g.c]&&h>.15){s=Math.min(1.4,Math.max(.7,hs[g.c]/h));s=1+.85*(s-1)}
-    if(g.c==='xd'){ay=g.y0;ty=xTop-base}else if(g.c){ay=g.y1}
-    const k=s*G,st=g.st.map(a=>a.map((n,i)=>i%2?(n-ay)*k+ty*G:(n-g.x0)*k));
+    if(T[g.c]&&h>.08*em){s=clamp(T[g.c]*em/h,.4,2.5);s=1+.9*(s-1)}
+    if(g.c==='xd'){ay=g.y0;ty=-T.xb}else if(g.c){ay=g.y1}
+    const k=s*G,st=g.st.map(a=>a.map((n,i)=>i%2?(n-ay)*k+ty:(n-g.x0)*k));
     const L=new Array(NB).fill(null),Rt=new Array(NB).fill(null);
     const put=(x,y)=>{const b=Math.floor((y-B0)/BH);if(b<0||b>=NB)return;if(L[b]===null||x<L[b])L[b]=x;if(Rt[b]===null||x>Rt[b])Rt[b]=x};
     for(const a of st){put(a[0],a[1]);for(let i=2;i<a.length;i+=2){const dx=a[i]-a[i-2],dy=a[i+1]-a[i-1],n=Math.max(1,Math.ceil(Math.hypot(dx,dy)/.03));for(let t=1;t<=n;t++)put(a[i-2]+dx*t/n,a[i-1]+dy*t/n)}}
@@ -336,12 +343,18 @@ function layoutPad(){
   geo={w,h,dpr};pad.style.width=w+'px';pad.style.height=h+'px';pad.width=Math.round(w*dpr);pad.height=Math.round(h*dpr);
   drawPad();
 }
+const GUIDE_FONT='"Andika","Inter",system-ui,sans-serif';
 function drawPad(){
   const {w,h,dpr}=geo,c=pctx,em=(BASE-ASC)*h;
   c.setTransform(dpr,0,0,dpr,0,0);c.clearRect(0,0,w,h);
+  // Vorlage vermessen: Die Hilfslinien richten sich nach der Vorlagenschrift, damit alle Zeichen im richtigen Größenverhältnis stehen.
+  c.font='400 100px '+GUIDE_FONT;c.textAlign='center';c.textBaseline='alphabetic';
+  const asc=c.measureText('l').actualBoundingBoxAscent||74,xh=(c.measureText('x').actualBoundingBoxAscent||50)/asc,dsc=(c.measureText('p').actualBoundingBoxDescent||22)/asc;
+  const yx=BASE*h-xh*em,yd=BASE*h+dsc*em;
+  if(S.guide!==false){c.font=`400 ${100*em/asc}px ${GUIDE_FONT}`;c.fillStyle=css('--fg');c.globalAlpha=.16;c.fillText(curChar(),w/2,BASE*h);c.globalAlpha=1}
   c.strokeStyle=css('--line-strong');c.lineWidth=1;c.globalAlpha=.5;
-  c.setLineDash([4,6]);c.beginPath();c.moveTo(20,XH*h);c.lineTo(w-20,XH*h);c.stroke();c.setLineDash([]);
-  c.beginPath();c.moveTo(20,ASC*h);c.lineTo(w-20,ASC*h);c.moveTo(20,DESC*h);c.lineTo(w-20,DESC*h);c.globalAlpha=.25;c.stroke();
+  c.setLineDash([4,6]);c.beginPath();c.moveTo(20,yx);c.lineTo(w-20,yx);c.stroke();c.setLineDash([]);
+  c.beginPath();c.moveTo(20,ASC*h);c.lineTo(w-20,ASC*h);c.moveTo(20,yd);c.lineTo(w-20,yd);c.globalAlpha=.25;c.stroke();
   c.globalAlpha=1;c.lineWidth=1.5;c.beginPath();c.moveTo(20,BASE*h);c.lineTo(w-20,BASE*h);c.stroke();
   const st=(profile.rounds[curRound]||{})[curChar()];
   if(st){c.strokeStyle=css('--fg');drawInk(c,st.map(a=>({w:w/75,p:a.map((n,k)=>k%2?BASE*h+n*em:n*em)})),1.5)}
@@ -416,6 +429,8 @@ $('#prev').onclick=()=>go(-1);$('#next').onclick=()=>go(1);
 $('#undo').onclick=()=>{clearTimeout(autoT);const r=profile.rounds[curRound],c=curChar();if(r[c]){r[c].pop();if(!r[c].length)delete r[c];saveProfile();drawPad()}};
 $('#redo').onclick=()=>{clearTimeout(autoT);const r=profile.rounds[curRound];if(r[curChar()]){delete r[curChar()];saveProfile();drawPad()}};
 $('#auto').checked=S.auto!==false;S.auto=$('#auto').checked;
+$('#guide').checked=S.guide!==false;$('#guide').onchange=e=>{S.guide=e.target.checked;saveSettings();drawPad()};
+if(document.fonts&&document.fonts.load)document.fonts.load('400 100px Andika').then(()=>{if(S.tab==='learn')drawPad()}).catch(()=>{});
 $('#auto').onchange=e=>{S.auto=e.target.checked;clearTimeout(autoT);saveSettings()};
 $('#add-round').onclick=()=>{profile.rounds.push({});curRound=profile.rounds.length-1;curGroup=0;curIdx=0;saveProfile();drawPad();toast('Neuer Durchgang: Schreib die Zeichen noch einmal.')};
 let armed=0;
