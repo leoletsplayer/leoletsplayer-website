@@ -273,8 +273,8 @@ function variants(){
   const V={};
   for(const g of raw){
     const h=g.y1-g.y0;let s=1,ay=base,ty=0;
-    if(T[g.c]&&h>.08*em){s=clamp(T[g.c]*em/h,.4,2.5);s=1+.9*(s-1)}
-    if(g.c==='xd'){ay=g.y0;ty=-T.xb}else if(g.c){ay=g.y1}
+    if(T[g.c]&&h>.08*em){s=clamp(T[g.c]*em/h,.4,2.5);s=1+.75*(s-1)}
+    if(g.c==='xd'){ay=g.y0;ty=-T.xb}else if(g.c){ay=g.y1;ty=clamp((g.y1-base)/em,-.12,.12)*.35}
     const k=s*G,st=g.st.map(a=>a.map((n,i)=>i%2?(n-ay)*k+ty:(n-g.x0)*k));
     const L=new Array(NB).fill(null),Rt=new Array(NB).fill(null);
     const put=(x,y)=>{const b=Math.floor((y-B0)/BH);if(b<0||b>=NB)return;if(L[b]===null||x<L[b])L[b]=x;if(Rt[b]===null||x>Rt[b])Rt[b]=x};
@@ -469,9 +469,9 @@ function compose(text){
       for(const it of gl){
         if(x>ML&&x+it.adv*E>maxX)newLine();
         if(it.g){
-          const rot=(R()-.5)*.03*nat,sc=1+(R()-.5)*.03*nat,cs=Math.cos(rot),sn=Math.sin(rot),cx=it.g.w/2;
-          walk=walk*.85+(R()-.5)*.018*nat;
-          const by=base+walk*E+slope*(x-ML),w=S.pen*(scale>1?1.25:1)*(1+(R()-.5)*.1*nat);
+          const rot=(R()-.5)*.04*nat,sc=1+(R()-.5)*.09*nat,cs=Math.cos(rot),sn=Math.sin(rot),cx=it.g.w/2;
+          walk=walk*.8+(R()-.5)*.05*nat;
+          const by=base+(walk+(R()-.5)*.05*nat)*E+slope*(x-ML),w=S.pen*(scale>1?1.25:1)*(1+(R()-.5)*.1*nat);
           const m=moves[chars],on=m&&m.c===it.c,ox=on?m.x:0,oy=on?m.y:0;let bx0=1e9,by0=1e9,bx1=-1e9,by1=-1e9;
           for(const a of it.g.s){const p=new Array(a.length);
             for(let i=0;i<a.length;i+=2){const dx=a[i]-cx,dy=a[i+1],X=ox+x+(cx+dx*cs-dy*sn)*E*sc,Y=oy+by+(dx*sn+dy*cs)*E*sc;p[i]=X;p[i+1]=Y;if(X<bx0)bx0=X;if(X>bx1)bx1=X;if(Y<by0)by0=Y;if(Y>by1)by1=Y}
