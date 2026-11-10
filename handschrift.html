@@ -140,7 +140,7 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
           <div class="bar">
             <div class="inks" id="inks"></div>
             <span class="grow"></span>
-            <select id="s-paper" aria-label="Papier"><option value="lined">Liniert</option><option value="squared">Kariert</option><option value="dotted">Gepunktet</option><option value="blank">Blanko</option></select>
+            <select id="s-paper" aria-label="Papier"><option value="gn">GoodNotes-Linien</option><option value="lined">Liniert</option><option value="squared">Kariert</option><option value="dotted">Gepunktet</option><option value="blank">Blanko</option></select>
           </div>
           <label class="f">Schriftgröße <output id="o-size"></output><input type="range" id="s-size" data-k="size" min="9" max="30" step="0.5"></label>
           <label class="f">Zeilenabstand <output id="o-lh"></output><input type="range" id="s-lh" data-k="lh" min="14" max="48" step="0.5"></label>
@@ -158,13 +158,14 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
         </div>
         <div class="card">
           <h3>Nach GoodNotes</h3>
-          <button class="primary" id="ex-png">Als verschiebbare Schrift (PNG)</button>
+          <button class="primary" id="ex-gn">GoodNotes-Datei mit beweglicher Schrift</button>
+          <p class="hint">Erzeugt ein GoodNotes-Dokument mit echten Stiftstrichen. Dort kannst du jeden Buchstaben mit dem Lasso auswählen, verschieben, umfärben oder radieren. Die Schrift kommt in Schwarz an.</p>
           <div class="bar">
-            <button id="ex-pdf">Ganze Seiten (PDF)</button>
-            <button id="ex-svg">Vektor (SVG)</button>
+            <button id="ex-pdf">PDF</button>
+            <button id="ex-png">PNG</button>
+            <button id="ex-svg">SVG</button>
           </div>
           <label class="chk"><input type="checkbox" id="s-withpaper"> Papierlinien ins PDF übernehmen</label>
-          <p class="hint">Das PNG enthält nur die Schrift ohne Hintergrund. In GoodNotes kannst du es frei verschieben und skalieren.</p>
         </div>
       </div>
       <div class="stack">
@@ -207,7 +208,7 @@ let profile=store.get('hs.profile',null);
 if(!validProfile(profile))profile={v:2,rounds:[{}]};
 if(migrate(profile))store.set('hs.profile',profile);
 let moves=store.get('hs.moves',{});if(!moves||typeof moves!=='object'||Array.isArray(moves))moves={};
-let S=Object.assign({size:17,lh:28,pen:1,ls:.06,ws:.4,nat:50,ink:INKS[0],paper:'lined',withPaper:true,seed:7,fingerScroll:false,tab:'learn'},store.get('hs.settings',{}));
+let S=Object.assign({size:17,lh:28,pen:1,ls:.06,ws:.4,nat:50,ink:INKS[0],paper:'gn',withPaper:true,seed:7,fingerScroll:false,tab:'learn'},store.get('hs.settings',{}));
 function validProfile(p){return p&&Array.isArray(p.rounds)&&p.rounds.length>0&&p.rounds.every(r=>r&&typeof r==='object'&&!Array.isArray(r)&&Object.values(r).every(st=>Array.isArray(st)&&st.every(a=>Array.isArray(a)&&a.every(n=>typeof n==='number'))))}
 function smooth(pts,passes){
   for(let k=0;k<(passes||2);k++){const o=pts.map(p=>p.slice());
@@ -432,8 +433,9 @@ const MAP={'„':'"','“':'"','”':'"','‚':"'",'‘':"'",'’':"'",'–':'-'
 function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function compose(text){
   const V=variants(),R=rng(S.seed*7919+13),nat=S.nat/100,missing=new Set(),pages=[[]],glyphs=[];
-  let page=pages[0],base=MT+S.lh,x=ML,slope=0,walk=0,chars=0;const last={};
-  const newLine=()=>{base+=S.lh;x=ML;slope=(R()-.5)*.004*nat;if(base>PH-MB){page=[];pages.push(page);base=MT+S.lh}};
+  const LH=S.paper==='gn'?25:S.lh,TOP=S.paper==='gn'?25:MT;
+  let page=pages[0],base=TOP+LH,x=ML,slope=0,walk=0,chars=0;const last={};
+  const newLine=()=>{base+=LH;x=ML;slope=(R()-.5)*.004*nat;if(base>PH-MB){page=[];pages.push(page);base=TOP+LH}};
   slope=(R()-.5)*.004*nat;
   const lines=[...text].map(c=>MAP[c]!==undefined?MAP[c]:c).join('').split('\n');
   for(let raw of lines){
@@ -474,6 +476,7 @@ function compose(text){
 }
 function paperLines(){
   const L=[],D=[];if(S.paper==='blank')return{L,D};
+  if(S.paper==='gn'){for(let y=50;y<=825;y+=25)L.push([0,y,PW,y]);return{L,D}}
   if(S.paper==='lined'){for(let y=MT+S.lh;y<PH-20;y+=S.lh)L.push([0,y,PW,y])}
   else{const g=S.lh/2,y0=(MT%g),x0=(ML%g);
     if(S.paper==='squared'){for(let y=y0;y<PH;y+=g)L.push([0,y,PW,y]);for(let x=x0;x<PW;x+=g)L.push([x,0,x,PH])}
@@ -556,7 +559,7 @@ const ta=$('#text');ta.value=store.get('hs.text',DEFAULT_TEXT);
 ta.addEventListener('input',()=>{store.set('hs.text',ta.value);scheduleRender()});
 
 /* ---------- Export ---------- */
-const MIME={png:'image/png',pdf:'application/pdf',svg:'image/svg+xml',zip:'application/zip',json:'application/json'};
+const MIME={png:'image/png',pdf:'application/pdf',svg:'image/svg+xml',zip:'application/zip',json:'application/json',goodnotes:'application/octet-stream'};
 async function save(filename,data){
   const ext=filename.split('.').pop(),blob=new Blob([data],{type:MIME[ext]||'application/octet-stream'});
   // Auf iPad und Handy das Teilen-Menü nutzen, damit die Datei direkt an GoodNotes gehen kann
@@ -654,6 +657,68 @@ $('#restore-file').onchange=e=>{
     profile.rounds=empty?p.rounds:profile.rounds.concat(p.rounds);curRound=profile.rounds.length-1;curIdx=0;saveProfile();drawPad();
     toast(empty?'Schrift geladen.':'Schrift als weitere Durchgänge hinzugefügt.')};
   r.readAsText(f);e.target.value='';
+};
+
+const GN_T={"ev": "wQIKJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQfIBlwIKJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQRIfChNVbmJlbmFubnQgKEVudHd1cmYpEggIARC5nIC+BRowCiQ1QTUzRTg5RS1GNEMyLTQ1NDgtOEREMy1FOURGOUZCNDU5MkUSCAgBEPL75bkPMg0KAVASCAgBEL+lse0BOjAKJDVBNTNFODlFLUY0QzItNDU0OC04REQzLUU5REY5RkI0NTkyRRIICAEQjvPj2wVKBWRlX0RFUSMJpESr5HlCWiRGOEJGMjA4Ni1BM0Y4LTQ5OTMtOTk0Ny0zQUNCNjBFMkRFODFo7oWKxaCCk4gucIrTn5m+MooBAJIBAJoBChIICAEQ3MTN+gSgARjnAQokMjBFQ0REMzAtMTczQS00NERGLThGMDktNkQ3NjZDMTU2NTFDMr4BCiQyMEVDREQzMC0xNzNBLTQ0REYtOEYwOS02RDc2NkMxNTY1MUMSJDIwRUNERDMwLTE3M0EtNDRERi04RjA5LTZENzY2QzE1NjUxQyi0HjIkMzAzMDlBMTktQjM5Ny00QTI2LUJCRjktODZGMzFEREM1RkVBUVBhpUSr5HlCWiQwRjc3MjNCQy1BNzY0LTQzRkQtQTMwMS0yOUJGRTQwMzQ2RjViBAgBEAFw7oWKxaCCk4gueIvTn5m+MoABGK8DCiQ3MUI1QzMyMS1CMTEyLTREQkYtQjY5NS0zMTc1QjBCODAzODYShgMKJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQRIkNzFCNUMzMjEtQjExMi00REJGLUI2OTUtMzE3NUIwQjgwMzg2IiQyMEVDREQzMC0xNzNBLTQ0REYtOEYwOS02RDc2NkMxNTY1MUMoATABOQAAAGBVVT1AQgoNGGuIRBXh7sBESk45RkU4RjM2NS00QkVFLTUwNTctODU3My0xQTU2Qzc3Q0FDMTlfYTRfMV8yRTQ3NDM4OS0xMDk3LTQ2ODMtOUExQS05RThGOTU1RDlBRTNRrMqmRKvkeUJaJDY2NjZERjcyLUVCRDktNDJEMy1BNjg1LUZDQ0Y5MDIzOThERGITCQAAAGBVVT1AEggIARDPxMWOBWoMCAESCAgBEMX46swBeO6FisWggpOILoABjNOfmb4yigEMCAESCAgBELKjwIQJkgEmChgKCg0AADBCFauqakISCg0x1npEFTdEskQVVlXjQR2rqmo/KAGaAQkSBwgBEMrX62CoARi6AgokM0IzNTkyQjYtMEUyNC00QUEwLTlBOEEtM0QwMTQzMjc1QzQ0sgOQAgokMzAzMDlBMTktQjM5Ny00QTI2LUJCRjktODZGMzFEREM1RkVBEiQzQjM1OTJCNi0wRTI0LTRBQTAtOUE4QS0zRDAxNDMyNzVDNDQaMAokNzFCNUMzMjEtQjExMi00REJGLUI2OTUtMzE3NUIwQjgwMzg2EggIARDix4juDSIRCgU0Y3B+ORIICAEQm/DywwNR9iqnRKvkeUJaJEJFMDJGRjc1LTNBNUMtNDJDQS04QkQ5LTk1MDQxOEVEOEFDQWjuhYrFoIKTiC5wjdOfmb4yeBiKAToKLhIsChQN3t1dPxXe3V0/Hd7dXT8lAACAPxIUDQAAgD8VAACAPx0AAIA/JQAAgD8SCAgBELSi14YPuQEKJDNCMzU5MkI2LTBFMjQtNEFBMC05QThBLTNEMDE0MzI3NUM0NbIGjwEKJDNCMzU5MkI2LTBFMjQtNEFBMC05QThBLTNEMDE0MzI3NUM0NVF+IF1Gq+R5QlokRTZCRTJFODUtQjBBNS00MEI2LUJDNDktNTVCMkU2ODA0RDYxaO6FisWggpOILnCT05+ZvjJ4GIIBJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQfYBCiQzMDMwOUExOS1CMzk3LTRBMjYtQkJGOS04NkYzMUREQzVGRUFSzQEKJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQRIkM0IzNTkyQjYtMEUyNC00QUEwLTlBOEEtM0QwMTQzMjc1QzQ0Gj1QYWdpbmdWaWV3U2VydmljZVVwZGF0ZXI6QzRBNDhFRTgtNzVFNi00ODA0LTg4NjAtMTY1ODY3MUQ2RUVDUW96Fkir5HlCWiRCOTUxOTQwNS1CQ0E4LTRFQkUtOUQ2NC0wMEJDMENCQUU4Rjho7oWKxaCCk4gucJ3Tn5m+MngYuAEKJDIwRUNERDMwLTE3M0EtNDRERi04RjA5LTZENzY2QzE1NjUxQ8oGjgESJDMwMzA5QTE5LUIzOTctNEEyNi1CQkY5LTg2RjMxRERDNUZFQRokMjBFQ0REMzAtMTczQS00NERGLThGMDktNkQ3NjZDMTU2NTFDUddvIkyr5HlCWiQ2OEI1RTc3NC1BQUJCLTQ5MUMtOTNBQi1DM0M1QzUzODExQjRo7oWKxaCCk4gucKLTn5m+MngY5AEKJDIwRUNERDMwLTE3M0EtNDRERi04RjA5LTZENzY2QzE1NjUxQ7oGugEKJDIwRUNERDMwLTE3M0EtNDRERi04RjA5LTZENzY2QzE1NjUxQxIkMzAzMDlBMTktQjM5Ny00QTI2LUJCRjktODZGMzFEREM1RkVBUYFxIkyr5HlCWiRDQ0MwNjhBMS01MDZCLTQ0QUUtOEFCMi01NDMwNTEwRkU4MjlwAYIBJDJFMzRCNkIwLTk2MjYtNDY4RS1CNzkyLTYwN0I1MUIwMzMwMJAB7oWKxaCCk4gumAGj05+ZvjKgARi7AQokMzAzMDlBMTktQjM5Ny00QTI2LUJCRjktODZGMzFEREM1RkVB+gGRAQokMzAzMDlBMTktQjM5Ny00QTI2LUJCRjktODZGMzFEREM1RkVBEicKGzkwX3RocmVlX3BhZ2VzX3dpdGhfc3Ryb2tlcxIICAIQq6W0tg1RX6xdTavkeUJaJEY5RTdCQ0Y0LUM4Q0QtNDMyQy1CMTdELTlBNkI0Q0E5OUQ1OWjuhYrFoIKTiC5wpNOfmb4yeBg=", "pdf": "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kuvfWX1X+d3M9oTtvaX2pft34HYId9zd6brzWJliWV7Z0K7gXa3lzPKi8re7V+y+VmFbcWAPaY9kj7QyqLK9Sq9qR9Wn6qTqgRqPmua96nu37Z3ax9vXv99tf9MBjQPFBz4eFBy8f8j3UGutQW3FYdzhrMPP66Lqur9nf19/RO1I8ZHPR4VHpcfCj3XVO9TXN6g3lDbCjZLGseNxx2/94PVDexOr6VAzo7n4BDghOfHix/gf754MPNl5in2q6Sf9n/a20FqKWqHW3NaJtqQ2aXtMe9/pgNOdHc4dLT+b/3z0jPaZmrPKZ0vPkc4VnJs5n3d+8kLGhfGLiReHOld0Prq05NKdrrCu3suBl69e8blyqdu9+/xVl6tnrjldO32dfb3thv2N1h67npZf7H5p6bXvbb3pcLP9luOtjr4Ffef6Xfsv3va6feWO/50bA4sG+u4uvnv/Xtw96X3e/dEHqQ9eP8x6OP1o/WPs46InCk8qnqo/rf3V+Ndmqb307KDXYM+ziGePhrhDL/+V+a9PwwXPqc8rRrRG6ketR8+M+YzderH0xfDLjJfT44W/Kf6295XRq59+d/u9Z2LJxPBr0euZP0reqL45+tb2bedk6OTTd2nvpqeK3qu+P/aB/aH7Y/THkensT/hPlZ+NP3d8CfzyeCZtZubf94Tz+wplbmRzdHJlYW0KZW5kb2JqCjUgMCBvYmoKWyAvSUNDQmFzZWQgNiAwIFIgXQplbmRvYmoKMiAwIG9iago8PCAvVHlwZSAvUGFnZXMgL01lZGlhQm94IFswIDAgNTk1LjI4IDg0MS44OV0gL0NvdW50IDEgL0tpZHMgWyAxIDAgUiBdID4+CmVuZG9iago3IDAgb2JqCjw8IC9UeXBlIC9DYXRhbG9nIC9QYWdlcyAyIDAgUiA+PgplbmRvYmoKOCAwIG9iago8PCAvQ3JlYXRpb25EYXRlIChEOjIwMjYxMTEwMTAwNzM2WjAwJzAwJykgL1Byb2R1Y2VyIChpT1MgVmVyc2lvbiAyNi41IFwoQnVpbGQgMjNGNzdcKSBRdWFydHogUERGQ29udGV4dCkKL01vZERhdGUgKEQ6MjAyNjExMTAxMDA3MzZaMDAnMDAnKSA+PgplbmRvYmoKeHJlZgowIDkKMDAwMDAwMDAwMCA2NTUzNSBmIAowMDAwMDAwMzY2IDAwMDAwIG4gCjAwMDAwMDMyNjEgMDAwMDAgbiAKMDAwMDAwMDAyMiAwMDAwMCBuIAowMDAwMDAwNDQ2IDAwMDAwIG4gCjAwMDAwMDMyMjYgMDAwMDAgbiAKMDAwMDAwMDUxNCAwMDAwMCBuIAowMDAwMDAzMzUwIDAwMDAwIG4gCjAwMDAwMDMzOTkgMDAwMDAgbiAKdHJhaWxlcgo8PCAvU2l6ZSA5IC9Sb290IDcgMCBSIC9JbmZvIDggMCBSIC9JRCBbIDxkMTI4NDhlN2IyYmM0YzI2Y2MyYzU4YjU0ODY2MzlhZT4KPGQxMjg0OGU3YjJiYzRjMjZjYzJjNThiNTQ4NjYzOWFlPiBdID4+CnN0YXJ0eHJlZgozNTU4CiUlRU9GCg==", "ids": ["30309A19-B397-4A26-BBF9-86F31DDC5FEA", "F8BF2086-A3F8-4993-9947-3ACB60E2DE81", "20ECDD30-173A-44DF-8F09-6D766C15651C", "0F7723BC-A764-43FD-A301-29BFE40346F5", "71B5C321-B112-4DBF-B695-3175B0B80386", "6666DF72-EBD9-42D3-A685-FCCF902398DD", "3B3592B6-0E24-4AA0-9A8A-3D0143275C44", "BE02FF75-3A5C-42CA-8BD9-950418ED8ACA", "3B3592B6-0E24-4AA0-9A8A-3D0143275C45", "E6BE2E85-B0A5-40B6-BC49-55B2E6804D61", "C4A48EE8-75E6-4804-8860-1658671D6EEC", "B9519405-BCA8-4EBE-9D64-00BC0CBAE8F8", "68B5E774-AABB-491C-93AB-C3C5C53811B4", "CCC068A1-506B-44AE-8AB2-5430510FE829", "2E34B6B0-9626-468E-B792-607B51B03300", "F9E7BCF4-C8CD-432C-B17D-9A6B4CA99D59"], "att": "20ECDD30-173A-44DF-8F09-6D766C15651C", "note": "3B3592B6-0E24-4AA0-9A8A-3D0143275C45", "layer": "3B3592B6-0E24-4AA0-9A8A-3D0143275C44"};
+/* ---------- GoodNotes-Export: echte Stiftstriche in einer .goodnotes-Datei ---------- */
+const GN_K=1091.3466796875/PW;
+function gnB64(s){const b=atob(s),u=new Uint8Array(b.length);for(let i=0;i<b.length;i++)u[i]=b.charCodeAt(i);return u}
+function gnUuid(){const h=[...crypto.getRandomValues(new Uint8Array(16))].map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase();return `${h.slice(0,8)}-${h.slice(8,12)}-4${h.slice(13,16)}-${'89AB'[parseInt(h[16],16)&3]}${h.slice(17,20)}-${h.slice(20)}`}
+function gnVar(n,o){while(n>127){o.push((n%128)|128);n=Math.floor(n/128)}o.push(n)}
+function gnF32(v,o){const u=new Uint8Array(new Float32Array([v]).buffer);o.push(u[0],u[1],u[2],u[3])}
+function gnStr(s,o){for(let i=0;i<s.length;i++)o.push(s.charCodeAt(i))}
+const GN_BLOB=[0x62,0x76,0x34,0x31,0x3e,0,0,0,0x33,0,0,0,0xf3,0x06,0x74,0x70,0x6c,0,0x3e,0,0,0,0x76,0x75,0x41,0x28,0x76,0x29,0x41,0x28,0x53,0x28,0x75,0x75,0x29,0x08,0,0,0x0a,0,0xd7,0x76,0x41,0x28,0x66,0x29,0,0x02,0,0,0,0,0,0,0x01,0,0x60,0x01,0,0,0,0,0,0x62,0x76,0x34,0x24];
+const GN_REPLICA=[0xee,0x85,0x8a,0xc5,0xa0,0x82,0x93,0x88,0x2e];
+/* Ein Strich = zwei Datensätze: Kopf (ID, Zähler) und Inhalt (Stärke, Punkte). */
+function gnStroke(out,id,rnd,seq,ts,width,pts){
+  const clock=[0x08,0x02,0x10];gnVar(rnd,clock);
+  const h=[0x0a,36];gnStr(id,h);h.push(0x12,clock.length,...clock,0x40,...GN_REPLICA,0x48);gnVar(seq,h);h.push(0x70,0x85,0x2a,0x80,0x01,0x18);
+  gnVar(h.length,out);for(const b of h)out.push(b);
+  const P=[];for(let i=0;i<pts.length;i+=2){P.push(0x0a,10,0x0d);gnF32(pts[i],P);P.push(0x15);gnF32(pts[i+1],P)}
+  const G=[0x0a];gnVar(P.length,G);for(const b of P)G.push(b);G.push(0x2a,0x02,0x10,0x01,0x7d);gnF32(width,G);
+  const blob=GN_BLOB.slice();const wb=[];gnF32(width,wb);blob.splice(49,4,...wb);
+  const t=[0x10];gnVar(ts,t);
+  const m=[0x0a,36];gnStr(id,m);m.push(0x12,blob.length,...blob,0x22,0x05,0x25,0,0,0x80,0x3f,0x32,0,0x3a,t.length+2,0x0a,t.length,...t,0x4a);
+  gnVar(G.length,m);for(const b of G)m.push(b);m.push(0x7a,clock.length,...clock,0xa2,0x01,0,0xa8,0x01,0x18);
+  const r=[0x3a];gnVar(m.length,r);gnVar(r.length+m.length,out);for(const b of r)out.push(b);for(const b of m)out.push(b);
+}
+function gnNotes(strokes){
+  const out=[],ts=Math.floor(Date.now()/1000);let seq=6801200;
+  for(const s of strokes){
+    const d=spline(s.p,.45),pts=new Array(d.length);for(let i=0;i<d.length;i++)pts[i]=d[i]*GN_K;
+    if(pts.length===2)pts.push(pts[0]+.3,pts[1]);
+    gnStroke(out,gnUuid(),Math.floor(Math.random()*4294967295)+1,seq++,ts,Math.max(.6,s.w*GN_K),pts);
+  }
+  return new Uint8Array(out);
+}
+function gnDocument(strokes,thumb){
+  let ev=gnB64(GN_T.ev);const map={};
+  const nb=gnUuid().slice(0,35);map[GN_T.layer]=nb+'4';map[GN_T.note]=nb+'5';
+  for(const id of GN_T.ids)if(!map[id])map[id]=gnUuid();
+  let s='';for(let i=0;i<ev.length;i++)s+=String.fromCharCode(ev[i]);
+  for(const id in map)s=s.split(id).join(map[id]);
+  s=s.replace('Unbenannt (Entwurf)','Handschrift-Entwurf');
+  ev=new Uint8Array(s.length);for(let i=0;i<s.length;i++)ev[i]=s.charCodeAt(i);
+  const idx=(id,dir,extra)=>{const p=dir+'/'+id,o=[0x0a,36];gnStr(id,o);o.push(0x12,p.length);gnStr(p,o);if(extra)o.push(...extra);return new Uint8Array([o.length,...o])};
+  const att=map[GN_T.att],note=map[GN_T.note],e=new Uint8Array(0);
+  return zip([
+    {name:'attachments/'+att,data:gnB64(GN_T.pdf)},{name:'document.info.pb',data:e},
+    {name:'index.attachments.pb',data:idx(att,'attachments')},{name:'index.events.pb',data:ev},
+    {name:'index.notes.pb',data:idx(note,'notes')},{name:'index.search.pb',data:idx(att,'search',[0x18,0x01])},
+    {name:'notes/'+note,data:gnNotes(strokes)},{name:'schema.pb',data:new Uint8Array([0x08,0x18])},
+    {name:'search/'+att,data:new Uint8Array([0x04,0x10,0x01,0x1a,0x00])},{name:'thumbnail.jpg',data:thumb}]);
+}
+$('#ex-gn').onclick=async()=>{
+  if(S.paper!=='gn'){S.paper='gn';$('#s-paper').value='gn';saveSettings();renderPreview();toast('Papier auf GoodNotes-Linien umgestellt, damit die Schrift auf den Linien sitzt.')}
+  if(!ready())return;const files=[];
+  for(let i=0;i<composed.pages.length;i++){const pg=composed.pages[i];if(!pg.length)continue;
+    const cv=document.createElement('canvas');cv.width=596;cv.height=842;const c=cv.getContext('2d');c.fillStyle='#fff';c.fillRect(0,0,596,842);c.setTransform(596/PW,0,0,842/PH,0,0);
+    const ink=S.ink;S.ink='#111111';paintPage(c,pg,true);S.ink=ink;
+    const th=await new Promise(r=>cv.toBlob(r,'image/jpeg',.8));
+    const doc=gnDocument(pg,new Uint8Array(await th.arrayBuffer()));
+    files.push({name:composed.pages.length>1?`handschrift-seite-${i+1}.goodnotes`:'handschrift.goodnotes',data:new Uint8Array(await doc.arrayBuffer())});}
+  const direct=!(window.claude&&window.claude.use);
+  if(direct&&files.length===1)save(files[0].name,files[0].data);else save('handschrift-goodnotes.zip',zip(files));
 };
 
 /* ---------- Bereiche ---------- */
