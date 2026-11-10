@@ -7,7 +7,7 @@
         passHash: '84c3db98dc194bb8eb168cd5c96ffb6b2f91cfd53414af8262b086c9ee58e969',
         adminHash: '4ca96230c35e20c3d16c71628c11c185ba016fd64b1bb3f6b236437f2d28fe43',
         // Dein GoatCounter-Name, z. B. 'leoletsplayer' für https://leoletsplayer.goatcounter.com. Leer = Zählung aus.
-        goatcounter: ''
+        goatcounter: 'leoletsplayer'
     };
     var SALT = 'leoletsplayer:';
     var root = document.documentElement;
