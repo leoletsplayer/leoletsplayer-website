@@ -67,6 +67,7 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
 .inks input{width:28px;height:28px;padding:0;border:0;border-radius:50%;background:none;cursor:pointer}
 .pages{display:flex;flex-direction:column;gap:20px;min-width:0}
 .pages canvas{display:block;width:100%;max-width:100%;background:var(--paper);border-radius:10px;box-shadow:var(--shadow)}
+.pages.moving canvas{touch-action:none;cursor:grab}
 .empty{background:var(--surface);border-radius:20px;box-shadow:var(--shadow);padding:40px 24px;color:var(--muted);text-align:center}
 .warn{background:var(--warn-bg);color:var(--warn-fg);border-radius:12px;padding:10px 14px;font-size:14px;overflow-wrap:anywhere}
 #toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:12px 18px;border-radius:999px;font-size:14px;max-width:calc(100% - 32px);z-index:20;box-shadow:var(--shadow)}
@@ -150,6 +151,12 @@ select{font:500 14px var(--font);color:var(--fg);background:var(--cell);border:0
         </div>
       </div>
       <div class="stack">
+        <div class="bar">
+          <button id="move-toggle">Buchstaben verschieben</button>
+          <span class="hint" id="move-hint" hidden>Zieh einzelne Buchstaben an die gewünschte Stelle.</span>
+          <span class="grow"></span>
+          <button id="move-reset" class="link" hidden>Verschiebungen zurücksetzen</button>
+        </div>
         <div class="warn" id="missing" hidden></div>
         <div class="empty" id="empty" hidden>Noch keine Schrift gelernt. Schreibe zuerst unter „Lernen“ deine Buchstaben, dann erscheint dein Text hier in deiner Handschrift.</div>
         <div class="pages" id="pages"></div>
@@ -180,9 +187,33 @@ const store={
   set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
 };
 let profile=store.get('hs.profile',null);
-if(!validProfile(profile))profile={v:1,rounds:[{}]};
+if(!validProfile(profile))profile={v:2,rounds:[{}]};
+if(migrate(profile))store.set('hs.profile',profile);
+let moves=store.get('hs.moves',{});if(!moves||typeof moves!=='object'||Array.isArray(moves))moves={};
 let S=Object.assign({size:17,lh:28,pen:1,ls:.06,ws:.4,nat:50,ink:INKS[0],paper:'lined',withPaper:true,seed:7,fingerScroll:false,tab:'learn'},store.get('hs.settings',{}));
 function validProfile(p){return p&&Array.isArray(p.rounds)&&p.rounds.length>0&&p.rounds.every(r=>r&&typeof r==='object'&&!Array.isArray(r)&&Object.values(r).every(st=>Array.isArray(st)&&st.every(a=>Array.isArray(a)&&a.every(n=>typeof n==='number'))))}
+function smooth(pts,passes){
+  for(let k=0;k<(passes||2);k++){const o=pts.map(p=>p.slice());
+    for(let i=1;i<pts.length-1;i++){const a=pts[i-1],b=pts[i],c=pts[i+1],ux=b[0]-a[0],uy=b[1]-a[1],vx=c[0]-b[0],vy=c[1]-b[1];
+      if((ux*vx+uy*vy)/((Math.hypot(ux,uy)*Math.hypot(vx,vy))||1)<-.2)continue; // echte Ecken bleiben spitz
+      o[i]=[(a[0]+2*b[0]+c[0])/4,(a[1]+2*b[1]+c[1])/4]}
+    pts=o}
+  return pts;
+}
+/* Repariert ältere Aufnahmen: doppelte und zurückspringende Punkte entfernen, dann glätten. */
+function repair(flat){
+  const out=[];
+  for(let i=0;i<flat.length;i+=2){const x=flat[i],y=flat[i+1];let dup=false;
+    for(let k=out.length-1;k>=Math.max(0,out.length-4);k--)if(out[k][0]===x&&out[k][1]===y){dup=true;break}
+    if(!dup)out.push([x,y])}
+  const d=(a,b)=>Math.hypot(a[0]-b[0],a[1]-b[1]),res=out.length?[out[0]]:[];
+  for(let i=1;i<out.length;i++){const a=res[res.length-1],b=out[i],c=out[i+1];
+    if(c){const ab=d(a,b),bc=d(b,c),cs=((b[0]-a[0])*(c[0]-b[0])+(b[1]-a[1])*(c[1]-b[1]))/((ab*bc)||1);
+      if(cs<-.5&&ab<.15&&bc<.15&&d(a,c)<ab)continue}
+    res.push(b)}
+  return smooth(res,2).flatMap(p=>[+p[0].toFixed(4),+p[1].toFixed(4)]);
+}
+function migrate(p){if(p.v>=2)return false;for(const r of p.rounds)for(const ch in r)r[ch]=r[ch].map(repair);p.v=2;return true}
 let variantsCache=null;
 function saveProfile(){variantsCache=null;store.set('hs.profile',profile);updateCounts();}
 function saveSettings(){store.set('hs.settings',S)}
@@ -195,7 +226,7 @@ for(const c of 'acemnorsuvwxz')CLS[c]='xb';
 for(const c of 'bdfhklß')CLS[c]='as';
 for(const c of 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')CLS[c]='cp';
 for(const c of 'gpqy')CLS[c]='xd';
-for(const c of 'tiäöüÄÖÜ!?%&@€#')CLS[c]='lb';
+for(const c of 'tiäöüÄÖÜ!?%&@€#.:')CLS[c]='lb';
 const med=a=>{if(!a.length)return null;const s=[...a].sort((x,y)=>x-y),m=s.length>>1;return s.length%2?s[m]:(s[m-1]+s[m])/2};
 const B0=-1.3,BH=.1,NB=19;
 /* Gleicht die Zeichen an: gleiche Grundlinie, gleiche Höhe je Buchstabenart, dazu Randprofile für gleichmäßige Abstände. */
@@ -243,7 +274,7 @@ function css(n){return getComputedStyle(document.documentElement).getPropertyVal
 function layoutPad(){
   const w=pad.parentElement.clientWidth;if(!w)return;
   const n=GROUPS[curGroup].chars.length;
-  const cols=Math.max(4,Math.min(10,Math.floor(w/112)));
+  const cols=Math.max(3,Math.min(8,Math.floor(w/150)));
   const cw=w/cols,ch=cw*1.2,rows=Math.ceil(n/cols),dpr=window.devicePixelRatio||1;
   geo={cols,cw,ch,dpr,rows};
   pad.width=Math.round(w*dpr);pad.height=Math.round(rows*ch*dpr);pad.style.height=rows*ch+'px';
@@ -297,23 +328,24 @@ pad.addEventListener('pointerdown',e=>{
   const round=profile.rounds[curRound];
   if(erase){if(round[chars[i]]){delete round[chars[i]];saveProfile();drawPad()}return}
   try{pad.setPointerCapture(e.pointerId)}catch(_){}
-  cur={id:e.pointerId,i,pts:[[x,y]]};
+  cur={id:e.pointerId,i,pts:[[x,y]],t:e.timeStamp};
 });
 pad.addEventListener('pointermove',e=>{
   if(scrollPtr&&e.pointerId===scrollPtr.id){window.scrollBy(0,scrollPtr.y-e.clientY);scrollPtr.y=e.clientY;return}
   if(!cur||e.pointerId!==cur.id)return;
-  const evs=e.getCoalescedEvents?e.getCoalescedEvents():[e];
+  let evs=(e.getCoalescedEvents?e.getCoalescedEvents():[]).filter(ev=>ev.timeStamp>cur.t);
+  if(!evs.length)evs=[e];
   const c=pctx;c.setTransform(geo.dpr,0,0,geo.dpr,0,0);c.strokeStyle=css('--fg');c.lineWidth=Math.max(2,geo.cw/45);c.lineCap='round';c.lineJoin='round';
-  c.beginPath();const l=cur.pts[cur.pts.length-1];c.moveTo(l[0],l[1]);
-  for(const ev of (evs.length?evs:[e])){const p=padPos(ev);cur.pts.push(p);c.lineTo(p[0],p[1])}
+  c.beginPath();let l=cur.pts[cur.pts.length-1];c.moveTo(l[0],l[1]);
+  for(const ev of evs){const q=padPos(ev);if(Math.hypot(q[0]-l[0],q[1]-l[1])<.4)continue;cur.pts.push(q);c.lineTo(q[0],q[1]);l=q;if(ev.timeStamp>cur.t)cur.t=ev.timeStamp}
   c.stroke();
 });
 function endStroke(e){
   if(scrollPtr&&e.pointerId===scrollPtr.id){scrollPtr=null;return}
   if(!cur||e.pointerId!==cur.id)return;
   const o=cellOrigin(cur.i),em=(BASE-ASC)*geo.ch,by=o.y+BASE*geo.ch,chr=GROUPS[curGroup].chars[cur.i];
-  const pts=rdp(cur.pts,.5),flat=[];
-  for(const p of pts)flat.push(+((p[0]-o.x)/em).toFixed(3),+((p[1]-by)/em).toFixed(3));
+  const pts=rdp(smooth(cur.pts,2),.15),flat=[];
+  for(const p of pts)flat.push(+((p[0]-o.x)/em).toFixed(4),+((p[1]-by)/em).toFixed(4));
   const round=profile.rounds[curRound];(round[chr]=round[chr]||[]).push(flat);
   undoStack.push({r:curRound,ch:chr});cur=null;saveProfile();drawPad();
 }
@@ -352,7 +384,7 @@ const PW=595.28,PH=841.89,ML=56,MR=40,MT=56,MB=50;
 const MAP={'„':'"','“':'"','”':'"','‚':"'",'‘':"'",'’':"'",'–':'-','—':'-','…':'...','\t':'    ',' ':' '};
 function rng(seed){let a=seed>>>0;return()=>{a|=0;a=a+0x6D2B79F5|0;let t=Math.imul(a^a>>>15,1|a);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296}}
 function compose(text){
-  const V=variants(),R=rng(S.seed*7919+13),nat=S.nat/100,missing=new Set(),pages=[[]];
+  const V=variants(),R=rng(S.seed*7919+13),nat=S.nat/100,missing=new Set(),pages=[[]],glyphs=[];
   let page=pages[0],base=MT+S.lh,x=ML,slope=0,walk=0,chars=0;const last={};
   const newLine=()=>{base+=S.lh;x=ML;slope=(R()-.5)*.004*nat;if(base>PH-MB){page=[];pages.push(page);base=MT+S.lh}};
   slope=(R()-.5)*.004*nat;
@@ -366,7 +398,7 @@ function compose(text){
         const vs=V[c];
         if(!vs){missing.add(c);gl.push({adv:.5});ww+=.5*E;continue}
         let k=Math.floor(R()*vs.length);if(vs.length>1&&k===last[c])k=(k+1)%vs.length;last[c]=k;
-        gl.push({g:vs[k]});
+        gl.push({g:vs[k],c});
       }
       gl.forEach((it,k)=>{if(!it.g)return;const nx=gl[k+1];it.adv=(nx&&nx.g?pairAdv(it.g,nx.g,gap):it.g.w+gap)+(R()-.5)*.025*nat;ww+=it.adv*E});
       if(x>ML&&x+ww>maxX)newLine();
@@ -376,9 +408,11 @@ function compose(text){
           const rot=(R()-.5)*.05*nat,sc=1+(R()-.5)*.05*nat,cs=Math.cos(rot),sn=Math.sin(rot),cx=it.g.w/2;
           walk=walk*.85+(R()-.5)*.018*nat;
           const by=base+walk*E+slope*(x-ML),w=S.pen*(scale>1?1.25:1)*(1+(R()-.5)*.1*nat);
+          const m=moves[chars],on=m&&m.c===it.c,ox=on?m.x:0,oy=on?m.y:0;let bx0=1e9,by0=1e9,bx1=-1e9,by1=-1e9;
           for(const a of it.g.s){const p=new Array(a.length);
-            for(let i=0;i<a.length;i+=2){const dx=a[i]-cx,dy=a[i+1];p[i]=x+(cx+dx*cs-dy*sn)*E*sc;p[i+1]=by+(dx*sn+dy*cs)*E*sc}
+            for(let i=0;i<a.length;i+=2){const dx=a[i]-cx,dy=a[i+1],X=ox+x+(cx+dx*cs-dy*sn)*E*sc,Y=oy+by+(dx*sn+dy*cs)*E*sc;p[i]=X;p[i+1]=Y;if(X<bx0)bx0=X;if(X>bx1)bx1=X;if(Y<by0)by0=Y;if(Y>by1)by1=Y}
             page.push({p,w});}
+          glyphs.push({pg:pages.length-1,i:chars,c:it.c,x0:bx0,y0:by0,x1:bx1,y1:by1});
           chars++;
         }
         x+=it.adv*E;
@@ -389,7 +423,7 @@ function compose(text){
     if(pages.length>40)break;
   }
   while(pages.length>1&&!pages[pages.length-1].length)pages.pop();
-  return{pages,missing,chars};
+  return{pages,missing,chars,glyphs};
 }
 function paperLines(){
   const L=[],D=[];if(S.paper==='blank')return{L,D};
@@ -406,7 +440,7 @@ function paintPage(c,strokes,withPaper){
   c.strokeStyle=S.ink;c.lineCap='round';c.lineJoin='round';
   for(const s of strokes){c.lineWidth=s.w;c.beginPath();tracePath(c,s.p);c.stroke()}
 }
-let composed={pages:[[]],missing:new Set(),chars:0},rt=0;
+let composed={pages:[[]],missing:new Set(),chars:0,glyphs:[]},rt=0;
 function scheduleRender(){clearTimeout(rt);rt=setTimeout(renderPreview,120)}
 function renderPreview(){
   if($('#view-write').hidden)return;
@@ -416,15 +450,45 @@ function renderPreview(){
   const host=$('#pages'),w=host.clientWidth||600,k=w/PW*Math.min(2,window.devicePixelRatio||1);
   while(host.children.length>composed.pages.length)host.lastChild.remove();
   composed.pages.forEach((pg,i)=>{
-    let cv=host.children[i];if(!cv){cv=document.createElement('canvas');cv.setAttribute('aria-label','Seite '+(i+1));host.appendChild(cv)}
+    let cv=host.children[i];if(!cv){cv=document.createElement('canvas');cv.setAttribute('aria-label','Seite '+(i+1));host.appendChild(cv);wireCanvas(cv,i)}
     cv.width=Math.round(PW*k);cv.height=Math.round(PH*k);
     const c=cv.getContext('2d');c.setTransform(k,0,0,k,0,0);c.fillStyle='#fff';c.fillRect(0,0,PW,PH);paintPage(c,pg,true);
+    if(drag){const g=composed.glyphs.find(q=>q.i===drag.i);if(g&&g.pg===i){c.strokeStyle='#2d5bff';c.lineWidth=.8;c.setLineDash([3,3]);c.strokeRect(g.x0-3,g.y0-3,g.x1-g.x0+6,g.y1-g.y0+6);c.setLineDash([])}}
   });
   $('#stats').textContent=has?`${composed.pages.length} ${composed.pages.length===1?'Seite':'Seiten'} A4, ${composed.chars} Zeichen`:'';
   const m=[...composed.missing].filter(c=>c.trim());
   $('#missing').hidden=!has||!m.length;
   if(m.length)$('#missing').textContent='Diese Zeichen hast du noch nicht geschrieben, sie bleiben leer: '+m.join(' ');
 }
+
+
+/* ---------- Einzelne Buchstaben verschieben ---------- */
+let moveMode=false,drag=null,raf=0;
+function ptOf(cv,e){const r=cv.getBoundingClientRect();return[(e.clientX-r.left)/r.width*PW,(e.clientY-r.top)/r.height*PH]}
+function hit(pg,x,y){let best=null,bd=1e9;
+  for(const g of composed.glyphs){if(g.pg!==pg||x<g.x0-4||x>g.x1+4||y<g.y0-4||y>g.y1+4)continue;
+    const d=Math.hypot(x-(g.x0+g.x1)/2,y-(g.y0+g.y1)/2);if(d<bd){bd=d;best=g}}
+  return best}
+function updateMoveUi(){
+  $('#move-toggle').classList.toggle('on',moveMode);$('#pages').classList.toggle('moving',moveMode);
+  $('#move-toggle').textContent=moveMode?'Fertig':'Buchstaben verschieben';
+  $('#move-hint').hidden=!moveMode;$('#move-reset').hidden=!Object.keys(moves).length;
+}
+function wireCanvas(cv,pg){
+  cv.addEventListener('pointerdown',e=>{
+    if(!moveMode||drag)return;const [x,y]=ptOf(cv,e),g=hit(pg,x,y);if(!g)return;
+    e.preventDefault();try{cv.setPointerCapture(e.pointerId)}catch(_){}
+    const m=moves[g.i]&&moves[g.i].c===g.c?moves[g.i]:{x:0,y:0};drag={id:e.pointerId,i:g.i,c:g.c,sx:x,sy:y,ox:m.x,oy:m.y};renderPreview()});
+  cv.addEventListener('pointermove',e=>{
+    if(!drag||e.pointerId!==drag.id)return;const [x,y]=ptOf(cv,e);
+    moves[drag.i]={c:drag.c,x:+(drag.ox+x-drag.sx).toFixed(2),y:+(drag.oy+y-drag.sy).toFixed(2)};
+    if(!raf)raf=requestAnimationFrame(()=>{raf=0;renderPreview()})});
+  const end=e=>{if(!drag||e.pointerId!==drag.id)return;drag=null;store.set('hs.moves',moves);renderPreview();updateMoveUi()};
+  cv.addEventListener('pointerup',end);cv.addEventListener('pointercancel',end);
+}
+$('#move-toggle').onclick=()=>{moveMode=!moveMode;updateMoveUi()};
+$('#move-reset').onclick=()=>{moves={};store.set('hs.moves',moves);updateMoveUi();renderPreview()};
+updateMoveUi();
 
 /* ---------- Einstellungen ---------- */
 const fmt={size:v=>v+' pt',lh:v=>(v/2.8346).toFixed(1)+' mm',pen:v=>(+v).toFixed(1)+' pt',ls:v=>(+v).toFixed(2),ws:v=>(+v).toFixed(2),nat:v=>v+' %'};
@@ -539,6 +603,7 @@ $('#restore-file').onchange=e=>{
   const f=e.target.files[0];if(!f)return;const r=new FileReader();
   r.onload=()=>{let p=null;try{p=JSON.parse(r.result)}catch(_){}
     if(!validProfile(p)){toast('Diese Datei ist keine gesicherte Schrift aus dem Handschrift-Studio.');return}
+    migrate(p);
     const empty=profile.rounds.every(x=>!Object.keys(x).length);
     profile.rounds=empty?p.rounds:profile.rounds.concat(p.rounds);curRound=profile.rounds.length-1;saveProfile();drawPad();
     toast(empty?'Schrift geladen.':'Schrift als weitere Durchgänge hinzugefügt.')};
